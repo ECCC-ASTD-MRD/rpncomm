@@ -45,13 +45,13 @@ rpn_comm_c_stubs.c: $(VPATH)/rpn_comm_stubs.sh
 
 $(STUB_LIBRARY): rpn_comm_fortran_stubs.o rpn_comm_c_stubs.o
 	mkdir -p $(LIBDIR)
-	ar rcv $(STUB_LIBRARY) rpn_comm_fortran_stubs.o rpn_comm_c_stubs.o
+	ar rcv $(STUB_LIBRARY) rpn_comm_fortran_stubs.o rpn_comm_c_stubs.o || true
 	(cd $(LIBDIR) ; ln -sf lib$(LIB)stubs_$(RPN_COMM_version).a lib$(LIB)stubs.a)
 
 $(LIBRARY): $(OBJECTS)
 	mkdir -p $(LIBDIR)
-	ar rcv $(LIBRARY)_ $(OBJECTS)
-	ar d $(LIBRARY)_ TEST_stubs.o rpn_comm_c_stubs.o rpn_comm_fortran_stubs.o
+	ar rcv $(LIBRARY)_ $(OBJECTS) || true
+	ar d $(LIBRARY)_ TEST_stubs.o rpn_comm_c_stubs.o rpn_comm_fortran_stubs.o || true 
 	mv $(LIBRARY)_ $(LIBRARY)
 	(cd $(LIBDIR) ; ln -sf lib$(LIB)_$(RPN_COMM_version).a  lib$(LIB).a)
 	mkdir -p $(INCDIR)
