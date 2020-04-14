@@ -98,3 +98,8 @@ RPN_COMM_xch_halosl.o
 RPN_COMM_xch_halox.o
 RPN_COMM_ezwin.o
 RPN_COMM_split_by_node.o
+RPN_COMM_cpu_configuration.o
+RPN_COMM_get_my_domain.o
+RPN_COMM_init_generic.o
+RPN_COMM_win_allocate_shared.o
+
