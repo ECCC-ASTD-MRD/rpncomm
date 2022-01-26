@@ -5,15 +5,11 @@ variables:
   ORD_SOUMET_TMPFS: "8G"
   ORD_SOUMET_M: "80G"
   ORD_SOUMET_W: "10"
-
 stages:
   - build
   - package
-#  - deploy
-
 before_script:
     - export CLICOLOR_FORCE=1
-
 build:XC50_intel-19.0.5:
   stage: build
   tags:
@@ -30,7 +26,6 @@ build:XC50_intel-19.0.5:
     expire_in: 2 hrs
     paths:
     - build_XC50_intel-19.0.5
-
 build:intel-19.0.3:
   stage: build
   when: always
@@ -44,7 +39,6 @@ build:intel-19.0.3:
     expire_in: 2 hrs
     paths:
     - build_intel-19.0.3
-
 build:gnu-7.4.0:
   stage: build
   when: always
@@ -59,11 +53,11 @@ build:gnu-7.4.0:
     expire_in: 2 hrs
     paths:
     - build_gnu-7.4.0
-
 build:gnu-7.5.0:
   stage: build
   when: always
   script:
+    - set +e
     - source ci-env/latest/ubuntu-18.04-amd-64/gnu-7.5.0.sh
     - mkdir build_gnu-7.5.0
     - cd build_gnu-7.5.0
@@ -73,11 +67,11 @@ build:gnu-7.5.0:
     expire_in: 2 hrs
     paths:
     - build_gnu-7.5.0
-
 build:gnu-9.3.0:
   stage: build
   when: always
   script:
+    - set +e
     - source ci-env/latest/ubuntu-18.04-amd-64/gnu-9.3.0.sh
     - mkdir build_gnu-9.3.0
     - cd build_gnu-9.3.0
@@ -87,7 +81,6 @@ build:gnu-9.3.0:
     expire_in: 2 hrs
     paths:
     - build_gnu-9.3.0
-
 package:XC50_intel-19.0.5:
    stage: package
    tags:
@@ -104,7 +97,6 @@ package:XC50_intel-19.0.5:
       - cd build_XC50_intel-19.0.5
       - make package
 #      - ~/ci-admin-bundle/bin/ci-package-ssm.sh package
-
 package:intel-19.0.3:
    stage: package
 #   only:
@@ -114,11 +106,11 @@ package:intel-19.0.3:
    environment:
       name: testing
    script:
+      - set +e
       - source ci-env/latest/ubuntu-18.04-skylake-64/intel-19.0.3.199.sh
       - cd build_intel-19.0.3
       - make package
-      - ~/ci-admin-bundle/bin/ci-package-ssm.sh package
-
+#      - ~/ci-admin-bundle/bin/ci-package-ssm.sh package
 package:gnu-7.4.0:
    stage: package
 #   only:
@@ -134,10 +126,10 @@ package:gnu-7.4.0:
      - make package
 #     - ~/ci-admin-bundle/bin/ci-package-ssm.sh package
       
-deploy:staging:
-   stage: deploy
+#deploy:staging:
+#   stage: deploy
 #   only:
 #      - tags
-   script:
-      - source ci-env/latest/profile.sh
-      - ~/ci-admin-bundle/bin/ci-stage-ssm.sh libs rpn_comm $CI_COMMIT_TAG
+ #  script:
+  #    - source ci-env/latest/profile.sh
+   #   - ~/ci-admin-bundle/bin/ci-stage-ssm.sh libs rpn_comm $CI_COMMIT_TAG
