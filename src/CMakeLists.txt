@@ -67,7 +67,7 @@ add_custom_command(
 add_custom_target(RPN_COMM_interfaces DEPENDS RPN_COMM_interfaces.inc)
 add_dependencies(${PROJECT_NAME} RPN_COMM_interfaces)
 
-set (RPN_MPI_ITF_FILE RPN_MPI_interfaces_gen.hf)
+set(RPN_MPI_ITF_FILE RPN_MPI_interfaces_gen.hf)
 add_custom_command(
    OUTPUT ${RPN_MPI_ITF_FILE}
    COMMAND ${GEN_INTERFACES_SCRIPT} ${PROJECT_MPI_F_FILES} > ${RPN_MPI_ITF_FILE}
@@ -90,6 +90,10 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
    # Symbolic link to latest build
    COMMAND ln -sfv $<TARGET_FILE_NAME:${PROJECT_NAME}> ${SHORT_LIB_FILE_NAME}
+   # Symbolic link to rpncomm.a
+   COMMAND ln -sfv $<TARGET_FILE_NAME:${PROJECT_NAME}> librpncomm.a
+   # Symbolic link to rpn_comm.a for backward compatibility
+   COMMAND ln -sfv $<TARGET_FILE_NAME:${PROJECT_NAME}> librpn_comm.a
 )
 
 # Installation
@@ -104,9 +108,11 @@ set(DISTINCLUDES
    ${CMAKE_CURRENT_BINARY_DIR}/RPN_COMM_interfaces_int.inc
    
    RPN_MPI.hf
+   RPN_MPI_mpi_layout.hf
    RPN_MPI_macros.hf
    RPN_MPI_mpi_definitions.hf
    RPN_MPI_nulls.hf
+   RPN_MPI_mpi_symbols.hf
    RPN_MPI_COMM_interfaces.hf
    RPN_MPI_interfaces.hf
    ${CMAKE_CURRENT_BINARY_DIR}/RPN_MPI_interfaces_gen.hf
@@ -115,6 +121,8 @@ set(DISTINCLUDES
 install(TARGETS ${PROJECT_NAME})
 install(FILES ${DISTINCLUDES} DESTINATION include)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${SHORT_LIB_FILE_NAME} DESTINATION lib)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/librpn_comm.a DESTINATION lib)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/librpncomm.a DESTINATION lib)
 
 # The tests
 if (RPN_BUILD_TESTS)

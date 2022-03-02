@@ -1,4 +1,7 @@
-NAME: rpn_comm
+NAME: rpncomm
 VERSION: 4.6.2
+BUILD      : Release
 DESCRIPTION: MPI based communication routines for models
 MAINTAINER : Vincent Magnoux - Vincent.Magnoux@ec.gc.ca
+URL        : https://github.com/ECCC-ASTD-MRD/rpncomm
+

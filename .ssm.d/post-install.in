@@ -1,4 +1,5 @@
 #!/bin/bash
+# post-install <domainHome> <packageHome>
 
 domainHome=$1
 packageHome=$2
@@ -12,11 +13,13 @@ loginPath=${profileDirPath}/${packageName}.csh
 rm -f ${profilePath} ${loginPath}
 mkdir -p ${profileDirPath}
 
-#cat > ${profilePath} << EOF
-#
-#EOF
+cat > ${profilePath} << EOF
+#----- Add the <PackageName>_DIR variable for cmake builds
+export ${packageName%%_*}_DIR="$packageHome"
+EOF
 
-#cat > ${loginPath} << EOF
-#
-#EOF
+cat > ${loginPath} << EOF
+#----- Add the <PackageName>_DIR variable for cmake builds
+export ${packageName%%_*}_DIR="$packageHome"
+EOF
 
