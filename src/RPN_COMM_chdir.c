@@ -32,7 +32,6 @@ int f_rpn_comm_chdir_(char *);
 int f_rpn_comm_chdir(char *in_reper)
 {
   int ierr;
-  fprintf(stderr,"reper='%s' \n",in_reper);
   ierr = chdir(in_reper);
 
   return(ierr);
