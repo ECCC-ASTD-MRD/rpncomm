@@ -99,7 +99,6 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 # Installation
 set(DISTINCLUDES
    RPN_COMM.inc
-   rpn_comm.inc 
    RPN_COMM_types.inc
    RPN_COMM_constants.inc
    RPN_COMM_ftoc.inc
@@ -123,6 +122,14 @@ install(FILES ${DISTINCLUDES} DESTINATION include)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${SHORT_LIB_FILE_NAME} DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/librpn_comm.a DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/librpncomm.a DESTINATION lib)
+
+# Symbolic link for rpn_comm.inc on Linux only, as some systems are case-insensitive
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ln -sfv RPN_COMM.inc rpn_comm.inc 
+    )
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/rpn_comm.inc DESTINATION include)
+endif()
 
 # The tests
 if (RPN_BUILD_TESTS)

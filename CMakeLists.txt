@@ -10,7 +10,7 @@ ec_parse_manifest()
 
 project(${NAME} VERSION ${VERSION} DESCRIPTION "${DESCRIPTION}") 
 set(PROJECT_VERSION ${VERSION}${STATE})
-set(RPN_COMM_VERSION ${PROJECT_VERSION} CACHE INTERNAL "rpncomm version" FORCE) # Needed for cascaded version identification
+set(rpncomm_VERSION ${PROJECT_VERSION} CACHE INTERNAL "rpncomm version" FORCE) # Needed for cascaded version identification
 message(STATUS "(EC) ${PROJECT_NAME} version = ${PROJECT_VERSION}")
 
 string(REPLACE "." "" RPN_COMM_VERSION_MARKER ${VERSION})
