@@ -17,6 +17,12 @@ git repo after having cloned.
 Source the right file depending on the architecture you need from the env directory.
 This will load the specified compiler and define the ECCI_DATA_DIR variable for the test datasets
 
+- Example for PPP5 and icelake specific architecture:
+
+#+begin_src
+. ci-env/latest/rhel-8-icelake-64/inteloneapi-2022.1.2.sh
+#+end_src
+
 - Example for PPP3 and skylake specific architecture:
 
 #+begin_src
