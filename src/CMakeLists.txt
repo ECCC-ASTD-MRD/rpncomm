@@ -82,6 +82,16 @@ set(SHORT_LIB_FILE_NAME lib${PROJECT_NAME}${MPI_LIBRARY_VERSION}.a)
 # Adjust library name to include MPI version
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${FULL_LIB_NAME})
 
+# Symbolic link for rpn_comm.inc on Linux only, as some systems are case-insensitive
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+  add_custom_command(
+    TARGET ${PROJECT_NAME}
+    PRE_BUILD
+    COMMAND cp -p ${CMAKE_CURRENT_SOURCE_DIR}/RPN_COMM.inc ${CMAKE_CURRENT_BINARY_DIR}/RPN_COMM.inc
+    COMMAND ln -sfv RPN_COMM.inc rpn_comm.inc
+    )
+endif()
+
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
    # Sanity check for library content
    COMMAND ar t $<TARGET_FILE_NAME:${PROJECT_NAME}> | sort -u > objects.lst
@@ -122,11 +132,10 @@ install(FILES ${DISTINCLUDES} DESTINATION include)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${SHORT_LIB_FILE_NAME} DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/librpn_comm.a DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/librpncomm.a DESTINATION lib)
-
 # Symbolic link for rpn_comm.inc on Linux only, as some systems are case-insensitive
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ln -sfv RPN_COMM.inc rpn_comm.inc 
+    COMMAND ln -sfv RPN_COMM.inc rpn_comm.inc
     )
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/rpn_comm.inc DESTINATION include)
 endif()
