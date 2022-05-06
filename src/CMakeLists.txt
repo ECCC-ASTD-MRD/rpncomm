@@ -40,14 +40,14 @@ target_compile_options(
 # Targets for generating header files
 add_executable(c_binding_extras c_binding_extras.c)
 add_custom_command(
-  OUTPUT c_binding_extras.hf
+  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf
   COMMAND ${CMAKE_CURRENT_BINARY_DIR}/c_binding_extras > ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf 
   COMMENT "Generating c_binding_extras.hf"
   DEPENDS c_binding_extras
-  BYPRODUCTS c_binding_extras.hf
+  BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf
   USES_TERMINAL
 )
-add_custom_target(c_binding_extras_include DEPENDS c_binding_extras.hf)
+add_custom_target(c_binding_extras_include DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf)
 add_dependencies(${PROJECT_NAME} c_binding_extras_include)
 
 set(GEN_INTERFACES_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/gen_interfaces.sh)
