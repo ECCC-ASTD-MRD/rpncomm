@@ -40,14 +40,14 @@ target_compile_options(
 # Targets for generating header files
 add_executable(c_binding_extras c_binding_extras.c)
 add_custom_command(
-  OUTPUT c_binding_extras.hf
+  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf
   COMMAND ${CMAKE_CURRENT_BINARY_DIR}/c_binding_extras > ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf 
   COMMENT "Generating c_binding_extras.hf"
   DEPENDS c_binding_extras
-  BYPRODUCTS c_binding_extras.hf
+  BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf
   USES_TERMINAL
 )
-add_custom_target(c_binding_extras_include DEPENDS c_binding_extras.hf)
+add_custom_target(c_binding_extras_include DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf)
 add_dependencies(${PROJECT_NAME} c_binding_extras_include)
 
 set(GEN_INTERFACES_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/gen_interfaces.sh)
@@ -81,6 +81,16 @@ set(FULL_LIB_NAME ${PROJECT_NAME}_${PROJECT_VERSION}${MPI_LIBRARY_VERSION})
 set(SHORT_LIB_FILE_NAME lib${PROJECT_NAME}${MPI_LIBRARY_VERSION}.a)
 # Adjust library name to include MPI version
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${FULL_LIB_NAME})
+
+# Symbolic link for rpn_comm.inc on Linux only, as some systems are case-insensitive
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+  add_custom_command(
+    TARGET ${PROJECT_NAME}
+    PRE_BUILD
+    COMMAND cp -p ${CMAKE_CURRENT_SOURCE_DIR}/RPN_COMM.inc ${CMAKE_CURRENT_BINARY_DIR}/RPN_COMM.inc
+    COMMAND ln -sfv RPN_COMM.inc rpn_comm.inc
+    )
+endif()
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
    # Sanity check for library content
@@ -122,11 +132,10 @@ install(FILES ${DISTINCLUDES} DESTINATION include)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${SHORT_LIB_FILE_NAME} DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/librpn_comm.a DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/librpncomm.a DESTINATION lib)
-
 # Symbolic link for rpn_comm.inc on Linux only, as some systems are case-insensitive
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ln -sfv RPN_COMM.inc rpn_comm.inc 
+    COMMAND ln -sfv RPN_COMM.inc rpn_comm.inc
     )
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/rpn_comm.inc DESTINATION include)
 endif()
