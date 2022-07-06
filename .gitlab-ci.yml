@@ -1,18 +1,19 @@
 variables:
-  GIT_SUBMODULE_STRATEGY: recursive
-  ORD_SOUMET_SHELL: "/bin/bash"
-  ORD_SOUMET_CPUS: "40"
-  ORD_SOUMET_TMPFS: "8G"
-  ORD_SOUMET_M: "80G"
-  ORD_SOUMET_W: "10"
+   GIT_SUBMODULE_STRATEGY: recursive
+   ORD_SOUMET_SHELL: "/bin/bash"
+   ORD_SOUMET_CPUS: "40"
+   ORD_SOUMET_TMPFS: "8G"
+   ORD_SOUMET_M: "80G"
+   ORD_SOUMET_W: "10"
+
 stages:
-  - build
-  - test
-  - package
-  - deploy
+   - build
+   - test
+   - package
+   - deploy
 
 before_script:
-    - export CLICOLOR_FORCE=1
+   - export CLICOLOR_FORCE=1
    - if [[ ${CI_COMMIT_REF_NAME} == "dev" && ${ECCI_PROCESS:0:3} != "dev" && ${ECCI_PROCESS} != "nightly" ]]; then ECCI_PROCESS="dev_${CI_PIPELINE_ID}"; fi
    - SSM=${ECCI_SSM}/`[[ ${ECCI_PROCESS:0:3} != "dev" ]] && echo ${ECCI_PROCESS} || echo staging`
 
@@ -78,19 +79,19 @@ build:amd64-gnu-9.3.0:
          - build_amd64-gnu-9.3.0
 
 build:amd64-gnu-7.5.0:
-  stage: build
-  when: always
-  script:
-    - set +e
-    - source ci-env/latest/ubuntu-18.04-amd-64/gnu-7.5.0.sh
-    - mkdir build_amd64-gnu-7.5.0
-    - cd build_amd64-gnu-7.5.0
-    - cmake ..
-    - make -j $NCPUS
+   stage: build
+   when: always
+   script:
+      - set +e
+      - source ci-env/latest/ubuntu-18.04-amd-64/gnu-7.5.0.sh
+      - mkdir build_amd64-gnu-7.5.0
+      - cd build_amd64-gnu-7.5.0
+      - cmake ..
+      - make -j $NCPUS
   artifacts:
-    expire_in: 2 hrs
-    paths:
-    - build_amd64-gnu-7.5.0
+     expire_in: 2 hrs
+     paths:
+     - build_amd64-gnu-7.5.0
 
 package:icelake-inteloneapi-2022.1.2:
    stage: package
