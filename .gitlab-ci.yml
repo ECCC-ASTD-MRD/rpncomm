@@ -78,21 +78,6 @@ build:amd64-gnu-9.3.0:
       paths:
          - build_amd64-gnu-9.3.0
 
-build:amd64-gnu-7.5.0:
-   stage: build
-   when: always
-   script:
-      - set +e
-      - source ci-env/latest/ubuntu-18.04-amd-64/gnu-7.5.0.sh
-      - mkdir build_amd64-gnu-7.5.0
-      - cd build_amd64-gnu-7.5.0
-      - cmake ..
-      - make -j $NCPUS
-   artifacts:
-     expire_in: 2 hrs
-     paths:
-     - build_amd64-gnu-7.5.0
-
 package:icelake-inteloneapi-2022.1.2:
    stage: package
    tags:
