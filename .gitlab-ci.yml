@@ -88,7 +88,7 @@ build:amd64-gnu-7.5.0:
       - cd build_amd64-gnu-7.5.0
       - cmake ..
       - make -j $NCPUS
-  artifacts:
+   artifacts:
      expire_in: 2 hrs
      paths:
      - build_amd64-gnu-7.5.0
