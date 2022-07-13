@@ -37,13 +37,10 @@ if (NOT RPN_SERIAL)
    if (${RPN_MPIRUN} STREQUAL "RPN_MPIRUN-NOTFOUND")
       message(FATAL_ERROR "(EC) mpirun not found. Won't be able to configure the version.")
    else()
-      execute_process(
-         COMMAND ${RPN_MPIRUN} --version 2>&1
-         COMMAND grep -w MPI
-         COMMAND sed -e "s/.* //" -e "s/)//"
-         OUTPUT_VARIABLE MPI_LIBRARY_VERSION
-         OUTPUT_STRIP_TRAILING_WHITESPACE)
-
+     execute_process(
+       COMMAND bash "-c" "${RPN_MPIRUN} --version 2>&1 | head -1 | xargs -n1 | grep '\\.'"
+       OUTPUT_VARIABLE MPI_LIBRARY_VERSION
+       OUTPUT_STRIP_TRAILING_WHITESPACE)
      set(MPI_LIBRARY_VERSION "_${MPI_LIBRARY_VERSION}")
    endif()
 endif()
