@@ -80,6 +80,19 @@
       endif
       return
       end subroutine RPN_COMM_world_get                            !InTf!
+      
+      subroutine RPN_COMM_world_get2(c)
+      use rpn_comm
+      implicit none
+      integer, intent(out) :: c
+      print *, 'PLEASE DELETE ME FROM THE CODE'
+      if( WORLD_COMM_MPI_INIT ) then  ! RPN_COMM_world_set has been called
+        c = WORLD_COMM_MPI
+      else
+        c = MPI_COMM_WORLD
+      endif
+      return
+      end subroutine RPN_COMM_world_get2
 !===================================================================
 !InTf!
       subroutine RPN_COMM_world_set(world_comm)                    !InTf!
