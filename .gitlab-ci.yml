@@ -37,22 +37,6 @@ build:rhel-8-icelake-64_inteloneapi-2022.1.2:
       paths:
          - build_rhel-8-icelake-64_inteloneapi-2022.1.2
 
-# test:rhel-8-icelake-64_inteloneapi-2022.1.2:
-#    stage: test
-#    only:
-#       - master
-#       - dev
-#       - tags
-#    dependencies:
-#       - build:rhel-8-icelake-64_inteloneapi-2022.1.2
-#    script:
-#       - set +e
-#       - source ~/ci-env/latest/rhel-8-icelake-64/inteloneapi-2022.1.2.sh
-#       - . r.load.dot ${ECCI_PROCESS_SSM}/libs
-#       - set -e
-#       - cd build_rhel-8-icelake-64_inteloneapi-2022.1.2
-#       - make check
-
 package:rhel-8-icelake-64_inteloneapi-2022.1.2:
    stage: package
    only:
@@ -93,22 +77,6 @@ build:rhel-8-amd64_inteloneapi-2022.1.2:
       paths:
          - build_rhel-8-amd64_inteloneapi-2022.1.2
 
-# test:rhel-8-amd64_inteloneapi-2022.1.2:
-#    stage: test
-#    only:
-#       - master
-#       - dev
-#       - tags
-#    dependencies:
-#       - build:rhel-8-amd64_inteloneapi-2022.1.2
-#    script:
-#       - set +e
-#       - source ~/ci-env/latest/rhel-8-amd-64/inteloneapi-2022.1.2.sh
-#       - . r.load.dot ${ECCI_PROCESS_SSM}/libs
-#       - set -e
-#       - cd build_rhel-8-amd64_inteloneapi-2022.1.2
-#       - make check
-
 package:rhel-8-amd64_inteloneapi-2022.1.2:
    stage: package
    only:
@@ -128,7 +96,7 @@ package:rhel-8-amd64_inteloneapi-2022.1.2:
       - make package
       - ~/ci-admin-bundle/bin/ci-package-ssm.sh package ${ECCI_PROCESS}
 
-#----- rhel-8-amd64_gnu-9.3
+#----- rhel-8-amd64_gnu-9.3.0
 
 build:rhel-8-amd64_gnu-9.3.0:
    stage: build
@@ -149,22 +117,6 @@ build:rhel-8-amd64_gnu-9.3.0:
       paths:
          - build_rhel-8-amd64_gnu-9.3.0
 
-# test:rhel-8-amd64_gnu-9.3.0:
-#    stage: test
-#    only:
-#       - master
-#       - dev
-#       - tags
-#    dependencies:
-#       - build:rhel-8-amd64_gnu-9.3.0
-#    script:
-#       - set +e
-#       - source ~/ci-env/latest/rhel-8-amd-64/gnu-9.3.0.sh 
-#       - . r.load.dot ${ECCI_PROCESS_SSM}/libs
-#       - set -e
-#       - cd build_rhel-8-amd64_gnu-9.3.0
-#       - make check
-
 package:rhel-8-amd64_gnu-9.3.0:
    stage: package
    only:
@@ -181,6 +133,54 @@ package:rhel-8-amd64_gnu-9.3.0:
       - source ~/ci-env/latest/rhel-8-amd-64/gnu-9.3.0.sh 
       - set -e
       - cd build_rhel-8-amd64_gnu-9.3.0
+      - make package
+      - ~/ci-admin-bundle/bin/ci-package-ssm.sh package ${ECCI_PROCESS}
+
+#----- ubuntu-18.04-amd64_gnu-9.3.0
+
+build:ubuntu-18.04-amd64_gnu-9.3.0:
+   variables:
+      ORD_SOUMET_MACH    : gpsc5
+      ORD_SOUMET_IMAGE   : eccc/eccc_all_default_ubuntu-18.04-amd64_latest
+      ORD_SOUMET_PROJECT : eccc_mrd
+   stage: build
+   only:
+     - master
+     - dev
+     - tags
+   script:
+      - set +e
+      - source ~/ci-env/latest/ubuntu-18.04-amd-64/gnu-9.3.0.sh
+      - set -e
+      - mkdir build_ubuntu-18.04-amd64_gnu-9.3.0
+      - cd build_ubuntu-18.04-amd64_gnu-9.3.0
+      - cmake -DRPN_BUILD_STUBS=true ../
+      - time make -j $NCPUS
+   artifacts:
+      expire_in: 2 hrs
+      paths:
+         - build_ubuntu-18.04-amd64_gnu-9.3.0
+      
+package:ubuntu-18.04-amd64_gnu-9.3.0:
+   variables:
+      ORD_SOUMET_MACH    : gpsc5
+      ORD_SOUMET_IMAGE   : eccc/eccc_all_default_ubuntu-18.04-amd64_latest
+      ORD_SOUMET_PROJECT : eccc_mrd
+   stage: package
+   only:
+      - master
+      - dev
+      - tags
+      - schedules
+   dependencies:
+      - build:ubuntu-18.04-amd64_gnu-9.3.0
+   environment:
+      name: testing
+   script:
+      - set +e
+      - source ~/ci-env/latest/ubuntu-18.04-amd-64/gnu-9.3.0.sh
+      - set -e
+      - cd build_ubuntu-18.04-amd64_gnu-9.3.0
       - make package
       - ~/ci-admin-bundle/bin/ci-package-ssm.sh package ${ECCI_PROCESS}
 
@@ -208,26 +208,6 @@ build:ubuntu-18.04-amd64_inteloneapi-2022.1.2:
       expire_in: 2 hrs
       paths:
          - build_ubuntu-18.04-amd64_inteloneapi-2022.1.2
-
-# test:ubuntu-18.04-amd64_inteloneapi-2022.1.2:
-#    variables:
-#       ORD_SOUMET_MACH    : gpsc5
-#       ORD_SOUMET_IMAGE   : eccc/eccc_all_default_ubuntu-18.04-amd64_latest
-#       ORD_SOUMET_PROJECT : eccc_mrd
-#    stage: test
-#    only:
-#       - master
-#       - dev
-#       - tags
-#    dependencies:
-#       - build:ubuntu-18.04-amd64_inteloneapi-2022.1.2
-#    script:
-#       - set +e
-#       - build:ubuntu-18.04-amd64_inteloneapi-2022.1.2
-#       - . r.load.dot ${ECCI_PROCESS_SSM}/libs
-#       - set -e
-#       - cd build_ubuntu-18.04-amd64_inteloneapi-2022.1.2
-#       - make check
       
 package:ubuntu-18.04-amd64_inteloneapi-2022.1.2:
    variables:
@@ -277,26 +257,6 @@ build:ubuntu-20.04-amd64_inteloneapi-2022.1.2:
       expire_in: 2 hrs
       paths:
          - build_ubuntu-20.04-amd64_inteloneapi-2022.1.2
-
-# test:ubuntu-20.04-amd64_inteloneapi-2022.1.2:
-#    variables:
-#       ORD_SOUMET_MACH    : gpsc5
-#       ORD_SOUMET_IMAGE   : eccc/eccc_all_default_ubuntu-20.04-amd64_latest
-#       ORD_SOUMET_PROJECT : eccc_mrd
-#    stage: test
-#    only:
-#       - master
-#       - dev
-#       - tags
-#    dependencies:
-#       - build:ubuntu-20.04-amd64_inteloneapi-2022.1.2
-#    script:
-#       - set +e
-#       - build:ubuntu-20.04-amd64_inteloneapi-2022.1.2
-#       - . r.load.dot ${ECCI_PROCESS_SSM}/libs
-#       - set -e
-#       - cd build_ubuntu-20.04-amd64_inteloneapi-2022.1.2
-#       - make check
       
 package:ubuntu-20.04-amd64_inteloneapi-2022.1.2:
    variables:
