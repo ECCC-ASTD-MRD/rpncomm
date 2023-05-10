@@ -33,6 +33,7 @@ if (MPI_FOUND)
    set(CMAKE_C_COMPILER ${MPI_C_COMPILER})
 endif()
 
+# Find out MPI version (to use in rpncomm version)
 if (NOT RPN_SERIAL)
    find_program(RPN_MPIRUN mpirun)
    if (${RPN_MPIRUN} STREQUAL "RPN_MPIRUN-NOTFOUND")

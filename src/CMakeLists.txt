@@ -34,11 +34,7 @@ configure_file(RPN_COMM_version.F90.in ${RPN_VERSION_FILE} @ONLY)
 target_compile_definitions(${PROJECT_NAME} PUBLIC MARKER=RPN_COMM_marker_${RPN_COMM_VERSION_MARKER})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-target_compile_options(
-  ${PROJECT_NAME}
-  PRIVATE
-  $<$<COMPILE_LANG_AND_ID:Fortran,Intel>:-diag-disable 5268>
-)
+
 # Targets for generating header files
 add_executable(c_binding_extras c_binding_extras.c)
 add_custom_command(
