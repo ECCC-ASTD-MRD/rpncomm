@@ -123,6 +123,8 @@ set(DISTINCLUDES
    RPN_MPI_COMM_interfaces.hf
    RPN_MPI_interfaces.hf
    ${CMAKE_CURRENT_BINARY_DIR}/RPN_MPI_interfaces_gen.hf
+
+   ${CMAKE_CURRENT_BINARY_DIR}/rpn_comm.mod
 )
 
 install(TARGETS ${PROJECT_NAME}
