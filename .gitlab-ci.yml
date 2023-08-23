@@ -420,9 +420,9 @@ package:ubuntu-22.04-amd64_inteloneapi-2023.0.0:
       - make package
       - ~/ci-admin-bundle/bin/ci-package-ssm.sh package ${ECCI_PROCESS}
 
-#----- ubuntu-22.04-amd64_gnu-11.3.0
+#----- ubuntu-22.04-amd64_gnu-11.4.0
 
-build:ubuntu-22.04-amd64_gnu-11.3.0:
+build:ubuntu-22.04-amd64_gnu-11.4.0:
    variables:
       ORD_SOUMET_MACH    : gpsc5
       ORD_SOUMET_IMAGE   : eccc/eccc_all_default_ubuntu-22.04-amd64_latest
@@ -437,16 +437,16 @@ build:ubuntu-22.04-amd64_gnu-11.3.0:
       - source ~/ci-env/latest/ubuntu-22.04-amd-64/gnu.sh
       - export ORDENV_PLAT=ubuntu-22.04-amd64-64
       - set -e
-      - mkdir build_ubuntu-22.04-amd64_gnu-11.3.0
-      - cd build_ubuntu-22.04-amd64_gnu-11.3.0
+      - mkdir build_ubuntu-22.04-amd64_gnu-11.4.0
+      - cd build_ubuntu-22.04-amd64_gnu-11.4.0
       - cmake -DRPN_BUILD_STUBS=true ../
       - time make -j $NCPUS
    artifacts:
       expire_in: 2 hrs
       paths:
-         - build_ubuntu-22.04-amd64_gnu-11.3.0
+         - build_ubuntu-22.04-amd64_gnu-11.4.0
       
-package:ubuntu-22.04-amd64_gnu-11.3.0:
+package:ubuntu-22.04-amd64_gnu-11.4.0:
    variables:
       ORD_SOUMET_MACH    : gpsc5
       ORD_SOUMET_IMAGE   : eccc/eccc_all_default_ubuntu-22.04-amd64_latest
@@ -458,7 +458,7 @@ package:ubuntu-22.04-amd64_gnu-11.3.0:
       - tags
       - schedules
    dependencies:
-      - build:ubuntu-22.04-amd64_gnu-11.3.0
+      - build:ubuntu-22.04-amd64_gnu-11.4.0
    environment:
       name: testing
    script:
@@ -466,7 +466,7 @@ package:ubuntu-22.04-amd64_gnu-11.3.0:
       - source ~/ci-env/latest/ubuntu-22.04-amd-64/gnu.sh
       - export ORDENV_PLAT=ubuntu-22.04-amd64-64
       - set -e
-      - cd build_ubuntu-22.04-amd64_gnu-11.3.0
+      - cd build_ubuntu-22.04-amd64_gnu-11.4.0
       - make package
       - ~/ci-admin-bundle/bin/ci-package-ssm.sh package ${ECCI_PROCESS}
 
