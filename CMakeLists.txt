@@ -9,7 +9,7 @@ include(ec_init)
 ec_git_version()           # Get version from git state
 ec_parse_manifest()
 
-project(${NAME} VERSION ${VERSION} DESCRIPTION "${DESCRIPTION}") 
+project(${NAME} VERSION ${VERSION} DESCRIPTION "${DESCRIPTION}" LANGUAGES C Fortran)
 set(PROJECT_VERSION ${VERSION}${STATE})
 set(rpncomm_VERSION ${PROJECT_VERSION} CACHE INTERNAL "rpncomm version" FORCE) # Needed for cascaded version identification
 message(STATUS "(EC) ${PROJECT_NAME} version = ${PROJECT_VERSION}")
