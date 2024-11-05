@@ -17,6 +17,7 @@ if (NOT RPN_SERIAL)
    set(SHORT_STUB_LIB_FILE_NAME lib${STUB_LIBRARY}${MPI_LIBRARY_VERSION}.a)
 
    add_library(${STUB_LIBRARY} STATIC ${RPN_STUB_SOURCE_FILES})
+   target_link_libraries(${STUB_LIBRARY} PUBLIC MPI::MPI_C MPI::MPI_Fortran)
    target_include_directories(${STUB_LIBRARY} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
    set_target_properties(${STUB_LIBRARY} PROPERTIES OUTPUT_NAME ${FULL_STUB_LIB_NAME})
@@ -33,6 +34,7 @@ if (NOT RPN_SERIAL)
 endif()
 
 add_executable(${MAKE_MPI_STUB_INCLUDE} ${MAKE_MPI_STUB_INCLUDE_SOURCE})
+target_link_libraries(${MAKE_MPI_STUB_INCLUDE} PUBLIC MPI::MPI_Fortran)
 
 # Generate the program that generates the header used by stubs
 set(GEN_MAKE_STUB_HEADER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/gen_make_mpi_stub_include.sh)

@@ -28,6 +28,7 @@ add_library(${PROJECT_NAME} STATIC
    ${PROJECT_STUB_FILES}
 )
 
+target_link_libraries(${PROJECT_NAME} PUBLIC MPI::MPI_C MPI::MPI_Fortran)
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 configure_file(RPN_COMM_version.F90.in ${RPN_VERSION_FILE} @ONLY)
@@ -37,6 +38,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURR
 
 # Targets for generating header files
 add_executable(c_binding_extras c_binding_extras.c)
+target_link_libraries(c_binding_extras PUBLIC MPI::MPI_C)
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf
   COMMAND ${CMAKE_CURRENT_BINARY_DIR}/c_binding_extras > ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf 

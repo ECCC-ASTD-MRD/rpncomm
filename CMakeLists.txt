@@ -26,10 +26,6 @@ endif()
 include(ec_compiler_presets)
 
 find_package(MPI)
-if (MPI_FOUND)
-   set(CMAKE_Fortran_COMPILER ${MPI_Fortran_COMPILER})
-   set(CMAKE_C_COMPILER ${MPI_C_COMPILER})
-endif()
 
 # Find out MPI version (to use in rpncomm version)
 if (NOT RPN_SERIAL)
