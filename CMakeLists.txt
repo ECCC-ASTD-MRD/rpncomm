@@ -23,8 +23,6 @@ if (RPN_SERIAL)
    set(RPN_SERIAL FALSE)
 endif()
 
-enable_language(Fortran)
-enable_language(C)
 include(ec_compiler_presets)
 
 find_package(MPI)
