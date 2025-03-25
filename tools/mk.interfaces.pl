@@ -31,7 +31,7 @@ foreach $file (@listfile) {
         print" integer :: $1\n";
         print "# if __GNUC__  > 3 && __GNUC_MINOR__ > 8\n";           # gfortran 4.9 and up (never reached now)
         print"!GCC\$ ATTRIBUTES NO_ARG_CHECK :: $1\n";
-        print "# elif defined(__INTEL_COMPILER)\n";                   # Intel ifort
+        print "# elif defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)\n"; # Intel ifort or ifx
         print"!DEC\$ ATTRIBUTES NO_ARG_CHECK :: $1\n";
         print "# elif defined (__PPC__)\n";                           # Power PC (IBM xlf)
         print"!IBM* ignore_tkr $1\n";
