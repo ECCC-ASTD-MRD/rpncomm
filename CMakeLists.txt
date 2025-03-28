@@ -41,6 +41,11 @@ if (NOT RPN_SERIAL)
    endif()
 endif()
 
+if (EC_INIT_DONE LESS 2)
+   include(CTest)
+   add_custom_target(check COMMAND CTEST_OUTPUT_ON_FAILURE=TRUE ${CMAKE_CTEST_COMMAND})
+endif()
+
 add_subdirectory(src)
 
 #----- Generate the config file for the project to be usable via cmake's find_package command
