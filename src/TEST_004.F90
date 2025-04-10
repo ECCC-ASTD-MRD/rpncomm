@@ -2,7 +2,7 @@
 !  call rpn_comm_test_004
 !  stop
 !end
-subroutine rpn_comm_test_004  ! test for two player MPMD update game
+subroutine rpncomm_test_004  ! test for two player MPMD update game
   implicit none
   include 'RPN_COMM_constants.inc'
   external sss

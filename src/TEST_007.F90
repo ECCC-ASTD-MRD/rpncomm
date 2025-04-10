@@ -1,9 +1,6 @@
-subroutine rpn_comm_test_007
-  use ISO_C_BINDING
+subroutine rpncomm_test_007
+  use rpn_comm_globals
   implicit none
-  include 'mpif.h'
-  include 'RPN_COMM.inc'
-!  include 'RPN_COMM_types.inc'
   integer, PARAMETER :: npts = 170000
   integer :: npes, myrank, nprint
   integer, dimension(npts) :: pe, index
@@ -90,7 +87,6 @@ subroutine rpn_comm_test_007
   end subroutine Shuffle
 
 !  integer function RPN_COMM_comm(str)
-!  include 'mpif.h'
 !  character (len=*) :: str
 !  RPN_COMM_comm = MPI_COMM_WORLD
 !  return
@@ -296,4 +292,4 @@ subroutine rpn_comm_test_007
       Return
 !
   End Subroutine I_mrgrnk
-end subroutine rpn_comm_test_007
+end subroutine rpncomm_test_007

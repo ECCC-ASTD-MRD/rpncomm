@@ -17,289 +17,9 @@
 ! * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ! * Boston, MA 02111-1307, USA.
 ! */
-!=======================================================================
-      integer function RPN_COMM_xch_halo_flip_test(nparams,params)
-!=======================================================================
-      use rpn_comm
-      implicit none
-      integer, intent(IN) :: nparams
-      integer, intent(IN), dimension(nparams) :: params
-      integer :: lni
-      integer :: lnj
-      integer :: nk
-      integer :: gni, gnj
-      logical :: periodx, periody
-      integer, dimension(pe_nx) :: countx, offsetx
-      integer, dimension(pe_ny) :: county, offsety
-      integer :: halox, haloy, npol_row
-      integer :: lminx, lmaxx, lminy, lmaxy
-      integer :: minx, maxx, miny, maxy
-      integer :: minx1, maxx1, miny1, maxy1
-      integer, pointer, dimension(:,:,:) :: localarray,localarray2
-      integer :: i, j, k, ierr
-      integer, external :: RPN_COMM_limit
-!
-      RPN_COMM_xch_halo_flip_test=-1
-      gni = params(1)
-      gnj = params(2)
-      nk = params(3)
-      halox=params(4)
-      haloy=params(5)
-      periodx = .false.
-      periody = .false.
-      periodx = params(6).ne.0
-      periody = params(7).ne.0
-
-      npol_row = -999999
-      ierr = RPN_COMM_limit(pe_mex,pe_nx,1,gni,lminx,lmaxx,countx,offsetx)
-      lni = countx(pe_mex+1)
-      ierr = RPN_COMM_limit(pe_mey,pe_ny,1,gnj,lminy,lmaxy,county,offsety)
-      lnj = county(pe_mey+1)
-      minx = lminx-halox ; minx1 = minx - lminx + 1
-      maxx = lmaxx+halox ; maxx1 = maxx - lminx + 1
-      miny = lminy-haloy ; miny1 = miny - lminy + 1
-      maxy = lmaxy+haloy ; maxy1 = maxy - lminy + 1
-
-      allocate(localarray(minx:maxx,miny:maxy,nk))
-      allocate(localarray2(minx:maxx,miny:maxy,nk))
-      localarray = 1111
-      localarray = 2222
-      do k = 1,nk
-      do j = lminy,lmaxy
-      do i = lminx,lmaxx
-        localarray(i,j,k) = (i - 1)*(360.0/gni)
-        localarray2(i,j,k) = -90 + (j - .5) * (180.0/(gnj))
-      enddo
-      enddo
-      enddo
-      do j = maxy,miny,-1
-        print 101,j,localarray(minx:maxx,j,1),-999,localarray2(minx:maxx,j,1)
-      enddo
-101   format(40I5)
-      call rpn_comm_xch_halo(localarray,minx1,maxx1,miny1,maxy1,lni,lnj,nk,halox,haloy,periodx,periody,gni,npol_row)
-      call rpn_comm_xch_halo(localarray2,minx1,maxx1,miny1,maxy1,lni,lnj,nk,halox,haloy,periodx,periody,gni,npol_row)
-      do j = maxy,miny,-1
-        print 101,j,localarray(minx:maxx,j,1),-999,localarray2(minx:maxx,j,1)
-      enddo
-
-      RPN_COMM_xch_halo_flip_test=0
-      return
-      end function RPN_COMM_xch_halo_flip_test
 !
 !=======================================================================
-      function RPN_COMM_exchange_halo_test(nparams,params) result(status)
-      use ISO_C_BINDING
-      implicit none
-      include 'RPN_COMM.inc'
-      integer, intent(IN) :: nparams
-      integer, intent(IN), dimension(nparams) :: params
-      integer :: status
-      status = 0
-      end function RPN_COMM_exchange_halo_test
-!=======================================================================
-!=======================================================================
-      integer function RPN_COMM_xch_halo_test(nparams,params)
-!=======================================================================
-      use rpn_comm
-      implicit none
-      include 'RPN_COMM_interfaces.inc'
-      integer, intent(IN) :: nparams
-      integer, intent(IN), dimension(nparams) :: params
-!
-      integer, pointer, dimension(:,:,:) :: localarray
-      integer*8, pointer, dimension(:,:,:) :: localarray2
-      integer :: lni
-      integer :: lnj
-      integer :: nk
-      integer :: gni, gnj
-      integer :: i, j, k, ierr
-      integer :: lminx, lmaxx, lminy, lmaxy
-      integer :: minx, maxx, miny, maxy
-      integer :: minx1, maxx1, miny1, maxy1
-      integer, dimension(pe_nx) :: countx, offsetx
-      integer, dimension(pe_ny) :: county, offsety
-      integer :: halox, haloy, npol_row, errors, value, ii, jj
-      logical :: periodx, periody
-!
-      RPN_COMM_xch_halo_test=-1
-      gni = params(1)
-      gnj = params(2)
-      nk = params(3)
-      halox=params(4)
-      haloy=params(5)
-      periodx = .false.
-      periody = .false.
-      periodx = params(6).ne.0
-      periody = params(7).ne.0
-!
-      ierr = RPN_COMM_limit(pe_mex,pe_nx,1,gni,lminx,lmaxx,countx,offsetx)
-      lni = countx(pe_mex+1)
-      ierr = RPN_COMM_limit(pe_mey,pe_ny,1,gnj,lminy,lmaxy,county,offsety)
-      lnj = county(pe_mey+1)
-      minx = lminx-halox ; minx1 = minx - lminx + 1
-      maxx = lmaxx+halox ; maxx1 = maxx - lminx + 1
-      miny = lminy-haloy ; miny1 = miny - lminy + 1
-      maxy = lmaxy+haloy ; maxy1 = maxy - lminy + 1
-      if(pe_me==pe_nx*pe_ny-1) write(rpn_u,100)  &
-          'grid halo exchange test',  &
-          pe_tot_grid,pe_nx,pe_ny,lminx,lmaxx,lminy,lmaxy,countx,county,  &
-          minx1,maxx1,miny1,maxy1
-100   format(A,25I5)
-      allocate(localarray(minx:maxx,miny:maxy,nk))
-      allocate(localarray2(minx:maxx,miny:maxy,nk))
-!
-      localarray = 99999
-      localarray2 = 99999
-      do k = 1,nk
-      do j = lminy,lmaxy
-      do i = lminx,lmaxx
-        localarray(i,j,k) = k + 10*j + 1000*i
-        localarray2(i,j,k) = k + 10*j + 1000*i
-      enddo
-      enddo
-      enddo
-      call mpi_barrier(MPI_COMM_WORLD,ierr)
-!
-      npol_row = 0
-!      return
-      call RPN_COMM_xch_halo(localarray,minx1,maxx1,miny1,maxy1, &
-                   lni,lnj,nk,halox,haloy,periodx,periody,  &
-                  gni,npol_row)
-
-      call mpi_barrier(MPI_COMM_WORLD,ierr)
-      if(pe_mex==0 .and. pe_mey==0)then
-        do j=lmaxy+haloy,lminy-haloy,-1
-          write(rpn_u,90)j,localarray(:,j,1)
-        enddo
-90      format(X,I5.4,20(X,I5.5))
-      endif
-      errors=0
-      do k=1,nk
-      do j=lminy-haloy,lmaxy+haloy
-!      do j=lminy,lmaxy+1
-      do i=lminx-halox,lmaxx+halox
-!      do i=lminx,lmaxx
-        ii = i
-        if(i>gni .and. .not. periodx) cycle
-        if(i<1   .and. .not. periodx) cycle
-        if(i>gni) ii=i-gni
-        if(i<1)   ii=i+gni
-        jj = j
-        if(jj>gnj .and. .not. periody) cycle
-        if(jj<1   .and. .not. periody) cycle
-        if(jj>gnj) jj=j-gnj
-        if(jj<1)   jj=j+gnj
-        value = k+10*jj+1000*ii
-        if(localarray(i,j,k) /= value)errors=errors+1
-      enddo
-      enddo
-      enddo
-      call mpi_barrier(MPI_COMM_WORLD,ierr)
-      write(rpn_u,100)'errors=',errors,pe_mex,pe_mey
-!
-      RPN_COMM_xch_halo_test=0
-      return
-      end function RPN_COMM_xch_halo_test
-!=======================================================================
-!InTf!
-      SUBROUTINE RPN_COMM_exchange_halo(pattern,array,periodx,periody,periodp,npol_row)  !InTf!
-      use rpn_comm
-!!    import ::  rpncomm_pattern, c_ptr                                                  !InTf!
-      implicit none                                                                      !InTf!
-      type(rpncomm_pattern), intent(IN) :: pattern                                       !InTf!
-      type(c_ptr), intent(IN) :: array                                                   !InTf!
-      logical, intent(IN), OPTIONAL  :: periodx,periody, periodp                         !InTf!
-      integer, intent(IN), OPTIONAL :: npol_row                                          !InTf!
-      integer, dimension(:), pointer :: g
-      integer :: minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,gni
-      type(rpncomm_field), pointer :: f
-
-      call c_f_pointer(pattern%p,f)
-      minx = f%x%lo
-      maxx = f%x%hi
-      miny = f%y%lo
-      maxy = f%y%hi
-      ni = f%x%lnp
-      nj = f%y%lnp
-      nk = f%z%lnp
-      halox = f%hx
-      haloy = f%hy
-      gni = f%x%gnp
-      call c_f_pointer(array,g,[(maxx-minx+1)*(maxy-miny+1)*nk])
-
-      if(npol_row > 0) then  !  semi lag exchange, call old code
-        call RPN_COMM_xch_halo(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody,gni,npol_row)
-      else
-        call RPN_COMM_exchange_ew(g,minx,maxx,miny,maxy,ni,nj,nk,halox,periodx,f%ew3d)
-        call RPN_COMM_exchange_ns(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periody,f%ns3d)
-        if(periodp) call RPN_COMM_haloflip(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,gni)
-      endif
-
-      end SUBROUTINE RPN_COMM_exchange_halo                                              !InTf!
-
-      SUBROUTINE RPN_COMM_exchange_ew(g,minx,maxx,miny,maxy,ni,nj,nk,halox,periodx,ew3d)
-      use rpn_comm
-      implicit none
-      integer, intent(IN) :: minx,maxx,miny,maxy,ni,nj,nk,halox,ew3d
-      logical, intent(IN) :: periodx
-      integer, dimension(minx:maxx,miny:maxy,nk), intent(INOUT) :: g
-      logical :: east, west
-      integer :: eastpe, westpe
-      integer :: ierr
-      integer, dimension(MPI_STATUS_SIZE) :: status
-
-      east=(bnd_east) .and. (.not.periodx)
-      eastpe=pe_id(pe_mex+1,pe_mey)
-      west=(bnd_west) .and. (.not.periodx)
-      westpe=pe_id(pe_mex-1,pe_mey)
-
-      !   message tag is 1000 + pe_id of sender
-      !   halo to east starts at g(ni-halox+1,1,1)
-      !   halo from west starts at g(1-halox,1,1)
-      !   halo to west starts at g(1,1,1)
-      !   halo from east starts at g(ni+1,1,1)
-      if(west) then                !   send to east_neighbor
-        if(.not.east)then
-          call MPI_SEND(g(ni-halox+1,1,1),1,ew3d,eastpe,1000+pe_medomm,PE_DEFCOMM,ierr)
-        endif
-      else if(east) then           !   receive from west_neighbor
-        call MPI_RECV(g(1-halox,1,1),1,ew3d,westpe,1000+westpe,PE_DEFCOMM,status,ierr)
-      else                         !   send to east_neighbor and receive from west_neighbor
-        call MPI_SENDRECV(                                    &
-               g(ni-halox+1,1,1),1,ew3d,eastpe,1000+pe_medomm,  &
-               g(1-halox,1,1),1,ew3d,westpe,1000+westpe, &
-               PE_DEFCOMM,status,ierr)
-      endif
-      if(east) then                !   send to west_neighbor
-        if(.not.west) then
-          call MPI_SEND(g(1,1,1),1,ew3d,westpe,1000+pe_medomm,PE_DEFCOMM,ierr)
-        endif
-      else if(west) then           !   receive from east_neighbor
-        call MPI_RECV(g(ni+1,1,1),1,ew3d,eastpe,1000+eastpe,PE_DEFCOMM,status,ierr)
-      else                         !   send to west_neighbor and receive from east_neighbor
-        call MPI_SENDRECV(                                    &
-               g(1,1,1),1,ew3d,westpe,1000+pe_medomm,  &
-               g(ni+1,1,1),1,ew3d,eastpe,1000+eastpe, &
-               PE_DEFCOMM,status,ierr)
-      endif
-      end SUBROUTINE RPN_COMM_exchange_ew
-
-      SUBROUTINE RPN_COMM_exchange_ns(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periody,ns3d)
-      use rpn_comm
-      implicit none
-      integer, intent(IN) :: minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,ns3d
-      logical, intent(IN) :: periody
-      integer, dimension(minx:maxx,miny:maxy,nk), intent(INOUT) :: g
-      logical :: north, south
-      integer :: northpe, southpe
-
-      north=(bnd_north) .and. (.not.periody)
-      northpe=pe_id(pe_mex,pe_mey+1)
-      south=(bnd_south) .and. (.not.periody)
-      southpe=pe_id(pe_mex,pe_mey-1)
-      end SUBROUTINE RPN_COMM_exchange_ns
-!=======================================================================
-      SUBROUTINE RPN_COMM_xch_halo(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody,gni,npol_row)
+      SUBROUTINE RPN_COMM_xch_halo(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody,gni,npol_row) !InTfout!
 !=======================================================================
 !
 !  +=======================================================================================+___maxy
@@ -377,16 +97,21 @@
 !  North -> South : sender_pe + 100000
 !  North <- South : sender_pe
 !
-      use rpn_comm
-      implicit none
+      use mpi
+      use rpn_comm, only: pe_defcomm, bnd_south, bnd_north, bnd_east, bnd_west, &
+                          pe_nx, pe_ny, pe_mex, pe_mey, pe_id, pe_medomm, &
+                          pe_opcv, pe_opiv, pe_oprv, &
+                          full_async_exch, rpn_comm_topo, rpn_ew_ext_l
+      implicit none                                                   !InTfout!
 !
 !     exchange a halo with N/S/E/W neighbours
 !
-      integer minx,maxx,miny,maxy,ni,nj,nk,halox,haloy
-      integer gni,npol_row
-      logical periodx,periody
-!     integer *8 mem_time, exch_time, ewtime
-      integer g(minx:maxx,miny:maxy,nk)
+      integer, intent(in) :: minx,maxx,miny,maxy,ni,nj,nk,halox,haloy !InTfout!
+      integer, intent(in) :: gni,npol_row                             !InTfout!
+      logical, intent(in) :: periodx,periody                          !InTfout!
+!!#define IgnoreTypeKindRank g                                        !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                    !InTfout!
+      integer :: g(minx:maxx,miny:maxy,nk)
 !
         integer, dimension(halox*nj*nk) :: BR_CR_TR, BL_CL_TL  ! send to East/West
         integer, dimension(halox*nj*nk) :: iBR_iCR_iTR, iBL_iCL_iTL   ! recv from East/West
@@ -411,7 +136,7 @@
       integer :: west_m, west_m_n
 !
       integer globalni,polarrows, nilmax, jmin,jmax
-        integer RPN_COMM_topo, mini,maxi,nil,ni0
+      integer mini,maxi,nil,ni0
 !
       integer land_fill
       real r_land_fill
@@ -912,4 +637,4 @@
         polarrows=0
 
         goto 1
-        end
+        end subroutine RPN_COMM_xch_halo !InTfout!

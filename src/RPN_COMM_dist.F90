@@ -17,123 +17,10 @@
 ! ! Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ! ! Boston, MA 02111-1307, USA.
 ! !/
-        subroutine RPN_COMM_fast_dist_test(nparams,params)   ! fast distribute with halos
-        use rpn_comm
-        implicit none
-        integer, intent(IN) :: nparams
-        integer, intent(IN), dimension(nparams) :: params
-        include 'RPN_COMM_interfaces.inc'
-
-        integer, dimension(:,:,:,:), allocatable :: garr
-        integer :: ghalox,ghaloy,gmini,gmaxi,gmaxj,gminj
-        integer :: nig,njg,size,mini,maxi,minj,maxj,nk
-        integer :: status
-        integer :: halox,haloy
-        integer, dimension(:,:,:,:), allocatable :: larr
-        logical :: periodx,periody
-        integer, dimension(0:pe_nx) :: count_x, depl_x
-        integer, dimension(0:pe_ny) :: count_y, depl_y
-        integer :: ierr
-        integer :: lmini, lmaxi, lminj, lmaxj
-        integer :: i, j, k
-        integer :: ii, jj
-        integer :: nerrors, expected, npts
-        integer :: n_halo, s_halo, e_halo, w_halo
-
-        periodx = .false.
-        periody = .false.
-        halox   = 1
-        w_halo  = halox
-        if(pe_mex==0) w_halo = 0
-        e_halo  = halox
-        if(pe_mex==pe_nx-1) e_halo = 0
-        haloy   = 1
-        n_halo  = haloy
-        if(pe_mey == pe_ny-1) n_halo = 0
-        s_halo  = haloy
-        if(pe_mey == 0) s_halo = 0
-        ghalox  = halox
-        ghaloy  = haloy
-        nig     = 120
-        gmini   = 1 - ghalox
-        gmaxi   = nig + ghalox
-        njg     = 60
-        gminj   = 1 - ghaloy
-        gmaxj   = njg + ghaloy
-        nk      = 1
-        size    = 1
-        status = -9999
-        if(pe_me == 0) then
-          allocate(garr(1,gmini:gmaxi,gminj:gmaxj,nk))
-          garr = 99099099
-          do k=1,nk
-          do j=1,njg
-          do i=1,nig
-            garr(1,i,j,k) = i*1000000 + j*1000 + k
-          enddo
-          enddo
-          enddo
-        else
-          allocate(garr(1,1,1,1))
-          garr = 88088088
-        endif
-        if(pe_me == 0 .and. nig < 13 .and. njg < 7) then
-          print *,'Global array'
-          do j = gmaxj,gminj,-1
-            print 101,j,garr(1,gmini:gmaxi,j,1)
-          enddo
-        endif
-
-        ierr =  RPN_COMM_limit(pe_mex, pe_nx, 1, nig , lmini, lmaxi, count_x, depl_x)
-        mini = 1 - halox
-        maxi = (lmaxi-lmini+1) + halox
-        ierr =  RPN_COMM_limit(pe_mey, pe_ny, 1, njg , lminj, lmaxj, count_y, depl_y)
-        minj = 1 - haloy
-        maxj = (lmaxj-lminj+1) + haloy
-
-        allocate(larr(1,mini:maxi,minj:maxj,nk))
-        larr = 77077077
-
-        call RPN_COMM_fast_dist(garr,gmini,gmaxi,gminj,      &
-     &          gmaxj,nig,njg,nk,ghalox,ghaloy,size,         &
-     &          larr,mini,maxi,minj,maxj,halox,haloy,        &
-     &          periodx,periody,status)
-
-        nerrors = 0
-        npts = 0
-!        print *,'DEBUG: mini, maxi, minj, maxj',mini,maxi,minj,maxj
-!        print *,'DEBUG: lmini,lmaxi,lminj,lmaxj',lmini,lmaxi,lminj,lmaxj
-        do k=1,nk
-          do j=minj,maxj
-            jj = (j+lminj-1)
-            if(jj < 1 .or. jj > njg) cycle
-            do i=mini,maxi
-              ii = (i+lmini-1)
-              expected = ii*1000000 + jj*1000 + k
-              if(ii < 1 .or. ii > nig) cycle
-              npts = npts + 1
-              if(expected .ne. larr(1,i,j,k)) nerrors = nerrors + 1
-            enddo
-          enddo
-        enddo
-        if(pe_me == 0) then
-          print *,'INFO: global ni,nj = ',nig,njg
-        endif
-        print *,'INFO: local ni,nj = ',count_x(pe_mex),count_y(pe_mey)
-        print *,'INFO: npts, nerrors = ',npts,nerrors
-        if(nerrors > 0) then
-          print *,'Local array'
-          do j = maxj, minj, -1
-            print 101,j,larr(1,mini:maxi,j,1)
-          enddo
-        endif
-101     format(I3,15I9)
-
-        end subroutine
-        subroutine RPN_COMM_fast_dist(garr,gmini,gmaxi,gminj,&    !InTf!
-     &          gmaxj,nig,njg,nk,ghalox,ghaloy,size,         &    !InTf!
-     &          larr,mini,maxi,minj,maxj,halox,haloy,        &    !InTf!
-     &          periodx,periody,status)                           !InTf!
+        subroutine RPN_COMM_fast_dist(garr,gmini,gmaxi,gminj,&    !InTfout!
+     &          gmaxj,nig,njg,nk,ghalox,ghaloy,size,         &    !InTfout!
+     &          larr,mini,maxi,minj,maxj,halox,haloy,        &    !InTfout!
+     &          periodx,periody,status)                           !InTfout!
 !
 !arguments
 !  I    garr    array containing data to distribute, USED ONLY on PE 0
@@ -154,16 +41,22 @@
 !               logical, periodicity along x and y axis.
 !  O    status  status code upon exit (RPN_COMM_OK or RPN_COMM_ERROR)
 !
-        use rpn_comm
-        implicit none                                                    !InTf!
+        use rpn_comm_globals
+        use rpn_comm, only: RPN_COMM_limit
+        implicit none                                                    !InTfout!
 #define IN_RPN_COMM_dist
-#include <RPN_COMM_interfaces_int.inc>
-        integer, intent(IN) :: ghalox,ghaloy,gmini,gmaxi,gmaxj,gminj     !InTf!
-        integer, intent(IN) :: nig,njg,size,mini,maxi,minj,maxj,nk       !InTf!
-        integer, intent(OUT)::status                                     !InTf!
-        integer, intent(IN), target :: garr(size,gmini:gmaxi,gminj:gmaxj,nk),halox,haloy    !InTf!
-        integer, intent(OUT):: larr(size,mini:maxi,minj:maxj,nk)         !InTf!
-        logical, intent(IN) :: periodx,periody                           !InTf!
+        integer, intent(IN) :: ghalox,ghaloy,gmini,gmaxi,gmaxj,gminj     !InTfout!
+        integer, intent(IN) :: halox,haloy                               !InTfout!
+        integer, intent(IN) :: nig,njg,size,mini,maxi,minj,maxj,nk       !InTfout!
+        integer, intent(OUT)::status                                     !InTfout!
+!!#define IgnoreTypeKindRank garr                                        !InTfout!
+!!#define ExtraAttributes ,target                                        !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                       !InTfout!
+        integer, intent(IN), target :: garr(size,gmini:gmaxi,gminj:gmaxj,nk)
+!!#define IgnoreTypeKindRank larr                                        !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                       !InTfout!
+        integer, intent(OUT):: larr(size,mini:maxi,minj:maxj,nk)
+        logical, intent(IN) :: periodx,periody                           !InTfout!
 
         integer, dimension(0:pe_nx) :: count_x, depl_x
         integer, dimension(0:pe_ny) :: count_y, depl_y
@@ -283,23 +176,27 @@
 
         status = RPN_COMM_OK
         return
-        end subroutine RPN_COMM_fast_dist   !InTf!
-        subroutine RPN_COMM_dist(garr,gmini,gmaxi,gminj,&
-     &          gmaxj,nig,njg,nk,ghalox,ghaloy,size,&
-     &          larr,mini,maxi,minj,maxj,halox,haloy,&
-     &          periodx,periody,status)
-        use rpn_comm
-        implicit none
+        end subroutine RPN_COMM_fast_dist   !InTfout!
+
+
+        subroutine RPN_COMM_dist(garr,gmini,gmaxi,gminj,&				!InTfout!
+     &          gmaxj,nig,njg,nk,ghalox,ghaloy,size,&    				!InTfout!
+     &          larr,mini,maxi,minj,maxj,halox,haloy,&   				!InTfout!
+     &          periodx,periody,status)                  				!InTfout!
+        use rpn_comm_globals
+        implicit none                                    				!InTfout!
 !
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
-	integer ghalox,ghaloy,gmini,gmaxi,gmaxj,gminj
-	integer nig,njg,size,mini,maxi,minj,maxj,nk,status
-	integer garr(size,gmini:gmaxi,gminj:gmaxj,nk),halox,haloy
-	real reel,lreel
+	integer ghalox,ghaloy,gmini,gmaxi,gmaxj,gminj           			!InTfout!
+	integer nig,njg,size,mini,maxi,minj,maxj,nk,status      			!InTfout!
+	integer halox, haloy												!InTfout!
+!!#define IgnoreTypeKindRank garr                                       !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
+	integer garr(size,gmini:gmaxi,gminj:gmaxj,nk)
+	real reel,lreel                                         			!InTfout!
+!!#define IgnoreTypeKindRank larr                                       !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
 	integer larr(size,mini:maxi,minj:maxj,nk)
-	logical periodx,periody
+	logical periodx,periody                                 			!InTfout!
 
 	integer dimtemp(2),dt1,dt2,ierr
 	
@@ -316,26 +213,29 @@
      &          larr,mini,maxi,minj,maxj,halox,haloy,&
      &          periodx,periody,status,dt1,dt2)
 	return
-	end
+	end																	!InTfout!
 
 !**S/R RPN_COMM_dist  Global distribution of data
-	subroutine RPN_COMM_dist2(garr,gmini,gmaxi,gminj,&
-     &          gmaxj,nig,njg,nk,ghalox,ghaloy,size,&
-     &          larr,mini,maxi,minj,maxj,halox,haloy,&
-     &          periodx,periody,status,dt1,dt2)
-	use rpn_comm
-	implicit none
+	subroutine RPN_COMM_dist2(garr,gmini,gmaxi,gminj,&					!InTfout!
+     &          gmaxj,nig,njg,nk,ghalox,ghaloy,size,&					!InTfout!
+     &          larr,mini,maxi,minj,maxj,halox,haloy,&					!InTfout!
+     &          periodx,periody,status,dt1,dt2)    						!InTfout!
+	use rpn_comm_globals
+	use rpn_comm, only: RPN_COMM_limit
+	implicit none                                     					!InTfout!
 !
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
-	integer ghalox,ghaloy,gmini,gmaxi,gmaxj,gminj
-	integer nig,njg,size,mini,maxi,minj,maxj,nk,status
-	integer garr(size,gmini:gmaxi,gminj:gmaxj,nk),halox,haloy
-	real reel,lreel
+	integer ghalox,ghaloy,gmini,gmaxi,gmaxj,gminj     					!InTfout!
+	integer nig,njg,size,mini,maxi,minj,maxj,nk,status					!InTfout!
+	integer halox, haloy												!InTfout!
+!!#define IgnoreTypeKindRank garr                                       !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
+	integer garr(size,gmini:gmaxi,gminj:gmaxj,nk)
+	real reel,lreel                                   					!InTfout!
+!!#define IgnoreTypeKindRank larr                                       !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
 	integer larr(size,mini:maxi,minj:maxj,nk)
-	logical periodx,periody
-	integer dt1,dt2
+	logical periodx,periody                           					!InTfout!
+	integer dt1,dt2                                   					!InTfout!
 !
 !arguments
 !  I	garr	array containing data to distribute, USED ONLY by PE 0
@@ -372,8 +272,6 @@
 	integer depl(pe_nx+pe_ny)
 	logical alongx
 
-	integer rpn_comm_limit
-
 	distribute = .true.
 1	status=MPI_ERROR
 	do  i=0,MAX_PENDING-1
@@ -381,8 +279,7 @@
 	enddo
 
 	alongx = .true.
-	ierr =  RPN_COMM_limit(pe_mex, pe_nx, 1, nig , lmini,&
-     &     lmaxi,count, depl)
+	ierr =  RPN_COMM_limit(pe_mex, pe_nx, 1, nig , lmini, lmaxi,count, depl)
 
 	nil=lmaxi-lmini+1
 
@@ -556,5 +453,5 @@
 1111	status =  MPI_ERROR
 
 	return
-	end
+	end																	!InTfout!
 

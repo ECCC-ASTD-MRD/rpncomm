@@ -42,11 +42,6 @@
 !	real*8, allocatable ::  za8(:,:,:,:)
 !	real*8, allocatable ::  zb8(:,:,:,:)
 
-
-!
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
 !	integer, dimension(size,n2,min3:max3,n1partiel,npe) :: ta
 !	real*8, dimension(size/2,n2,min3:max3,n1partiel,npe) :: ta8
 	real, allocatable, dimension(:) :: ta,tb
@@ -58,7 +53,6 @@
 	
 	integer i,j,k,ierr, myproc,i0
 	integer nrecv,nsend, nkl, nil
-	integer RPN_COMM_limit
 !
 
 !	allocate(za(size,min1:max1,n2,n3g))

@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
+include(CheckSourceCompiles)
+
 option(RPN_BUILD_TESTS "Whether to build the test programs associated with the RPN_Comm library")
 option(RPN_BUILD_STUBS "Whether to build the stubs and, if building the serial version of RPN_Comm, include them in the library")
 
@@ -36,6 +38,13 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC MARKER=RPN_COMM_marker_${RPN_C
 target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
 
+# Check whether we need our own MPI interfaces
+set(CMAKE_REQUIRED_INCLUDES ${MPI_Fortran_INCLUDE_DIRS})
+check_source_compiles(Fortran "use mpi, only: mpi_bcast; end" HAS_EXTRA_MPI_ITF SRC_EXT F90)
+if (NOT (${HAS_EXTRA_MPI_ITF}))
+   target_compile_definitions(${PROJECT_NAME} PRIVATE NEED_EXTRA_MPI_ITF)
+endif()
+
 # Targets for generating header files
 add_executable(c_binding_extras c_binding_extras.c)
 target_link_libraries(c_binding_extras PUBLIC MPI::MPI_C)
@@ -51,7 +60,7 @@ add_custom_target(c_binding_extras_include DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/c
 add_dependencies(${PROJECT_NAME} c_binding_extras_include)
 
 set(GEN_INTERFACES_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/gen_interfaces.sh)
-set(RPN_COMM_ITF_FILE RPN_COMM_interfaces_int.inc)
+set(RPN_COMM_ITF_FILE RPN_COMM_interfaces.hf)
 add_custom_command(
    OUTPUT ${RPN_COMM_ITF_FILE}
    COMMAND ${GEN_INTERFACES_SCRIPT} ${PROJECT_F_FILES} > ${RPN_COMM_ITF_FILE}
@@ -60,9 +69,9 @@ add_custom_command(
 )
 add_custom_command(
    OUTPUT RPN_COMM_interfaces.inc
-   COMMAND cat RPN_COMM_interfaces_int.inc | grep -v '^\#' > RPN_COMM_interfaces.inc
+   COMMAND cat ${RPN_COMM_ITF_FILE} | grep -v '^\#' | sed -e '/! PREPROCESSOR INTERFACES/q'> RPN_COMM_interfaces.inc
    COMMENT "Generating RPN_COMM_interfaces.inc"
-   DEPENDS RPN_COMM_interfaces_int.inc
+   DEPENDS ${RPN_COMM_ITF_FILE}
 )
 add_custom_target(RPN_COMM_interfaces DEPENDS RPN_COMM_interfaces.inc)
 add_dependencies(${PROJECT_NAME} RPN_COMM_interfaces)
@@ -114,7 +123,7 @@ set(DISTINCLUDES
    RPN_COMM_ftoc.inc
    RPN_COMM_is_null.inc
    ${CMAKE_CURRENT_BINARY_DIR}/RPN_COMM_interfaces.inc
-   ${CMAKE_CURRENT_BINARY_DIR}/RPN_COMM_interfaces_int.inc
+   ${CMAKE_CURRENT_BINARY_DIR}/RPN_COMM_interfaces.hf
    
    RPN_MPI.hf
    RPN_MPI_mpi_layout.hf
@@ -143,6 +152,8 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
     )
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/rpn_comm.inc DESTINATION include)
 endif()
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ln -sfv RPN_COMM_interfaces.hf RPN_COMM_interfaces_int.inc)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/RPN_COMM_interfaces_int.inc DESTINATION include)
 
 # The tests
 if (RPN_BUILD_TESTS)
@@ -161,6 +172,8 @@ if (RPN_BUILD_TESTS)
       TEST_011.F90
       TEST_012.F90
       # TEST_013.F90
+      #TEST_014.F90
+      TEST_015.F90
    )
 
    function(get_test_name SOURCE_FILE TEST_NAME)
@@ -174,10 +187,10 @@ if (RPN_BUILD_TESTS)
 
 
       set(CMAKE_RPN_TEST_FUNCTION_NAME ${TEST_TARGET})
-      set(TEST_PROGRAM_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TEST_SOURCE}_main.f90)
+      set(TEST_PROGRAM_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TEST_TARGET}_main.F90)
       file(WRITE ${TEST_PROGRAM_FILE} "program MAIN_TEST_PROGRAM\n  call ${CMAKE_RPN_TEST_FUNCTION_NAME}\n  stop\nend program MAIN_TEST_PROGRAM\n")
 
       add_executable(${TEST_TARGET} ${TEST_SOURCE} ${TEST_PROGRAM_FILE})
       target_link_libraries(${TEST_TARGET} ${PROJECT_NAME})
-   endforeach(TEST_SOURCE)
+   endforeach()
 endif()

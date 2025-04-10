@@ -17,7 +17,7 @@
 ! ! Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ! ! Boston, MA 02111-1307, USA.
 ! !/
-	use rpn_comm
+	use rpn_comm_globals
 	implicit none
 #if defined(DOUBLE8)
     real *8, parameter :: real48=1.0
@@ -38,9 +38,6 @@
 
 !       has to be real because of g_adj = g_adj + wk\
 !       instead of g_adj = wk (mathematical operation)
-
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
 !
 	real(kind=kind(real48)), target, allocatable, dimension(:) :: wk
 	real(kind=kind(real48)) wkxs,wkxr,wkys,wkyr,wks,wkr,wkslag,wkgth
@@ -184,7 +181,7 @@
 
 !
 !       On additionne tout de suite les contributions de halos
-!	en halos afin de ne transférer que des bandes de longueur ni
+!	en halos afin de ne transfï¿½rer que des bandes de longueur ni
 !
 	   do m=1,halo
 	      do k=1,nk
@@ -339,7 +336,7 @@
 
 !
 !       On additionne tout de suite les contributions de halos
-!	en halos afin de ne transférer que des bandes de longueur ni
+!	en halos afin de ne transfï¿½rer que des bandes de longueur ni
 !
 	   do m=1,halo
 	      do k=1,nk

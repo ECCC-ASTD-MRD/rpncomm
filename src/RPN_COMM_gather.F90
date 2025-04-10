@@ -18,20 +18,22 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-        SUBROUTINE RPN_COMM_gather(sendbuf,sendcount,sendtype,&
-     &  recbuf,reccount,rectype,root,com,ierr)
-!	Luc Corbeil, 2001-09-19
-!	mpi gather
-
-        implicit none
-        integer sendbuf,recbuf,sendcount,reccount,comm,ierr
-        integer datyp,datyp2,oper,root
-        character(len=*) rectype,sendtype,com
-        integer RPN_COMM_datyp,RPN_COMM_oper,RPN_COMM_comm
-	logical RPN_COMM_grank        
+        SUBROUTINE RPN_COMM_gather(sendbuf,sendcount,sendtype,&                                 !InTfout!
+     &  recbuf,reccount,rectype,root,com,ierr)                                                  !InTfout!
+!	Luc Corbeil, 2001-09-19                                                                 !InTfout!
+!	mpi gather                                                                              !InTfout!
+                                                                                                !InTfout!
+        use rpn_comm, only: rpn_comm_datyp, RPN_COMM_oper, rpn_comm_comm, rpn_comm_grank
+        implicit none                                                                           !InTfout!
+!!#define IgnoreTypeKindRank sendbuf                                                            !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                                              !InTfout!
+!!#define IgnoreTypeKindRank recbuf                                                             !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                                              !InTfout!
+        integer sendbuf, recbuf
+        integer sendcount,reccount,comm,ierr                                                    !InTfout!
+        integer datyp,datyp2,oper,root                                                          !InTfout!
+        character(len=*) rectype,sendtype,com                                                   !InTfout!
 !*
-!        include 'mpif.h'
-
         datyp=rpn_comm_datyp(sendtype)
         datyp2=rpn_comm_datyp(rectype)
 	comm=rpn_comm_comm(com)
@@ -41,4 +43,4 @@
      &  ,reccount,datyp2,root,comm,ierr)
 
 	return
-	end
+	end                                                                                     !InTfout!

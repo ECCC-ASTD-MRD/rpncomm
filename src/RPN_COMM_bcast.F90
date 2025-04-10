@@ -18,43 +18,43 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-        SUBROUTINE RPN_COMM_bcast(buffer,count,datatype,root,com,ierr)
+        SUBROUTINE RPN_COMM_bcast(buffer,count,datatype,root,com,ierr)  !InTfout!
 !	Luc Corbeil, 2000-11-20
-!	mpi broadcast
-        implicit none
-        integer count,root,comm,ierr,group
-        integer buffer
-        integer datyp
-        character(len=*) datatype,com
-        integer RPN_COMM_datyp,RPN_COMM_comm
-        logical RPN_COMM_grank
+        ! use rpn_comm_mpi
+                use mpi
+        use rpn_comm, only: rpn_comm_comm, RPN_COMM_datyp, RPN_COMM_grank
+        implicit none                                                   !InTfout!
+!!#define IgnoreTypeKindRank buffer                                       !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                        !InTfout!
+        integer(8) :: buffer
+        integer, intent(in) :: count,root                               !InTfout!
+        character(len=*), intent(in) :: datatype,com                    !InTfout!
+        integer, intent(out) :: ierr                                    !InTfout!
+
+        integer :: comm
+        integer :: datyp
 !*
-!        include 'rpn_comm.h'
-!        include 'mpif.h'
         comm=rpn_comm_comm(com)
         datyp=rpn_comm_datyp(datatype)
 
         if(.not.RPN_COMM_grank(com)) return
         call mpi_bcast(buffer,count,datyp,root,comm,ierr)
 
-	return
-	end
+        return
+        end subroutine RPN_COMM_bcast                                   !InTfout!
 
 !InTf!
       SUBROUTINE RPN_COMM_bcastc(buffer,count,datatype,root,com,ierr) !InTf!
 !	Luc Corbeil, 2000-11-20
-!	mpi broadcast
+      use rpn_comm_globals
+      use rpn_comm, only: RPN_COMM_comm, RPN_COMM_datyp, RPN_COMM_grank
       implicit none                                                   !InTf!
       integer, intent(IN) :: count,root                               !InTf!
       integer, intent(OUT) :: ierr                                    !InTf!
       character(len=*), intent(INOUT) :: buffer                       !InTf!
       character(len=*), intent(IN) :: datatype,com                    !InTf!
       integer comm,group,datyp
-      integer, external :: RPN_COMM_datyp,RPN_COMM_comm
-      logical, external :: RPN_COMM_grank
 !*
-!        include 'rpn_comm.h'
-!        include 'mpif.h'
       comm=rpn_comm_comm(com)
       datyp=rpn_comm_datyp(datatype)
 

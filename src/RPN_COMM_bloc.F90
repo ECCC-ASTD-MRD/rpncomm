@@ -53,9 +53,8 @@
       end function RPN_COMM_bloc                                                   !InTf!
 !InTf!
       integer function RPN_COMM_bloc_find(nblocx,nblocy,set) ! find and optionally use an already defined block distribution !InTf!
-      use rpn_comm
       use RPN_COMM_bloc_mgt
-      use rpncomm_com
+      use rpncomm_com, self => RPN_COMM_bloc_find
       implicit none                                                                !InTf!
       integer, intent(IN) :: nblocx, nblocy                                        !InTf!
       logical, intent(IN) :: set   ! if block distribution found, apply it         !InTf!
@@ -110,9 +109,8 @@
       end function RPN_COMM_bloc_find                                               !InTf!
 !InTf!
       integer function RPN_COMM_bloc_create(nblocx,nblocy)                          !InTf!
-      use rpn_comm
       use RPN_COMM_bloc_mgt
-      use rpncomm_com
+      use rpncomm_com, self => RPN_COMM_bloc_create
       implicit none                                                                 !InTf!
       integer, intent(IN) :: nblocx, nblocy                                         !InTf!
 !arguments

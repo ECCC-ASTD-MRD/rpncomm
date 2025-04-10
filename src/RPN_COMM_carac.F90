@@ -32,7 +32,7 @@
 ! myblocx,myblocy: Coordinate of PE's block along x and y
 ! blocme   : Rank of PE relative to its block
 ! domname  : Domain name of the current PE
-      use rpn_comm
+      use rpn_comm_globals
       implicit none                                                             !InTf!
       integer, intent(out) :: npex,npey,me,mex,mey,sizex,sizey,ismaster         !InTf!
       integer, intent(out) :: mymaster, mybloc, myblocx,myblocy,blocme          !InTf!
@@ -41,8 +41,6 @@
 !arguments
 !     I nblocx, nblocy: number of blocks on the subgrid in x-y direction
 !     O RPN_COMM_bloc : error status (-1 if error, else 0)
-!      include 'rpn_comm.h'
-!      include 'mpif.h'
 !
       npex     = pe_nx
       npey     = pe_ny

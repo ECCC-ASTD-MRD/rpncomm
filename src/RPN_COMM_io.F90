@@ -78,8 +78,8 @@ module RPN_COMM_io  ! file replicator across nodes , async file copy, test and h
   end function rpn_comm_open
 
   integer function RPN_COMM_file_copy_test()  ! test asynchronous copying in background and file replication across nodes
+  use rpn_comm_mpi
   implicit none
-  include 'mpif.h'
   integer :: fd1, fd2, status, id, ierr, rank
   integer, external :: RPN_COMM_file_copy_start, RPN_COMM_file_bcst
 
@@ -180,8 +180,9 @@ integer function RPN_COMM_file_bcst(name,com)
 ! this is deemed more efficient than having all processes reading the same file on shared storage
 ! there will be a few processes on the same host reading the same local file subsequently
 !
-  use iso_c_binding
+  use rpn_comm_globals
   use rpn_comm_io
+  use rpn_comm_mpi
   implicit none
   character (len=*), intent(IN) :: name   ! name of the file to replicate
   integer, intent(IN) :: com              ! communicator
@@ -191,8 +192,6 @@ integer function RPN_COMM_file_bcst(name,com)
       use iso_c_binding
     end function c_gethostid
   end interface
-
-  include 'mpif.h'
 
   integer(C_LONG_LONG), parameter :: NW8 = 1024*1024
   integer, dimension(0:NW8), target :: buf  ! 4 MegaByte buffer
@@ -222,7 +221,7 @@ integer function RPN_COMM_file_bcst(name,com)
   nwr = 1
   do while(nwr > 0)
     if(rank == 0) buf(0) = rpn_comm_read(fd,c_loc(buf(1)),NW8*4)   ! PE ranked at 0 reads 
-    call mpi_bcast(buf,NW8+1,MPI_INTEGER,0,com,ierr)     ! and broadcasts (this is lazy, but intra host broadcast deemed cheap)
+    call mpi_bcast(buf,int(NW8+1, kind=int32),MPI_INTEGER,0,com,ierr)     ! and broadcasts (this is lazy, but intra host broadcast deemed cheap)
     nwr = buf(0)                                                   ! valid everywhere after broadcast
     nww = buf(0)                                                   ! needed for PEs that do not write to no get errors
     if(rank /= 0 .and. rank_on_host == 0 .and. nwr > 0) then

@@ -18,7 +18,7 @@
 ! * Boston, MA 02111-1307, USA.
 ! */
         SUBROUTINE RPN_COMM_transpose_44(za,min1,max1,n1g,n2,min3,max3,n3g,zb,direction)
-        use rpn_comm
+        use rpn_comm_globals
         implicit none
         integer, intent(IN) :: min1,max1,n1g,n2,min3,max3,n3g
         integer, intent(IN) :: direction
@@ -152,15 +152,17 @@
 
         end SUBROUTINE RPN_COMM_transpose_44
 !
-      SUBROUTINE RPN_COMM_transpose(za,min1,max1,n1g,n2,min3,max3,n3g,zb,type,size)
-      use rpn_comm
-      implicit none
-      integer min1,max1,n1g,n2,min3,max3,n3g,type,size
+      SUBROUTINE RPN_COMM_transpose(za,min1,max1,n1g,n2,min3,max3,n3g,zb,type,size) !InTfout!
+      use rpn_comm_globals
+      use rpn_comm, only: RPN_COMM_Xpose1, RPN_COMM_Xpose2
+      implicit none                                                                 !InTfout!
+      integer min1,max1,n1g,n2,min3,max3,n3g,type,size                              !InTfout!
+!!#define IgnoreTypeKindRank za                                                     !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                                  !InTfout!
+!!#define IgnoreTypeKindRank zb                                                     !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                                  !InTfout!
       integer za(size,min1:max1,n2,n3g)
       integer zb(size,n2,min3:max3,n1g)
-!
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
 !
       integer n3partiel,n1partiel,npe,pecomm
 !
@@ -193,4 +195,4 @@
       endif
 !
       return
-      end SUBROUTINE RPN_COMM_transpose
+      end SUBROUTINE RPN_COMM_transpose                                             !InTfout!

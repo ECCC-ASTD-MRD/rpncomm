@@ -19,13 +19,12 @@
 ! */
 !InTf!
 	subroutine RPN_COMM_qadl(ipe,ni,nj,i0,in,j0,jn)   !InTf!
-	use rpn_comm
+	use rpn_comm, sefl => RPN_COMM_qadl
 	implicit none                                     !InTf!
     integer, intent(OUT) :: i0,in,j0,jn               !InTf!
     integer, intent(IN) :: ipe,ni,nj                  !InTf!
     integer :: ilim, jlim, ifact
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
+
 	ilim = (ni + pe_nx -1) / pe_nx
 	jlim = (nj + pe_ny -1) / pe_ny
 	ifact = ipe/pe_nx

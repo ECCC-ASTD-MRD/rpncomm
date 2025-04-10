@@ -109,7 +109,7 @@ function rpn_comm_create_2dgrid(gni,gnj,mini,maxi,minj,maxj) result (grid_id)  !
 ! the functions returns a grid identifier if successful, -1 if unsucessful
 ! the number of PEs along x and y is taken from waht was determined by rpn_comm_init...
 !
-  use rpn_comm
+  use rpn_comm, self => rpn_comm_create_2dgrid
   use rpn_comm_grids
   implicit none
   integer, intent(IN) :: gni, gnj, mini, maxi, minj, maxj              !InTf!
@@ -174,7 +174,7 @@ function rpn_comm_get_2dgrid(grid_id,dim_i,dim_j,gni,gnj,mini,maxi,minj,maxj,sta
 !
 ! the value of the function is RPN_COMM_ERROR or RPN_COMM_OK
 !
-  use rpn_comm
+  use rpn_comm, self => rpn_comm_get_2dgrid
   use rpn_comm_grids
   implicit none
   integer, intent(IN) :: grid_id, dim_i, dim_j                                     !InTf!
@@ -213,7 +213,6 @@ function rpn_comm_2dgrid_test(nparams,params) result(status)
   use rpn_comm
   implicit none
   integer :: status
-  include 'RPN_COMM_interfaces.inc'
   integer, intent(IN) :: nparams
   integer, intent(IN), dimension(nparams) :: params
   integer :: gni, gnj, grid_id, mini, maxi, minj, maxj

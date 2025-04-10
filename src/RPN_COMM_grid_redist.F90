@@ -29,8 +29,8 @@
       external :: RPN_COMM_grid_redist_n
       integer, pointer, dimension(:,:,:) :: localarray
       integer, pointer, dimension(:,:,:) :: globalarray
-      integer*8, pointer, dimension(:,:,:) :: localarray2
-      integer*8, pointer, dimension(:,:,:) :: globalarray2
+      integer, pointer, dimension(:,:,:) :: localarray2
+      integer, pointer, dimension(:,:,:) :: globalarray2
       integer :: gni, gnj
       integer :: lminx,lmaxx,lminy,lmaxy
       integer, dimension(pe_nx) :: countx,offsetx
@@ -48,7 +48,6 @@
       integer, pointer, dimension(:) :: zlist, zlist2
       integer :: nk, nz, k0
       real *8 :: t1,t2,t3,t4,t5
-      integer, external :: RPN_COMM_limit
 !
 !      gni = params(1)
       gni = pe_nx*lni
@@ -243,7 +242,7 @@
       integer function vfy_array2(zin,mini,maxi,minj,maxj,nk,k,ref)
       implicit none
       integer, intent(IN) :: mini,maxi,minj,maxj,nk,k,ref
-      integer*8, dimension(mini:maxi,minj:maxj,nk),&
+      integer, dimension(mini:maxi,minj:maxj,nk),&
      &         intent(IN) :: zin
 !
       integer :: i,j,nerr
@@ -295,7 +294,6 @@
       integer :: i, j, k, l, kbot, ktop, n2d, kout
       integer :: lev0, narrays, ierr, temp, my_out_col
       logical :: needed_for_pass2, size_error, no_holes
-      integer, external :: RPN_COMM_limit
 !
       RPN_COMM_grid_redist = -1  ! return -1 if an error occurred
       zlist = -1                 ! empty list

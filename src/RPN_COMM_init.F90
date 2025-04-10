@@ -19,13 +19,11 @@
 ! !/
 !InTf!
       subroutine RPN_COMM_mydomain (call_back, mydomain)             !InTf!
-      use rpn_comm
+      use rpn_comm_globals
       implicit none                                                  !InTf!
 !
       external :: call_back                                          !InTf!
       integer, intent(OUT) :: mydomain                               !InTf!
-!
-!      include 'mpif.h'
 
       logical mpi_started
       integer ierr, err, err_all, pe_tot2, pe_me2, npe_per_domain,&
@@ -69,7 +67,7 @@
 !===================================================================
 !InTf!
       subroutine RPN_COMM_world_get(world_comm) BIND(C,name='RPN_COMM_World_Get')   !InTf!
-      use rpn_comm
+      use rpn_comm_globals
       implicit none                                                !InTf!
       integer, intent(OUT) ::  world_comm                          !InTf!
 
@@ -83,7 +81,7 @@
 !===================================================================
 !InTf!
       subroutine RPN_COMM_world_set(world_comm)                    !InTf!
-      use rpn_comm
+      use rpn_comm, self => RPN_COMM_world_set
       implicit none                                                !InTf!
       integer, intent(IN) ::  world_comm                           !InTf!
 !        world_comm=WORLD_COMM_MPI ! should rather be the other way around
@@ -109,14 +107,13 @@
 !!INTEGER FUNCTION RPN_COMM_init_multigrid(Userinit,Pelocal,Petotal,Pex,Pey,MultiGrids) !InTf!
       INTEGER FUNCTION RPN_COMM_init_multigrid&
      &      (Userinit,Pelocal,Petotal,Pex,Pey,MultiGrids)
-      use rpn_comm
+      use rpn_comm_globals
+      use rpn_comm, only: RPN_COMM_init_multi_level
       implicit none                                                  !InTf!
       external :: Userinit                                           !InTf!
       integer, intent(out)   :: Pelocal,Petotal                      !InTf!
       integer, intent(inout) :: Pex,Pey                              !InTf!
       integer, intent(in)    :: MultiGrids                           !InTf!
-      integer rpn_comm_init_multi_level
-      external rpn_comm_init_multi_level
       RPN_COMM_init_multigrid=RPN_COMM_init_multi_level&
      &      (Userinit,Pelocal,Petotal,Pex,Pey,MultiGrids,1)
       return
@@ -126,7 +123,9 @@
 !!INTEGER FUNCTION RPN_COMM_init_multi_level(Userinit,Pelocal,Petotal,Pex,Pey,MultiGrids,Grids)  !InTf!
       INTEGER FUNCTION RPN_COMM_init_multi_level&
      &      (Userinit,Pelocal,Petotal,Pex,Pey,MultiGrids,Grids)
-      use rpn_comm
+      use rpn_comm_globals
+      use rpn_comm, only: RPN_COMM_set_timeout_alarm, RPN_COMM_get_a_free_unit, RPN_COMM_version, &
+                          RPN_COMM_chdir, RPN_COMM_petopo
       implicit none                                                  !InTf!
       external :: Userinit                                           !InTf!
       integer, intent(out)   :: Pelocal,Petotal                      !InTf!
@@ -150,9 +149,6 @@
 !	positions are calculated from 0 (ORIGIN 0)
 !!
 !
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
       integer ierr, i, j, count, npe, reste, nslots, key, status
       logical mpi_started
       integer gr1, gr2
@@ -161,8 +157,6 @@
       integer unit, ndom, lndom, nproc, procmax,procmin
       type(domm), allocatable, dimension(:) :: locdom
       logical ok, allok
-      logical RPN_COMM_grank
-      integer RPN_COMM_petopo, RPN_COMM_version
       character *4096 SYSTEM_COMMAND,SYSTEM_COMMAND_2
       character *256 , dimension(:), allocatable :: directories
       character *256 :: my_directory, my_directory_file
@@ -172,8 +166,7 @@
       integer,dimension(:),allocatable::colortab
       integer version_marker, version_max, version_min
       integer pe_my_location(8)
-      external RPN_COMM_unbind_process
-      integer, external :: RPN_COMM_get_a_free_unit, RPN_COMM_set_timeout_alarm, fnom
+      integer, external :: fnom
 !
 !      if(RPM_COMM_IS_INITIALIZED) then ! ignore with warning message or abort ?
 !      endif
@@ -331,7 +324,7 @@
         call MPI_COMM_SPLIT(WORLD_COMM_MPI,my_color, &       ! split using my color
      &                     pe_me,pe_wcomm,ierr)
         RPN_COMM_init_multi_level = my_color
-        call RPN_COMM_chdir(trim(my_directory))              ! cd to my directory
+        ierr = RPN_COMM_chdir(trim(my_directory))            ! cd to my directory
         if(diag_mode.ge.2)&
      &       write(rpn_u,*)"my directory is:",trim(my_directory)
         call MPI_COMM_RANK(pe_wcomm,pe_me,ierr)               ! my rank
@@ -460,7 +453,7 @@
 !     Grid initialization, get PEs along X and Y
 !
 !      write(rpn_u,*)'READY to call UserInit'
-	if(pe_me .eq. pe_pe0)then
+      if(pe_me .eq. pe_pe0)then
 	  if ( Pex.eq.0 .or. Pey.eq.0  ) then ! get processor topology
 	    WORLD_pe(1)=pe_tot
 	    WORLD_pe(2)=1
@@ -586,7 +579,7 @@
       endif
       pe_bloc = pe_indomm
 
-      call MPI_Group_incl(pe_gr_indomm, 1, 0, pe_gr_blocmaster, ierr) 
+      call MPI_Group_incl(pe_gr_indomm, 1, [0], pe_gr_blocmaster, ierr) 
       call MPI_Comm_create(pe_indomm,pe_gr_blocmaster, &
      &            pe_blocmaster, ierr)
 

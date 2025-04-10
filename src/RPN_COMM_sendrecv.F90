@@ -18,24 +18,26 @@
 ! * Boston, MA 02111-1307, USA.
 ! */
 
-        SUBROUTINE RPN_COMM_sendrecv( sendbuf, sendcount, sendtype,&
-     &          dest, sendtag, recvbuf, recvcount, recvtype, recv, &
-     &          recvtag, com, status, ierr )
-
+        SUBROUTINE RPN_COMM_sendrecv( sendbuf, sendcount, sendtype,&    !InTfout!
+     &          dest, sendtag, recvbuf, recvcount, recvtype, recv, &    !InTfout!
+     &          recvtag, com, status, ierr )                            !InTfout!
+                                                                        !InTfout!
 !	Luc Corbeil, 2002-10-15
-!	mpi_sendrecv
 
-        implicit none
-        integer recvcount,ierr,sendtag,dest
-        integer sendcount,comm,recvtag,recv
-        integer status
+        use mpi
+        use rpn_comm, only: RPN_COMM_datyp, RPN_COMM_comm, RPN_COMM_grank
+        implicit none                                                   !InTfout!
+        integer recvcount,ierr,sendtag,dest                             !InTfout!
+        integer sendcount,comm,recvtag,recv                             !InTfout!
+        integer status                                                  !InTfout!
+!!#define IgnoreTypeKindRank sendbuf                                    !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
+!!#define IgnoreTypeKindRank recvbuf                                    !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
         integer sendbuf, recvbuf
-        integer datyp1, datyp2
-        character(len=*) recvtype, sendtype ,com
-        integer RPN_COMM_datyp,RPN_COMM_comm
-        logical RPN_COMM_grank
+        integer datyp1, datyp2                                          !InTfout!
+        character(len=*) recvtype, sendtype ,com                        !InTfout!
 
-        include 'mpif.h'
         integer status2(MPI_STATUS_SIZE)
 
         datyp1=rpn_comm_datyp(sendtype)
@@ -47,4 +49,4 @@
      &          recvtag, comm, status2, ierr )
         call mpi_get_count( status2, datyp2, status, ierr)
 	return
-	end
+	end                                                             !InTfout!

@@ -49,7 +49,7 @@
 !
 !InTf!
       integer function RPN_COMM_hostid()       !InTf!
-      use rpn_comm
+      use rpn_comm, self => RPN_COMM_hostid
       implicit none                            !InTf!
       RPN_COMM_hostid=f_gethostid()
       return

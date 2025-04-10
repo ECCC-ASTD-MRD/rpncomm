@@ -20,9 +20,8 @@
 ! */
 !InTf!
         real(kind=kind(1.d0)) function RPN_COMM_wtime()            !InTf!
+        use rpn_comm_globals
         implicit none                               !InTf!
-!
-        include 'mpif.h'
 !
         integer :: myrank, ierr
         logical,save :: display = .TRUE.

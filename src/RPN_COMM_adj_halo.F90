@@ -18,27 +18,27 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-	SUBROUTINE RPN_COMM_adj_halo(g,minx,maxx,miny,maxy, &
-                  ni,nj,nk,halox,haloy,periodx,periody, &
-                  gni,npol_row)
-	use rpn_comm
-	implicit none
+	SUBROUTINE RPN_COMM_adj_halo(g,minx,maxx,miny,maxy, &       !InTfout!
+                  ni,nj,nk,halox,haloy,periodx,periody, &       !InTfout!
+                  gni,npol_row)                                 !InTfout!
+    use rpn_comm_globals
+	implicit none                                               !InTfout!
 !
 !	exchange a halo with neighbours
-!       or get halo contributions from neighbors 
+!       or get halo contributions from neighbors
 
-	integer minx,maxx,miny,maxy,ni,nj,nk,halox,haloy
-	integer gni,npol_row
-	logical periodx,periody
+	integer minx,maxx,miny,maxy,ni,nj,nk,halox,haloy            !InTfout!
+	integer gni,npol_row                                        !InTfout!
+	logical periodx,periody                                     !InTfout!
+!!#define IgnoreTypeKindRank g                                  !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                              !InTfout!
 	integer g(minx:maxx,miny:maxy,nk)
+
 	real g_adj(minx:maxx,miny:maxy,nk)
 
 !       has to be real because of g_adj = g_adj + wk\
 !       instead of g_adj = wk (mathematical operation)
 
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
 	integer, target, allocatable, dimension(:) :: wk
 	integer wkxs,wkxr,wkys,wkyr,wks,wkr,wkslag,wkgth
 	pointer(g_adj_,g_adj)
@@ -182,7 +182,7 @@
 
 !
 !       On additionne tout de suite les contributions de halos
-!	en halos afin de ne transférer que des bandes de longueur ni
+!	en halos afin de ne transfï¿½rer que des bandes de longueur ni
 !
 	   do m=1,halo
 	      do k=1,nk
@@ -337,7 +337,7 @@
 
 !
 !       On additionne tout de suite les contributions de halos
-!	en halos afin de ne transférer que des bandes de longueur ni
+!	en halos afin de ne transfï¿½rer que des bandes de longueur ni
 !
 	   do m=1,halo
 	      do k=1,nk
@@ -678,4 +678,4 @@
 	adjoint=.true.
 	goto 1
 
-	end
+	end                                                         !InTfout!

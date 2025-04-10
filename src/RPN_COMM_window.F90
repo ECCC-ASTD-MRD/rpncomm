@@ -17,7 +17,6 @@
 ! ! Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ! ! Boston, MA 02111-1307, USA.
 ! !/
-#define IN_RPN_COMM_window
 #if defined(WITH_DOC)
 !****P* rpn_comm/windows  (simplified/restricted version of MPI one sided communications package)
 ! DESCRIPTION
@@ -87,14 +86,11 @@ module RPN_COMM_windows
 ! (used internally by user callable routines)
 !===============================================================================
   use ISO_C_BINDING
+  use rpn_comm
   implicit none
-  include 'mpif.h'
-  include 'RPN_COMM_types.inc'
-  include 'RPN_COMM_types_int.inc'
-  include 'RPN_COMM_constants.inc'
 !******
   integer, parameter :: RPN_COMM_MAX_WINDOWS = 64
-  integer, save :: integer_size = 0                                       ! will contain extent of MPI_INTEGER
+  integer(kind=MPI_ADDRESS_KIND), save :: integer_size = 0                ! will contain extent of MPI_INTEGER
   type(rpncomm_windef), dimension(:), pointer, save :: win_tab => NULL()  ! rpn comm window table
   logical, save :: debug_mode = .true.
   type(rpncomm_operator), save :: op = NULL_rpncomm_operator
@@ -164,6 +160,7 @@ module RPN_COMM_windows
 ! using the recommended MPI_alloc_mem MPI routine
 !===============================================================================
 !******
+    use iso_fortran_env
     implicit none
     type(C_PTR), intent(IN), value :: base ! base address of array exposed through window (may be C_NULL_PTR)
     integer, intent(IN) :: typ             ! MPI data type (as defined in mpif.h)
@@ -172,9 +169,9 @@ module RPN_COMM_windows
     integer, intent(OUT) :: indx           ! index into wintab of created window (used for consistency test)
     integer, intent(OUT) :: ierr           ! return status (RPN_COMM_ERROR or RPN_COMM_OK)
 
-    integer :: i, extent, ierror, group
+    integer :: i, ierror, group
     integer(kind=MPI_ADDRESS_KIND) win_size  ! may be wider than a default integer
-    integer(kind=MPI_ADDRESS_KIND) :: lb
+    integer(kind=MPI_ADDRESS_KIND) :: lb, extent
 
     if(.not. associated(win_tab)) call init_win_tab  ! create and initialize window table if necessary
     ierr = RPN_COMM_ERROR                  ! preset for failure
@@ -203,7 +200,8 @@ module RPN_COMM_windows
         endif
         call c_f_pointer(win_tab(i)%base,win_tab(i)%remote,[extent*siz])  ! make Fortran pointer to array associated with window
 
-        call MPI_win_create(win_tab(i)%remote, win_size, extent, MPI_INFO_NULL, comm, win_tab(i)%win, ierror) ! create window
+        call MPI_win_create(win_tab(i)%remote, win_size, int(extent, kind=int32), MPI_INFO_NULL, &
+                            comm, win_tab(i)%win, ierror) ! create window
         if(ierror .ne. MPI_SUCCESS) then
           print *,'ERROR: window creation unsuccessful'
           return
@@ -260,9 +258,9 @@ end module RPN_COMM_windows
 !===============================================================================
 subroutine RPN_COMM_i_win_test(nparams,params)
   use ISO_C_BINDING
+  use rpn_comm
   implicit none
-  include 'RPN_COMM.inc'
-  include 'mpif.h'
+
   integer, intent(IN) :: nparams
   integer, intent(IN), dimension(nparams) :: params
 
@@ -1160,7 +1158,7 @@ subroutine RPN_COMM_i_win_group(window,pes_to,pes_from,ierr)  !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use RPN_COMM_windows, self => RPN_COMM_i_win_group
   implicit none
 !!  import :: rpncomm_window                                       !InTf!
 ! ARGUMENTS
@@ -1224,9 +1222,8 @@ subroutine RPN_COMM_i_win_oper(window,oper,ierr)  !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use RPN_COMM_windows, self => RPN_COMM_i_win_oper
   implicit none
-#include <RPN_COMM_interfaces_int.inc>
 !!  import :: rpncomm_window                                       !InTf!
 !!  import :: rpncomm_operator                                     !InTf!
 ! ARGUMENTS
@@ -1275,7 +1272,7 @@ subroutine RPN_COMM_i_win_create(window,dtype,siz,com,array,ierr)  !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use RPN_COMM_windows, self => RPN_COMM_i_win_create
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window, rpncomm_datatype, rpncomm_communicator  !InTf!
@@ -1319,7 +1316,7 @@ subroutine RPN_COMM_i_win_free(window,ierr)                           !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use RPN_COMM_windows, self => RPN_COMM_i_win_free
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1378,7 +1375,7 @@ subroutine RPN_COMM_i_win_open(window,active,ierr)                           !In
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use RPN_COMM_windows, self => RPN_COMM_i_win_open
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1390,7 +1387,6 @@ subroutine RPN_COMM_i_win_open(window,active,ierr)                           !In
 
   integer :: ierr1, ierr2, indx
   logical ::is_open
-  logical, external :: RPN_COMM_i_win_check
 
   ierr = RPN_COMM_ERROR
   indx = window%t2                   ! window table entry for this window
@@ -1439,7 +1435,7 @@ subroutine RPN_COMM_i_win_close(window,ierr)                          !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use RPN_COMM_windows, self => RPN_COMM_i_win_close
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1450,7 +1446,6 @@ subroutine RPN_COMM_i_win_close(window,ierr)                          !InTf!
 
   integer :: ierr1, ierr2, indx
   logical :: is_not_open
-  logical, external :: RPN_COMM_i_win_check
 
   ierr = RPN_COMM_ERROR
   indx = window%t2                   ! window table entry for this window
@@ -1500,7 +1495,8 @@ function RPN_COMM_i_valid_win(window,ierr) result(is_valid)           !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use rpn_comm_globals
+  use RPN_COMM_windows, only: win_valid
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1534,7 +1530,8 @@ function RPN_COMM_i_win_check(window,ierr) result(is_open)            !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use rpn_comm_globals
+  use RPN_COMM_windows, only: win_tab, win_valid
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1574,7 +1571,7 @@ function RPN_COMM_i_win_get_ptr(window,ierr) result(ptr)                 !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use RPN_COMM_windows, self => RPN_COMM_i_win_get_ptr
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1614,7 +1611,7 @@ function RPN_COMM_i_win_get_size(window,ierr) result(siz)                 !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use RPN_COMM_windows, self => RPN_COMM_i_win_get_size
   implicit none
 !!  import :: rpncomm_window                                          !InTf!
 ! ARGUMENTS
@@ -1656,7 +1653,7 @@ subroutine RPN_COMM_i_win_put_r(window,larray,targetpe,offset,nelem,ierr) !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use RPN_COMM_windows, self => RPN_COMM_i_win_put_r
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1671,7 +1668,6 @@ subroutine RPN_COMM_i_win_put_r(window,larray,targetpe,offset,nelem,ierr) !InTf!
 
   logical :: is_open
   integer :: ierr2, indx
-  logical, external :: RPN_COMM_i_win_check
   integer, dimension(:), pointer :: local
   type(rpncomm_windef), pointer :: win_entry
   integer(kind=MPI_ADDRESS_KIND) :: offset_8
@@ -1737,7 +1733,7 @@ subroutine RPN_COMM_i_win_acc_r(window,larray,targetpe,offset,nelem,oper,ierr) !
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use RPN_COMM_windows, self => RPN_COMM_i_win_acc_r
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1754,7 +1750,6 @@ subroutine RPN_COMM_i_win_acc_r(window,larray,targetpe,offset,nelem,oper,ierr) !
 
   logical :: is_open
   integer :: ierr2, indx
-  logical, external :: RPN_COMM_i_win_check
   integer, dimension(:), pointer :: local
   type(rpncomm_windef), pointer :: win_entry
   integer(kind=MPI_ADDRESS_KIND) :: offset_8
@@ -1822,7 +1817,8 @@ subroutine RPN_COMM_i_win_put_l(window,larray,offset,nelem,ierr)      !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use rpn_comm_globals
+  use RPN_COMM_windows, only: RPN_COMM_i_win_check
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1838,7 +1834,6 @@ subroutine RPN_COMM_i_win_put_l(window,larray,offset,nelem,ierr)      !InTf!
   integer :: ierr2, i, indx, extent
   type(rpncomm_windef), pointer :: win_entry
   integer, dimension(:), pointer :: local
-  logical, external :: RPN_COMM_i_win_check
 
   ierr = RPN_COMM_ERROR
   is_open = RPN_COMM_i_win_check(window,ierr2)
@@ -1877,7 +1872,7 @@ subroutine RPN_COMM_i_win_get_r(window,larray,target,offset,nelem,ierr) !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use RPN_COMM_windows, self => RPN_COMM_i_win_get_r
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1892,7 +1887,6 @@ subroutine RPN_COMM_i_win_get_r(window,larray,target,offset,nelem,ierr) !InTf!
 
   logical :: is_open
   integer :: ierr2, indx
-  logical, external :: RPN_COMM_i_win_check
   integer, dimension(:), pointer :: local
   type(rpncomm_windef), pointer :: win_entry
   integer(kind=MPI_ADDRESS_KIND) offset_8
@@ -1943,7 +1937,8 @@ subroutine RPN_COMM_i_win_get_l(window,larray,offset,nelem,ierr)      !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows
+  use rpn_comm_globals
+  use RPN_COMM_windows, only: RPN_COMM_i_win_check
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1959,7 +1954,6 @@ subroutine RPN_COMM_i_win_get_l(window,larray,offset,nelem,ierr)      !InTf!
   integer :: ierr2, i, indx, extent
   type(rpncomm_windef), pointer :: win_entry
   integer, dimension(:), pointer :: local
-  logical, external :: RPN_COMM_i_win_check
 
   ierr = RPN_COMM_ERROR
   is_open = RPN_COMM_i_win_check(window,ierr2)

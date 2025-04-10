@@ -26,9 +26,6 @@
       real*8 zb_8(min2:max2,min3:max3,n1g)
       real*8 a_8,b_8
 !
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
       integer n3partiel,n1partiel,npe,pecomm
 !
       if(abs(type).eq.1) then   ! transpose along X

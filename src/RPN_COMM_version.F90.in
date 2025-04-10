@@ -18,11 +18,12 @@
 ! * Boston, MA 02111-1307, USA.
 ! */
 
-      integer function RPN_COMM_version()
-      implicit none
+      integer function RPN_COMM_version()             !InTf!
+      implicit none                                   !InTf!
       RPN_COMM_version = @RPN_COMM_VERSION_MARKER@
       return
-      end
+      end function RPN_COMM_version                   !InTf!
+
       subroutine MARKER
       return
       end subroutine MARKER

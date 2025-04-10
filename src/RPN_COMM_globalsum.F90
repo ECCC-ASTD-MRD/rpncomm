@@ -23,9 +23,6 @@
       use rpn_comm
       implicit none
 
-!      include 'rpn_comm.h'
-!      include 'mpif.h'
-
       integer minx,maxx,miny,maxy,nptsz,nil,njl
       integer gnj,njlmax
       real array(minx:maxx,miny:maxy,nptsz)

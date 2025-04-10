@@ -41,11 +41,8 @@
 	subroutine RPN_COMM_swapns(nwen,wden,nwes,wdes,&
      &          nwin,nwrn,wdin,nwis,nwrs,wdis,periody,&
      &          status)
-	use rpn_comm
+	use rpn_comm_globals
 	implicit none
-
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
 
 	integer nwen,wden(nwen),nwes,wdes(nwes)
 	integer nwin,nwrn,wdin(nwin),nwis,nwrs,wdis(nwis),status
@@ -101,8 +98,8 @@
 
 	if((.not.north).and.(.not.south)) then
 	   call mpi_waitall(4,req,stat,ierr)
-	   call mpi_get_count(stat(1,2),mpi_integer,nwrn,ierr)
-	   call mpi_get_count(stat(1,4),mpi_integer,nwrs,ierr)
+	   call mpi_get_count(stat(:,2),mpi_integer,nwrn,ierr)
+	   call mpi_get_count(stat(:,4),mpi_integer,nwrs,ierr)
 	   if(nwrn.gt.nwin) then
 	      write(rpn_u,*) 'ABORT PE=',pe_me,': Received ',nwrn,&
      &        ' elements from north in a ',nwin,' elements array!'
@@ -118,16 +115,16 @@
 	 
 !       cannot be south and north at the same time (case pe_ny=1)
 	   if(north) then
-	     call mpi_waitall(2,req(3),stat,ierr)
-	     call mpi_get_count(stat(1,2),mpi_integer,nwrs,ierr)
+	     call mpi_waitall(2,req(3:3),stat,ierr)
+	     call mpi_get_count(stat(:,2),mpi_integer,nwrs,ierr)
 	   if(nwrs.gt.nwis) then
 	      write(rpn_u,*) 'ABORT PE=',pe_me,': Received ',nwrs,&
      &        ' elements from south in a ',nwis,' elements array!'
 	      call MPI_abort(PE_DEFCOMM,1,ierr)
 	   endif
 	   else ! south...
-	     call mpi_waitall(2,req(1),stat,ierr)
-	     call mpi_get_count(stat(1,2),mpi_integer,nwrn,ierr)
+	     call mpi_waitall(2,req(1:1),stat,ierr)
+	     call mpi_get_count(stat(:,2),mpi_integer,nwrn,ierr)
 	   if(nwrn.gt.nwin) then
 	      write(rpn_u,*) 'ABORT PE=',pe_me,': Received ',nwrn,&
      &        ' elements from north in a ',nwin,' elements array!'

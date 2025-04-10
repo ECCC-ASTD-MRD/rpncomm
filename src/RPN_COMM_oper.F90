@@ -19,12 +19,11 @@
 ! */
 !InTf!
         integer function RPN_COMM_oper(op)              !InTf!
-	use rpn_comm
+        use rpn_comm_globals
 !	Luc Corbeil, 2000-11-20
 !	lien entre datatype et MPI_datatype
 
         implicit none                                   !InTf!
-!        include 'mpif.h'
         character(len=*), intent(IN) :: op              !InTf!
         character(len=32) operation
         integer :: i
@@ -104,13 +103,11 @@
         return
         end function RPN_COMM_oper                  !InTf!
 subroutine RPN_COMM_i_oper(op,r_oper)             !InTf!
-  use rpn_comm
+  use rpn_comm, self => RPN_COMM_i_oper
   implicit none
 !! import :: rpncomm_operator                     !InTf!
   character(len=*), intent(IN) :: op              !InTf!
   type(rpncomm_operator), intent(OUT) :: r_oper   !InTf!
-
-  integer, external :: RPN_COMM_oper
 
   r_oper%t2 = RPN_COMM_oper(op)
   r_oper%t1 = ieor(r_oper%t2,RPN_COMM_MAGIC)
@@ -119,7 +116,7 @@ subroutine RPN_COMM_i_oper(op,r_oper)             !InTf!
   return
 end subroutine RPN_COMM_i_oper                    !InTf!
 function RPN_COMM_i_valid_oper(r_oper) result (is_valid)  !InTf!
-  use rpn_comm
+  use rpn_comm, self => RPN_COMM_i_valid_oper
 !! import :: rpncomm_operator                     !InTf!
   implicit none
   type(rpncomm_operator), intent(IN) :: r_oper    !InTf!

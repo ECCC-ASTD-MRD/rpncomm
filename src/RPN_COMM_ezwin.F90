@@ -1,8 +1,7 @@
 #define IN_RPN_COMM_ezwin
 module RPN_COMM_ezwin_mod
-  use ISO_C_BINDING
+  use rpn_comm_globals
   implicit none
-  include 'RPN_COMM_types.inc'
   type :: rpn_comm_ezwin
     type(C_PTR) :: p
     integer     :: ix
@@ -28,7 +27,6 @@ end module
 subroutine RPN_COMM_ezwin_create(sz,comm,mywin,ierr)       !InTf!
   use RPN_COMM_ezwin_mod
   implicit none
-  include 'mpif.h'
 !!  import :: rpncomm_window                           !InTf!
   integer, intent(IN) :: sz,comm                           !InTf!
   integer, intent(OUT) :: ierr                             !InTf!
@@ -59,9 +57,9 @@ subroutine RPN_COMM_ezwin_create(sz,comm,mywin,ierr)       !InTf!
 end subroutine RPN_COMM_ezwin_create                       !InTf!
 
 function RPN_COMM_ezwin_id(mywin) result(winid)            !InTf!
+  use rpn_comm_globals
   use RPN_COMM_ezwin_mod
   implicit none
-  include 'mpif.h'
 !!  import :: rpncomm_window                           !InTf!
   type(rpncomm_window), intent(IN) :: mywin                !InTf!
   integer :: winid                                         !InTf!
@@ -72,9 +70,9 @@ function RPN_COMM_ezwin_id(mywin) result(winid)            !InTf!
 end function RPN_COMM_ezwin_id                             !InTf!
 
 function RPN_COMM_ezwin_ptr(mywin) result(winptr)          !InTf!
+  use rpn_comm_globals
   use RPN_COMM_ezwin_mod
   implicit none
-  include 'mpif.h'
 !!  import :: rpncomm_window,    C_PTR                 !InTf!
   type(rpncomm_window), intent(IN) :: mywin                !InTf!
   type(C_PTR) :: winptr                                    !InTf!
@@ -87,9 +85,9 @@ function RPN_COMM_ezwin_ptr(mywin) result(winptr)          !InTf!
 end function RPN_COMM_ezwin_ptr                            !InTf!
 
 function RPN_COMM_ezwin_size(mywin) result(sz)             !InTf!
+  use rpn_comm_globals
   use RPN_COMM_ezwin_mod
   implicit none
-  include 'mpif.h'
 !!  import :: rpncomm_window                           !InTf!
   type(rpncomm_window), intent(IN) :: mywin                !InTf!
   integer :: sz                                            !InTf!
@@ -100,9 +98,9 @@ function RPN_COMM_ezwin_size(mywin) result(sz)             !InTf!
 end function RPN_COMM_ezwin_size                           !InTf!
 
 subroutine RPN_COMM_ezwin_fetch_add(mywin, add, fetch, rank, offset, ierr)       !InTf!
+  use rpn_comm_globals
   use RPN_COMM_ezwin_mod
   implicit none
-  include 'mpif.h'
 !!  import :: rpncomm_window                           !InTf!
   type(rpncomm_window), intent(IN) :: mywin                !InTf!
   integer, intent(IN) :: add, rank, offset                 !InTf!
@@ -122,9 +120,9 @@ subroutine RPN_COMM_ezwin_fetch_add(mywin, add, fetch, rank, offset, ierr)      
 end subroutine RPN_COMM_ezwin_fetch_add                    !InTf!
 
 subroutine RPN_COMM_ezwin_get(mywin,pz,nw,rank,offset,ierr)       !InTf!
+  use rpn_comm_globals
   use RPN_COMM_ezwin_mod
   implicit none
-  include 'mpif.h'
 !!  import :: rpncomm_window,    C_PTR                 !InTf!
   type(rpncomm_window), intent(IN) :: mywin                !InTf!
   type(C_PTR), intent(IN), value :: pz                     !InTf!
@@ -147,9 +145,9 @@ subroutine RPN_COMM_ezwin_get(mywin,pz,nw,rank,offset,ierr)       !InTf!
 end subroutine RPN_COMM_ezwin_get                          !InTf!
 
 subroutine RPN_COMM_ezwin_put(mywin,pz,nw,rank,offset,ierr)      !InTf!
+  use rpn_comm_globals
   use RPN_COMM_ezwin_mod
   implicit none
-  include 'mpif.h'
 !!  import :: rpncomm_window,    C_PTR                 !InTf!
   type(rpncomm_window), intent(IN) :: mywin                !InTf!
   type(C_PTR), intent(IN), value :: pz                     !InTf!
@@ -175,9 +173,7 @@ end subroutine RPN_COMM_ezwin_put                          !InTf!
 
 #if defined(SELF_TEST)
 program test_ezwin
-  use ISO_C_BINDING
-  include 'RPN_COMM.inc'
-  include 'mpif.h'
+  use rpn_comm
 
 interface
   include 'new.inc'

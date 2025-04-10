@@ -39,15 +39,8 @@
 	integer index0, index1, index2, index3, njkl, level, k0, proc
 	integer, dimension(npe) :: icount,idispl,scount,sdispl
 	integer, dimension(npe) :: kcount,kdispl,rcount,rdispl
-	integer RPN_COMM_limit
 	integer nil,nkl,istart,iend,kstart,kend
 !
-
-!
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
-
 	integer i,j,k,ierr,n3w
 
 	n3w = max3-min3+1

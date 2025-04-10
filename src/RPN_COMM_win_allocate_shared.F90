@@ -23,6 +23,7 @@
 !! interface RPN_COMM_win_allocate_shared   !InTf!
 subroutine RPN_COMM_win_allocate_shared2(comm, msize, win, baseptr, err)  !InTf! 
   use ISO_C_BINDING
+  use rpn_comm_globals
   implicit none
 !!  import :: C_PTR, C_INTPTR_T              !InTf!   
   integer, intent(IN)  :: comm               !InTf!   communicator
@@ -31,9 +32,6 @@ subroutine RPN_COMM_win_allocate_shared2(comm, msize, win, baseptr, err)  !InTf!
   type(C_PTR), intent(OUT) :: baseptr        !InTf!   base address of shared memory area
   integer, intent(OUT)  :: err               !InTf!   status RPN_COMM_OK or RPN_COMM_ERROR
   
-  include 'mpif.h'
-  include 'RPN_COMM_constants.inc'
-
   integer(KIND=MPI_ADDRESS_KIND) :: wsiz
   integer :: dispunit, ierr, rank
 
@@ -59,6 +57,7 @@ end subroutine RPN_COMM_win_allocate_shared2  !InTf!
 !InTf!
 subroutine RPN_COMM_win_allocate_shared1(comm, msize, win, baseptr, err)  !InTf! 
   use ISO_C_BINDING
+  use rpn_comm_globals
   implicit none
 !!  import :: C_PTR                          !InTf!   
   integer, intent(IN)  :: comm               !InTf!   communicator
@@ -66,9 +65,6 @@ subroutine RPN_COMM_win_allocate_shared1(comm, msize, win, baseptr, err)  !InTf!
   integer, intent(OUT) :: win                !InTf!   window communicator
   type(C_PTR), intent(OUT) :: baseptr        !InTf!   base address of shared memory area
   integer, intent(OUT)  :: err               !InTf!   status RPN_COMM_OK or RPN_COMM_ERROR
-  
-  include 'mpif.h'
-  include 'RPN_COMM_constants.inc'
 
   integer(KIND=MPI_ADDRESS_KIND) :: wsiz
   integer :: dispunit, ierr, rank

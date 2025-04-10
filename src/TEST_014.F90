@@ -1,16 +1,14 @@
 #if defined(TEST)
 program my_test
 call mpi_init(ierr)
-call rpn_comm_test_014
+call rpncomm_test_014
 call mpi_finalize(ierr)
 stop
 end
 #endif
-subroutine rpn_comm_test_014
-  use ISO_C_BINDING
+subroutine rpncomm_test_014
+  use rpn_comm_globals
   implicit none
-  include 'mpif.h'
-  include 'RPN_COMM.inc'
   integer :: ierr, narg, arglen, rank, pop
   external :: Userinit
   integer :: Pelocal,Petotal,Pex,Pey,MultiGrids,Grids,Io
@@ -67,7 +65,7 @@ subroutine rpn_comm_test_014
   print *,"ERROR in arguments",ierr
   go to 777
   return
-end subroutine rpn_comm_test_014
+end subroutine rpncomm_test_014
 
 subroutine Userinit
   return

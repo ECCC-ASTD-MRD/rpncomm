@@ -24,14 +24,12 @@
 !	lien entre chaine de caractere de groupe
 !	'GRID', 'EW' et 'NS' et leur numero assigne par
 !	MPI.
-!
+        use rpn_comm_globals
+        use rpn_comm, only: rpn_comm_group
         implicit none                             !InTf!
-        include 'mpif.h'
         character(len=*), intent(IN) :: com       !InTf!
 
         integer group,rank,ierr
-        integer  RPN_COMM_group
-        external RPN_COMM_group
 
         RPN_COMM_grank=.false.
         group=rpn_comm_group(com)
@@ -50,13 +48,11 @@
 !       'GRID', 'EW' et 'NS' et leur numero assigne par
 !       MPI.
 !
+        use rpn_comm_globals
         implicit none                              !InTf!
-        include 'mpif.h'
         integer, intent(IN) :: group               !InTf!
 
         integer rank,ierr
-        integer  RPN_COMM_group
-        external RPN_COMM_group
 
         RPN_COMM_ngrank=.false.
 !!!!!!!if(group.lt.0) return

@@ -21,10 +21,8 @@
 ! (see RPN_COMM_constants.inc)
 !InTf!
         integer function RPN_COMM_datyp_indx(data_int)            !InTf!
-        use rpn_comm
+        use rpn_comm_globals
         implicit none                                             !InTf!
-!        include 'mpif.h'
-!        include 'rpn_comm.h'
         character(len=*), intent(IN) :: data_int                  !InTf!
         character(len=32) :: datatype
         integer :: i
@@ -46,14 +44,12 @@
         integer function RPN_COMM_datyp(data_int)                 !InTf!
 !   Luc Corbeil, 2000-11-20
 !   lien entre datatype et MPI_datatype
-        use rpn_comm
+        use rpn_comm_globals
+        use rpn_comm, only : RPN_COMM_datyp_indx
         implicit none                                             !InTf!
-!        include 'mpif.h'
-!        include 'rpn_comm.h'
         character(len=*), intent(IN) :: data_int                  !InTf!
         character(len=32) :: datatype
         integer :: i
-        integer, external :: RPN_COMM_datyp_indx
 
         RPN_COMM_datyp = MPI_DATATYPE_NULL  ! in case nothing is found in RPN_COMM type table
 
@@ -130,12 +126,11 @@
 !       dtyp   : new item of type rpncomm_datatype
 !InTf!
         subroutine RPN_COMM_i_datyp(dtyp_c,dtyp)           !InTf!
-        use rpn_comm
+        use rpn_comm, self => RPN_COMM_i_datyp
 !!      import :: rpncomm_datatype                           !InTf!
         implicit none
         type(rpncomm_datatype), intent(OUT) :: dtyp          !InTf!
         character(len=*), intent(IN) :: dtyp_c               !InTf!
-        integer, external :: RPN_COMM_datyp_indx
 
         dtyp%p = C_LOC(WORLD_COMM_MPI)            ! signature (to be changed to C MPI data type)
         dtyp%t1 = RPN_COMM_datyp_indx(dtyp_c)     ! index of datatype from internal table
@@ -151,16 +146,13 @@
 !       dtyp   : new item of type rpncomm_datatype
 !InTf!
         subroutine RPN_COMM_i_user_datyp(dtyp_m,dtyp)       !InTf!
-        use rpn_comm
+        use rpn_comm, self => RPN_COMM_i_user_datyp
 !!      import :: rpncomm_datatype                     !InTf!
         implicit none
         type(rpncomm_datatype), intent(OUT) :: dtyp    !InTf!
         integer, intent(IN) :: dtyp_m                  !InTf!
-        integer, external :: RPN_COMM_datyp_indx
         integer :: ierr
-!        integer(kind=MPI_COUNT_KIND) :: lb, extent
-        integer :: extent
-        integer(kind=MPI_ADDRESS_KIND) :: lb
+        integer(kind=MPI_ADDRESS_KIND) :: lb, extent
 
         dtyp%p = C_LOC(WORLD_COMM_MPI)            ! signature (to be changed to C MPI data type)
         dtyp%t1 = 0                               ! special index for user defined MPI data types
@@ -178,18 +170,15 @@
 !
 !InTf!
         function RPN_COMM_i_valid_datyp(dtyp) result(valid)    !InTf!
-        use rpn_comm
+        use rpn_comm, self => RPN_COMM_i_valid_datyp
 !!      import :: rpncomm_datatype                           !InTf!
         implicit none
         type(rpncomm_datatype), intent(IN) :: dtyp           !InTf!
         logical :: valid                                     !InTf!
 
-        integer, external :: RPN_COMM_datyp_indx
         type(C_PTR) :: temp
-!        integer(kind=MPI_COUNT_KIND) :: lb, extent
-        integer :: extent
         integer :: ierr
-        integer(kind=MPI_ADDRESS_KIND) :: lb
+        integer(kind=MPI_ADDRESS_KIND) :: lb, extent
 
         temp = C_LOC(WORLD_COMM_MPI)                      ! correct signature pointer ?
         valid = c_associated( dtyp%p , temp )
@@ -199,7 +188,6 @@
         if(.not. valid) return
 
         if(dtyp%t1 == 0) then   ! custom user defined MPI data type
-!          call MPI_type_get_extent(dtyp%t2,lb,extent,ierr)   ! computable extent ?
           call MPI_type_get_extent(dtyp%t2,lb,extent,ierr)   ! computable extent ?
           valid = (ierr == MPI_SUCCESS)
         else
@@ -213,19 +201,16 @@
 ! get extent of data type dtyp ( rpn comm datatype)
 !InTf!
         function RPN_COMM_i_datyp_extent(dtyp) result(extent)    !InTf!
-        use rpn_comm
+        use rpn_comm, self => RPN_COMM_i_datyp_extent
 !!      import :: rpncomm_datatype                               !InTf!
         implicit none
         type(rpncomm_datatype), intent(IN) :: dtyp               !InTf!
         integer :: extent                                        !InTf!
 
-!        integer(kind=MPI_COUNT_KIND) :: lb, extent2
-        integer(kind=MPI_ADDRESS_KIND) :: lb
-        integer :: extent2
+        integer(kind=MPI_ADDRESS_KIND) :: lb, extent2
         integer :: ierr
         
-!        call MPI_type_get_extent(dtyp%t2,lb,extent,ierr)   ! computable extent ?
-        call MPI_type_get_extent(dtyp%t2,lb,extent,ierr)   ! computable extent ?
+        call MPI_type_get_extent(dtyp%t2,lb,extent2,ierr)   ! computable extent ?
         if (ierr .ne. MPI_SUCCESS) then
           extent = -1
         else

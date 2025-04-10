@@ -18,20 +18,21 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-        SUBROUTINE RPN_COMM_allreduce(sendbuf,recbuf,count,datatype,op,&
-                                  com,ierr)
+        SUBROUTINE RPN_COMM_allreduce(sendbuf,recbuf,count,datatype,op,&        !InTfout!
+                                  com,ierr)                                     !InTfout!
 !	Luc Corbeil, 2000-11-21
 !	mpi allreduce
-
-        implicit none
-        integer sendbuf,recbuf,count,comm,ierr
-        integer datyp,oper
-        character(len=*) datatype,op,com
-        integer RPN_COMM_datyp,RPN_COMM_oper,RPN_COMM_comm
-        logical RPN_COMM_grank
+        use rpn_comm, only: RPN_COMM_datyp, RPN_COMM_oper, RPN_COMM_comm, RPN_COMM_grank
+        implicit none                                                           !InTfout!
+!!#define IgnoreTypeKindRank sendbuf                                            !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                              !InTfout!
+!!#define IgnoreTypeKindRank recbuf                                             !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                              !InTfout!
+        integer sendbuf, recbuf
+        integer count,comm,ierr                                                 !InTfout!
+        integer datyp,oper                                                      !InTfout!
+        character(len=*) datatype,op,com                                        !InTfout!
 !*
-!        include 'mpif.h'
-
         datyp=rpn_comm_datyp(datatype)
         oper=rpn_comm_oper(op)
         comm=rpn_comm_comm(com)
@@ -39,4 +40,4 @@
         call mpi_allreduce(sendbuf,recbuf,count,datyp,oper,comm,ierr)
 
 	return
-	end
+	end                                                                     !InTfout!

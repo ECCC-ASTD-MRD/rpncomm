@@ -18,20 +18,22 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-        SUBROUTINE RPN_COMM_allgather(sendbuf,sendcount,sendtype,&
-             recbuf,reccount,rectype,com,ierr)
+        SUBROUTINE RPN_COMM_allgather(sendbuf,sendcount,sendtype,&              !InTfout!
+             recbuf,reccount,rectype,com,ierr)                                  !InTfout!
 !	Luc Corbeil, 2001-09-19
-!	mpi allgather
 
-        implicit none
-        integer sendbuf,recbuf,sendcount,reccount,comm,ierr
-        integer datyp,datyp2,oper
-        character(len=*) rectype,sendtype,com
-        integer RPN_COMM_datyp,RPN_COMM_oper,RPN_COMM_comm
-        logical RPN_COMM_grank
+        use rpn_comm, only: RPN_COMM_datyp, RPN_COMM_grank, RPN_COMM_oper, RPN_COMM_comm
+        implicit none                                                           !InTfout!
+
+!!#define IgnoreTypeKindRank sendbuf                                            !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                              !InTfout!
+!!#define IgnoreTypeKindRank recbuf                                             !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                              !InTfout!
+        integer sendbuf, recbuf
+        integer sendcount,reccount,comm,ierr                                    !InTfout!
+        integer datyp,datyp2,oper                                               !InTfout!
+        character(len=*) rectype,sendtype,com                                   !InTfout!
 !*
-!        include 'mpif.h'
-
         datyp=rpn_comm_datyp(sendtype)
         datyp2=rpn_comm_datyp(rectype)
         comm=rpn_comm_comm(com)
@@ -40,4 +42,4 @@
              reccount,datyp2,comm,ierr)
 
         return
-        end SUBROUTINE RPN_COMM_allgather
+        end SUBROUTINE RPN_COMM_allgather                                       !InTfout!

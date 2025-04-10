@@ -18,20 +18,20 @@
 ! * Boston, MA 02111-1307, USA.
 ! */
 
-        SUBROUTINE RPN_COMM_send(buffer,count,datatype,dest,tag,&
-     &                           com,ierr)
+        SUBROUTINE RPN_COMM_send(buffer,count,datatype,dest,tag,&       !InTfout!
+     &                           com,ierr)                              !InTfout!
 !	Luc Corbeil, 2000-11-21
-!	mpi send
 
-        implicit none
-        integer count,comm,ierr,tag,dest
-        integer buffer
+        use mpi
+        use rpn_comm, only: RPN_COMM_datyp, RPN_COMM_comm, RPN_COMM_grank
+        implicit none                                                   !InTfout!
+        integer count,comm,ierr,tag,dest                                !InTfout!
+!!#define IgnoreTypeKindRank buffer                                       !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                        !InTfout!
+        real(8) :: buffer
+        character(len=*) datatype,com                                   !InTfout!
+
         integer datyp
-        character(len=*) datatype,com
-        integer RPN_COMM_datyp,RPN_COMM_comm
-        logical RPN_COMM_grank
-
-!        include 'mpif.h'
 
         datyp=rpn_comm_datyp(datatype)
 	comm=rpn_comm_comm(com)
@@ -39,4 +39,4 @@
         call mpi_send(buffer,count,datyp,dest,tag,comm,ierr)
 
 	return
-	end
+	end                                                             !InTfout!

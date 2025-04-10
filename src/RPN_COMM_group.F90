@@ -22,7 +22,7 @@
 ! if rcom is present, com is ignored
 !InTf!
       subroutine RPN_COMM_i_group(com,rgroup,rcom)  !InTf!
-      use rpn_comm
+      use rpn_comm, self => RPN_COMM_i_group
       use ISO_C_BINDING
 !!  import :: rpncomm_group                        !InTf!
 !!  import :: rpncomm_communicator                 !InTf!
@@ -31,7 +31,6 @@
       type(rpncomm_group), intent(OUT) :: rgroup    !InTf!
       type(rpncomm_communicator), optional, intent(IN) :: rcom        !InTf!
 
-      integer, external :: RPN_COMM_group
       integer :: temp, ierr
 
       if( present(rcom) ) then
@@ -60,10 +59,8 @@
 !      GRID, EW et NS et leur numero assigne par
 !      MPI.
 !
-      use rpn_comm
+      use rpn_comm_globals
       implicit none                                 !InTf!
-!      include mpif.h
-!      include rpn_comm.h
       character(len=*), intent(IN) :: com           !InTf!
       character(len=32) comm
       integer ierr,world_group

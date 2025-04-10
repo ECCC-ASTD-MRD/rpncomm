@@ -1,16 +1,14 @@
 #if defined(TEST)
 program my_test
 call mpi_init(ierr)
-call rpn_comm_test_012
+call rpncomm_test_012
 call mpi_finalize(ierr)
 stop
 end
 #endif
-subroutine rpn_comm_test_012
-  use ISO_C_BINDING
+subroutine rpncomm_test_012
+  use rpn_comm_globals
   implicit none
-  include 'mpif.h'
-  include 'RPN_COMM_types.inc'
 
   type(rpncomm_datatype) :: my_type
   type(rpncomm_group) :: my_group
@@ -76,4 +74,4 @@ subroutine rpn_comm_test_012
   print 100,'operator result =',result,MPI_SUM,my_op%t2
 100 format(A20,3I5)
   return
-end subroutine rpn_comm_test_012
+end subroutine rpncomm_test_012

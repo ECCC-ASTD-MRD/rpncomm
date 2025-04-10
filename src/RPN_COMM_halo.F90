@@ -1,6 +1,6 @@
 module rpn_comm_halos
+use rpn_comm_globals
 implicit none
-include 'mpif.h'
 save
 
 integer, parameter :: HALO_NOT_FOUND=0

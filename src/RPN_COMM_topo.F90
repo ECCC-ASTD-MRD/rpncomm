@@ -20,7 +20,7 @@
 !**function RPN_COMM_topo_2 compute the local bounds for a distributed array
 !InTf!
       integer function RPN_COMM_topo_2(nxg,minx,maxx,nxl,nxlmax,halo,nx0,alongx,fill,relax,abort) !InTf!
-      use rpn_comm
+      use rpn_comm, self => RPN_COMM_topo_2
       implicit none                                                         !InTf!
       integer, intent(in) :: nxg,halo,relax                                 !InTf!
       logical, intent(in) :: alongx,fill,abort                              !InTf!
@@ -52,8 +52,6 @@
         integer gmin, gmax, ierr
         integer count(pe_nx + pe_ny)
         integer depl(pe_nx + pe_ny)
-      external RPN_COMM_limit_2
-      integer RPN_COMM_limit_2
 !
         if (alongx) then    ! distribute along X axis
           ierr = RPN_COMM_limit_2(pe_mex, pe_nx, 1, nxg, gmin, gmax, count, depl,relax)

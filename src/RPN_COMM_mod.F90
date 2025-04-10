@@ -17,21 +17,24 @@
 ! * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ! * Boston, MA 02111-1307, USA.
 ! */
-module rpn_comm
+
+module rpn_comm_globals
   use iso_c_binding
+  use iso_fortran_env
+  use rpn_comm_mpi
   implicit none
+  save
   include 'RPN_COMM_constants.inc'
   include 'RPN_COMM_types.inc'
   include 'RPN_COMM_types_int.inc'
-  include 'mpif.h'
-  save
 !
 !	domain boundary flags, LOGICAL
 !	.true. if a PE(TILE) is on a domain edge
 !	all 4 values .true. if single tile
 !	normally set by routine rpn_comm_init
 !
-	logical bnd_east,bnd_west,bnd_north,bnd_south
+
+  logical bnd_east,bnd_west,bnd_north,bnd_south
 !
 !	characteristics of the local PE
 !	plus some PE grid topology information
@@ -312,4 +315,10 @@ contains  ! routines to manage decomposition table
   ns = dec_t(indx)%ns
   status = indx
   end function rpn_comm_expand_decomp
+end module rpn_comm_globals
+
+module rpn_comm
+  use rpn_comm_globals
+  implicit none
+# include <RPN_COMM_interfaces.hf>
 end module rpn_comm

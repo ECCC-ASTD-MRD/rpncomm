@@ -355,14 +355,13 @@
 !          .true.  : data flows from root PE to client PEs
 !          .false. : data flows from client PEs to root PE
 !
+      use rpn_comm_globals
       use rpn_comm_localdist
       implicit none
       integer :: RPN_COMM_do_dist
       integer, intent(IN) :: pattern, nvalues
       logical, intent(IN) :: from_root
       integer, dimension(nvalues), intent(INOUT) :: values
-
-      include 'mpif.h'
 
       integer row, j, request, offset, length
       integer, pointer, dimension(:,:) :: clients, sources

@@ -1,4 +1,4 @@
-subroutine rpn_comm_test_010
+subroutine rpncomm_test_010
 use ISO_C_BINDING
 implicit none
 #include "RPN_COMM_int.inc"

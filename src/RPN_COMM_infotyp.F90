@@ -13,7 +13,7 @@
 ! ! Lesser General Public License for more details.
 ! !/
 integer function RPN_COMM_infotyp(info)                 !InTf!
-  use rpn_comm
+  use rpn_comm, self => RPN_COMM_infotyp
   implicit none
   character(len=*), intent(IN) :: info                  !InTf!
 

@@ -19,7 +19,7 @@
 ! */
 !InTf!
       integer function RPN_COMM_colors(comm)         !InTf!
-      use rpn_comm
+      use rpn_comm, self => RPN_COMM_colors
       implicit none                                  !InTf!
       character(len=*) :: comm                       !InTf!
       RPN_COMM_colors=-1

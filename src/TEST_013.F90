@@ -5,10 +5,10 @@ module test_013
   integer, save :: pe_mex, pe_mey
   type(time_context), save :: trace
 end module test_013
-subroutine rpn_comm_test_013
+subroutine rpncomm_test_013
   use test_013
+  use rpn_comm_globals
   implicit none
-  include 'mpif.h'
   integer :: Pex, Pey, Pelocal, Petotal, halox, haloy, step, is, nbeads, nbent, nused, nprc
   external :: TestUserInit
   integer :: lni, lnj, gnk, gni, gnj, nk, lnk, lniymax, lniy
@@ -143,7 +143,7 @@ subroutine rpn_comm_test_013
 100 format(A50,10I7)
 101 format(12I10)
 102 format(2I10,5(I18,I2))
-end subroutine rpn_comm_test_013
+end subroutine rpncomm_test_013
 !=======================================================================
 subroutine TestUserInit(NX,NY) ! try to get NX,NY from file TEST.cfg if it exists
 !=======================================================================
@@ -165,12 +165,9 @@ end subroutine TestUserInit
 !=======================================================================
 integer function xch_halo_test(lni, lnj, nk, halox, haloy, gni, gnj, mode, tag)
 !=======================================================================
-  use ISO_C_BINDING
   use test_013
+  use rpn_comm_globals
   implicit none
-  include 'mpif.h'
-  external MPI_Barrier
-  include 'RPN_COMM.inc'
   !
   integer, pointer, dimension(:,:,:), static :: localarray
   integer, intent(IN) :: lni, lnj, nk, halox, haloy, gni, gnj, mode
@@ -262,12 +259,9 @@ end function xch_halo_test
 !=======================================================================
 integer function transpose_test(lni, lnj, gnk, halox, haloy, gni, gnj, Pex, Pey, mode, tag)
 !=======================================================================
-  use ISO_C_BINDING
+  use rpn_comm_globals
   use test_013
   implicit none
-  include 'mpif.h'
-  external MPI_Barrier
-  include 'RPN_COMM.inc'
 
   integer, intent(IN) :: lni, lnj, gnk, halox, haloy, gni, gnj, Pex, Pey, mode
   integer, intent(INOUT) :: tag

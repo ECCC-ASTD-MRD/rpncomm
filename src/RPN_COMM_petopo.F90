@@ -145,9 +145,8 @@
 !  pe_mey +----+  +----+  +----+  +----+ 
 !            0       1       2       3    pe_mex
 
-      use rpn_comm
+      use rpn_comm_globals
       implicit none                      !InTf!
-!      include 'mpif.h'
       integer, intent(IN) :: sizx,sizy   !InTf!
 
       deltai = sizx
@@ -157,9 +156,8 @@
       end subroutine RPN_COMM_set_petopo                  !InTf!
 !InTf!
       integer function RPN_COMM_petopo(pex,pey)          !InTf!
-      use rpn_comm
+      use rpn_comm_globals
       implicit none                                      !InTf!
-!      include 'mpif.h'
       integer, intent(IN) :: pex,pey                     !InTf!
 
       integer count, ierr,i,j,i0,j0
@@ -291,7 +289,7 @@
 !          'SUPERGRID' : coordinates of PE x,y in current SUPERGRID (sgrd must be -1)
 !          'ALLGRIDS'  : coordinates of PE x,y in current domain (set of SUPERGRIDs)
 !
-      use rpn_comm
+      use rpn_comm, self => RPN_COMM_get_pe
       implicit none                                                !InTf!
       integer, intent(IN) :: x,y,grd,sgrd                          !InTf!
       character (len=*), intent(IN) :: communicator                   !InTf!

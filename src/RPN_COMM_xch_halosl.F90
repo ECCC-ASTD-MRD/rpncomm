@@ -22,7 +22,6 @@
 !     nj, haloy, periody, npol_row : NOT USED
       use rpn_comm
       implicit none
-!      include 'mpif.h'
 !     
 !     exchange a halo with neighbours, semi-lagrangian fashion for E-W part of exchange
 !     (really an allgather, G needs to be large enough for the entire E-W dimension)
@@ -42,7 +41,7 @@
 
       integer status(MPI_STATUS_SIZE)
       integer sendtag, recvtag, sendpe, recvpe, sendi, recvi
-      integer procx, ierr, RPN_COMM_limit, offset, temp
+      integer procx, ierr, offset, temp
 
 
       ierr = RPN_COMM_limit(pe_mex,pe_nx,1,gni,gmin,gmax,count,depl)

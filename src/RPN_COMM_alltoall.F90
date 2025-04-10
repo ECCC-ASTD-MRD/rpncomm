@@ -18,21 +18,23 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-        SUBROUTINE RPN_COMM_alltoall(sendbuf,sendcount,sendtype,&
-                                     recbuf,recvcnt,recvtype,&
-                                     com,ierr)
+        SUBROUTINE RPN_COMM_alltoall(sendbuf,sendcount,sendtype,&       !InTfout!
+                                     recbuf,recvcnt,recvtype,&          !InTfout!
+                                     com,ierr)                          !InTfout!
 !	Luc Corbeil, 2000-11-21
 !	mpi alltoall
 
-        implicit none
-        integer sendbuf,recbuf,sendcount,recvcnt,comm,ierr
-        integer sendt, recvt
-        character(len=*) sendtype,recvtype,com
-        integer RPN_COMM_datyp,RPN_COMM_comm
-        logical RPN_COMM_grank
+        use rpn_comm, only: RPN_COMM_datyp, RPN_COMM_comm, RPN_COMM_grank
+        implicit none                                                   !InTfout!
+!!#define IgnoreTypeKindRank sendbuf                                    !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
+!!#define IgnoreTypeKindRank recbuf                                     !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
+        integer sendbuf,recbuf
+        integer sendcount,recvcnt,comm,ierr                             !InTfout!
+        integer sendt, recvt                                            !InTfout!
+        character(len=*) sendtype,recvtype,com                          !InTfout!
 !*
-!        include 'mpif.h'
-
         sendt=rpn_comm_datyp(sendtype)
         recvt=rpn_comm_datyp(recvtype)
 	comm=rpn_comm_comm(com)
@@ -41,4 +43,4 @@
                           recvt,comm,ierr)
 
 	return
-	end
+	end                                                             !InTfout!

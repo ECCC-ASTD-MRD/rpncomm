@@ -19,7 +19,7 @@
 ! */
 
       subroutine RPN_COMM_waitall_nostat(nreq,req,ierr)
-      include 'mpif.h'
+        use rpn_comm_globals
         integer nreq,req(nreq),status(mpi_status_size,nreq),ierr
         call mpi_waitall(nreq,req,status,ierr)
       return

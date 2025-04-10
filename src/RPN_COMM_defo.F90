@@ -25,11 +25,10 @@
 !   RPN_COMM_tmg_wrt, RPN_COMM_move
 !
 SUBROUTINE RPN_COMM_defo(com)             !InTf!
-  use rpncomm_com
+  use rpncomm_com, self => RPN_COMM_defo
   implicit none                           !InTf!
   character(len=*), intent(IN) ::  com    !InTf!
   integer comm
-  integer, external :: rpn_comm_comm
 
   if(.not. associated(com_tab)) call init_com_tab   ! in case communicator table is not initialized yet
   comm=rpn_comm_comm(com)               ! get communicator

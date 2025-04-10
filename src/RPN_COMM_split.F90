@@ -21,7 +21,7 @@
 !!integer function RPN_COMM_split(mex,nx,nxg,minx,maxx,nxl,nxlmax,halox,nx0,fill) !InTf!
 	integer function RPN_COMM_split(mex,nx,nxg,minx,maxx,nxl,nxlmax,&
      &                   halox,nx0,fill)
-	use rpn_comm
+	use rpn_comm, self => RPN_COMM_split
 	implicit none                                             !InTf!
 	integer, intent(IN) :: nx, mex, nxg, halox                !InTf!
 	integer, intent(OUT) :: minx,maxx,nxl,nxlmax,nx0          !InTf!
@@ -42,7 +42,6 @@
 !*
 !
 	integer count(nx),depl(nx), nxn, ierr
-	integer, external :: RPN_COMM_limit
 
 	RPN_COMM_split = -1
 

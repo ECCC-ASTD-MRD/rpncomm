@@ -31,8 +31,6 @@
 !	integer *8 mem_time, exch_time, ewtime
       integer g(minx:maxx,miny:maxy,nk)
 !
-!	include 'mpif.h'
-!
       integer halo_to_east(halox,nj,nk),halo_to_west(halox,nj,nk)
       integer halo_from_east(halox,nj,nk),halo_from_west(halox,nj,nk)
       integer halo_to_north(1-halox:ni+halox,haloy,nk)

@@ -3,7 +3,7 @@
 !    are giving correct results. Furthermore, it returns a timing
 !    for rpn_comm_xch_halo
 !
-        subroutine rpn_comm_test_002
+        subroutine rpncomm_test_002
 	logical :: asynchronous  ! use asynchronous code
 !        print *,'I am version ',VeRsion
         call rpn_comm_test_002b
@@ -23,7 +23,9 @@
         err = 0
         return
         end
+
         subroutine rpn_comm_test_002b
+        use rpn_comm
         implicit none
 !
 !       dummy test program implemented as a subroutne
@@ -46,20 +48,12 @@
         integer mini,maxi,nil,nilmax,ni0,i0
         integer minj,maxj,njl,njlmax,nj0,j0
         integer nzl, nzlmzx, nz0,irep,iter,irep2
-        real*8 time1,time2,MPI_wtime,time_min,time_max,time_tot
-        external MPI_wtime
+        real*8 time1,time2,time_min,time_max,time_tot
 !
-        integer RPN_COMM_topo
-        logical RPN_COMM_ngrank, RPN_COMM_grank
-        integer RPN_COMM_init_multi_level, mygrid, mygridcomm, mymultigridcomm,myworldcomm,myallgridcomm
-        integer RPN_COMM_colors
-        integer RPN_COMM_comm
+        integer mygrid, mygridcomm, mymultigridcomm,myworldcomm,myallgridcomm
         integer test_grids
-	integer RPN_COMM_option_L
-        external RPN_COMM_mydomain
         external get_n_domains
         external test_grids
-	external RPN_COMM_option_L
         integer domains, mydomain,irank,isize
         integer n_domains,j
         integer peercomm, npeers
@@ -80,7 +74,7 @@
 !
         npex=0
         npey=0
-        call RPN_COMM_mydomain (get_n_domains, mydomain,ierr)
+        call RPN_COMM_mydomain (get_n_domains, mydomain)
 !        print *,'This is member',mydomain+1,' of',n_domains,' domains'
 !
         call RPN_COMM_set_petopo(1,1000)   ! force vertically striped distribution
@@ -552,11 +546,10 @@
         end
 !
 	integer function test_grids(mygrid,Pelocal)
+        use rpn_comm
 	implicit none
 	integer mygrid, Pelocal
 
-	integer RPN_COMM_comm, RPN_COMM_colors
-	external RPN_COMM_comm, RPN_COMM_colors
 	integer mygridcomm, mymultigridcomm,myworldcomm,myallgridcomm,peercomm
 	integer irank, isize, ierr, npeers
 

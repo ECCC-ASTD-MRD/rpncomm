@@ -29,6 +29,7 @@ RPN_COMM_debug.F90.o
 RPN_COMM_defo.F90.o
 RPN_COMM_diag.F90.o
 RPN_COMM_dist.F90.o
+RPN_COMM_exchange_halo.F90.o
 RPN_COMM_ezwin.F90.o
 RPN_COMM_f2c.c.o
 RPN_COMM_finalize.F90.o
@@ -60,6 +61,7 @@ RPN_COMM_low2up.F90.o
 RPN_COMM_manage_halo.c.o
 RPN_COMM_mod.F90.o
 RPN_COMM_move.F90.o
+RPN_COMM_mpi.F90.o
 RPN_COMM_mype.F90.o
 RPN_COMM_openmp.F90.o
 RPN_COMM_oper.F90.o

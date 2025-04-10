@@ -24,8 +24,8 @@
 ! rank    : rank of process in domname
 ! ierr    : error code
 !	Luc Corbeil, 2002-11-21
-!	mpi reduce
 
+      use rpn_comm_globals
       implicit none                                                 !InTf!
       character(len=*),intent(in) :: com                            !InTf!
       integer, intent(out) :: rank                                  !InTf!
@@ -34,8 +34,6 @@
       integer, external :: RPN_COMM_datyp,RPN_COMM_oper,RPN_COMM_comm
       logical, external :: RPN_COMM_grank
 !*
-!        include 'mpif.h'
-
       comm=rpn_comm_comm(com)
       if(.not.RPN_COMM_grank(com)) return
       call mpi_comm_rank(comm, rank, ierr)

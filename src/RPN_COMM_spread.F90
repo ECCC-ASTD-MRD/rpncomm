@@ -17,15 +17,13 @@
 ! * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ! * Boston, MA 02111-1307, USA.
 ! */
-#define IN_RPN_COMM_spread
 !InTf!
 function RPN_COMM_spread(contxt,source,npts,ndata,dest)  result(status)   !InTf!
   use ISO_C_BINDING                                                       !InTf!
+  use rpn_comm, self => RPN_COMM_spread
 !!  import :: rpncomm_context    !InTf!
   implicit none                                                           !InTf!
-#include "RPN_COMM_int.inc"
   include 'RPN_COMM_spread.inc'
-  include 'mpif.h'
 
   type(rpncomm_context), intent(IN) :: contxt          ! object obtained from RPN_COMM_spread_context                !InTf!
   integer, intent(IN) :: npts, ndata                   ! dimensions of source array (used only on root PE)           !InTf!
@@ -117,12 +115,10 @@ function RPN_COMM_spread(contxt,source,npts,ndata,dest)  result(status)   !InTf!
 end function RPN_COMM_spread                                                                         !InTf!
 !InTf!
 function RPN_COMM_spread_context(contxt,com,rootpe,pe,npts) result(status)                          !InTf!
-  use ISO_C_BINDING                                                                                 !InTf!
+  use rpn_comm, self => RPN_COMM_spread_context
 !!  import :: rpncomm_context                                                                       !InTf!
   implicit none                                                                                     !InTf!
-#include "RPN_COMM_int.inc"
   include 'RPN_COMM_spread.inc'
-  include 'mpif.h'
 
   type(rpncomm_context), intent(OUT) :: contxt     ! C pointer to metadata describing "spread" operation         !InTf!
   character (len=*), intent(IN) :: com             ! RPN_COMM communicator                                       !InTf!

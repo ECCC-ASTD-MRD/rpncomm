@@ -36,9 +36,6 @@
       pointer (g2_adj_,g2_adj)
       logical adjoint
 !
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
       integer i,j,k,borneminx,bornemaxx,borneminy,bornemaxy
       integer nimax,ierr
 !

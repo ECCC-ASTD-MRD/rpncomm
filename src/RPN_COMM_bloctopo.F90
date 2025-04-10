@@ -19,12 +19,10 @@
 ! !/
 !InTf!
       subroutine RPN_COMM_bloctopo(blocme,blocmex,blocmey,blocsizex,blocsizey)   !InTf!
-	use rpn_comm
+	use rpn_comm_globals
       implicit none                                                              !InTf!
       integer, intent(out) :: blocme,blocmex,blocmey                             !InTf!
       integer, intent(out) :: blocsizex, blocsizey                               !InTf!
-!      include 'mpif.h'
-!
 
       blocsizex    = BLOC_sizex
       blocsizey    = BLOC_sizey

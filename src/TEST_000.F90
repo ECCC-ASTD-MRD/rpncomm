@@ -1,7 +1,7 @@
-	subroutine rpn_comm_test_000
+	subroutine rpncomm_test_000
+	use rpn_comm
 	implicit none
 	integer ierr, myrank,totpes
-	include 'mpif.h'
 	call mpi_init(ierr)
 	call mpi_comm_size(MPI_COMM_WORLD,totpes,ierr)
         call mpi_comm_rank(MPI_COMM_WORLD,myrank,ierr)

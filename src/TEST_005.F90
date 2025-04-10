@@ -1,6 +1,6 @@
-subroutine rpn_comm_test_005
+subroutine rpncomm_test_005
+use rpn_comm_mpi
 implicit none
-include 'mpif.h'
 integer, parameter :: BUFSIZE=4096*1024
 integer, dimension(BUFSIZE) :: rbuf, sbuf
 integer :: ierr, increment, i, me, other, irep, irep2

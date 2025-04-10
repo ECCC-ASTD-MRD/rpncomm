@@ -18,6 +18,9 @@
 ! * Boston, MA 02111-1307, USA.
 ! */
         module RPN_COMM_barrier_priv
+          use rpn_comm_globals
+          use rpn_comm, only: RPN_COMM_comm, RPN_COMM_grank
+          implicit none
           integer, save :: detail = 0   ! 0, 1, 2
           integer, save :: isize = -1   ! valid number of data points in times array
           integer, save :: irank = -1   ! rank of PE in communicator domain
@@ -36,10 +39,6 @@
         character(len=*), intent(IN) ::  com                     !InTf!
 !*
         integer :: comm
-        include 'mpif.h'
-
-        integer, external :: RPN_COMM_comm
-        logical RPN_COMM_grank
         real *8 t1,t2
 
 	comm=rpn_comm_comm(com)

@@ -18,25 +18,22 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-        SUBROUTINE RPN_COMM_isend(buffer,count,datatype,dest,tag,&
-                                 com,request,ierr)
+        SUBROUTINE RPN_COMM_isend(buffer,count,datatype,dest,tag,&      !InTfout!
+                                 com,request,ierr)                      !InTfout!
 !	Michel Valin 2009/10/13
-!	mpi isend
-
-        implicit none
-        integer count,request,comm,ierr,tag,dest
+        use rpn_comm, only: RPN_COMM_datyp, RPN_COMM_comm, RPN_COMM_grank
+        implicit none                                                   !InTfout!
+        integer count,request,comm,ierr,tag,dest                        !InTfout!
+!!#define IgnoreTypeKindRank buffer                                     !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
         integer buffer
-        integer datyp
-        character(len=*) datatype,com
-        integer RPN_COMM_datyp,RPN_COMM_comm
-        logical RPN_COMM_grank
+        integer datyp                                                   !InTfout!
+        character(len=*) datatype,com                                   !InTfout!
 !*
-!        include 'mpif.h'
-
         datyp=rpn_comm_datyp(datatype)
 	comm=rpn_comm_comm(com)
         if(.not.RPN_COMM_grank(com)) return
         call mpi_isend(buffer,count,datyp,dest,tag,comm,request,ierr)
 
 	return
-	end
+	end                                                             !InTfout!

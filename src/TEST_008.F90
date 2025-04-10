@@ -1,4 +1,4 @@
-subroutine rpn_comm_test_008
+subroutine rpncomm_test_008
 call RPN_COMM_debug_test()
 stop
 end

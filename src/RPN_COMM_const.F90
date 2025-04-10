@@ -19,10 +19,9 @@
 ! !/
 !InTf!
     subroutine RPN_COMM_const(IER)                 !InTf!
-    use rpn_comm
+    use rpn_comm_globals
     implicit none                                  !InTf!
     integer, intent(OUT) :: IER                    !InTf!
-    external :: MPI_BCAST
     real :: VALEUR
     integer :: FLAG
 
@@ -31,7 +30,7 @@
       print *,' first call to constnt to prime tables'
     endif
     call CONSTNT_X(VALEUR,FLAG,'DUMMY',4,&
-      	     MPI_BCAST,MPI_INTEGER,0,pe_defcomm,IER)
+                   MPI_Bcast,MPI_INTEGER,0,pe_defcomm,IER)
     if(pe_me .eq.0) then
       print *,' constnt tables have been distributed'
     endif

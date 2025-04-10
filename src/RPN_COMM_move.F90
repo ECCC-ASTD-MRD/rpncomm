@@ -18,26 +18,29 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-        SUBROUTINE RPN_COMM_move( sendbuf, sendcount, mtyp, dest,&
-     &     recvbuf, recvcount,periodicity, ierr)
+        SUBROUTINE RPN_COMM_move( sendbuf, sendcount, mtyp, dest,&   !InTfout!
+     &     recvbuf, recvcount,periodicity, ierr)                     !InTfout!
 
-        use rpn_comm
-        implicit none
-!        include 'rpn_comm.h'
-!        include 'mpif.h'
+        use rpn_comm_globals
+        use rpn_comm, only: RPN_COMM_datyp
+        implicit none                                                !InTfout!
 
-        integer sendbuf, sendcount, recvbuf, recvcount
-        integer sendtag, recvtag, ierr
-        character(len=*), intent(IN) ::  mtyp
-        character(len=*), intent(IN) ::  dest
+!!#define IgnoreTypeKindRank sendbuf                                 !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                   !InTfout!
+!!#define IgnoreTypeKindRank recvbuf                                 !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                   !InTfout!
+        integer sendbuf, recvbuf
+        integer sendcount, recvcount                                 !InTfout!
+        integer sendtag, recvtag, ierr                               !InTfout!
+        character(len=*), intent(IN) ::  mtyp                        !InTfout!
+        character(len=*), intent(IN) ::  dest                        !InTfout!
+        logical periodicity                                          !InTfout!
+
         character(len=1) dest2
         integer sendt, recvt, icomm, icomm2, idest, irecv
         logical lsend, lrecv,lsendrecv, borders, borderr
-        logical periodx,periody,periodicity
+        logical periodx,periody
         integer status(MPI_STATUS_SIZE)
-
-        integer  RPN_COMM_datyp, RPN_COMM_comm
-        external RPN_COMM_datyp, RPN_COMM_comm
 
         periodx=periodicity
         periody=periodicity
@@ -112,6 +115,6 @@
         endif
 
         return
-        end SUBROUTINE RPN_COMM_move
+        end SUBROUTINE RPN_COMM_move                                 !InTfout!
 
            

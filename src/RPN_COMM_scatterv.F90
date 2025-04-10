@@ -18,28 +18,30 @@
 ! * Boston, MA 02111-1307, USA.
 ! */
 
-      SUBROUTINE RPN_COMM_scatterv(sendbuf,sendcount,disp,sendtype,&
-     &     recbuf,reccountv,rectype,root,com,ierr)
+      SUBROUTINE RPN_COMM_scatterv(sendbuf,sendcounts,disp,sendtype,&    !InTfout!
+     &     recbuf,reccountv,rectype,root,com,ierr)                      !InTfout!
 !     Bin He     , 2005-12-16
-!     mpi scatterv
-      
-      implicit none
-      integer sendbuf,recbuf,sendcount,reccountv,comm,ierr
-      integer datyp,datyp2,oper,root, disp
-      character(len=*) rectype,sendtype,com
-      integer RPN_COMM_datyp,RPN_COMM_oper,RPN_COMM_comm
-      logical RPN_COMM_grank
 
-!      include 'mpif.h'
-      
+      use mpi
+      use rpn_comm, only: RPN_COMM_datyp, RPN_COMM_oper, RPN_COMM_comm, RPN_COMM_grank
+      implicit none                                                     !InTfout!
+!!#define IgnoreTypeKindRank sendbuf                                    !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
+!!#define IgnoreTypeKindRank recbuf                                     !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
+      integer sendbuf, recbuf
+      integer sendcounts(:),reccountv,comm,ierr                         !InTfout!
+      integer datyp,datyp2,oper,root, disp(:)                           !InTfout!
+      character(len=*) rectype,sendtype,com                             !InTfout!
+
       datyp=rpn_comm_datyp(sendtype)
       datyp2=rpn_comm_datyp(rectype)
       comm=rpn_comm_comm(com)
       
       if(.not.RPN_COMM_grank(com)) return
-      call mpi_scatterv(sendbuf,sendcount,disp,datyp,recbuf&
+      call mpi_scatterv(sendbuf,sendcounts,disp,datyp,recbuf&
      &     ,reccountv,datyp2,root,comm,ierr)
       
       return
-      end
+      end                                                               !InTfout!
       

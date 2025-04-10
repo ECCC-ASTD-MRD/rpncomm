@@ -18,20 +18,24 @@
 ! * Boston, MA 02111-1307, USA.
 ! */
 
-	SUBROUTINE RPN_COMM_Xpose1(n3partiel,npe,pecomm, &
-      n1partiel,za,min1,max1,n1g,n2,min3,max3,n3g,zb,size)
+	SUBROUTINE RPN_COMM_Xpose1(n3partiel,npe,pecomm, &			!InTfout!
+      n1partiel,za,min1,max1,n1g,n2,min3,max3,n3g,zb,size)		!InTfout!
 !
-	use rpn_comm
+	use rpn_comm_globals
 !	forward transpose, za to zb
 !	gather first dimension into processor,
 !	distribute last dimension
 !	result array has gathered index as last dimension
 !	(last dimension of arrays is always in-processor)
 !
-	implicit none
+	implicit none                                     			!InTfout!
 
-	integer n3partiel,n1partiel,npe,pecomm,size
-	integer min1,max1,n1g,n2,min3,max3,n3g
+	integer n3partiel,n1partiel,npe,pecomm,size       			!InTfout!
+	integer min1,max1,n1g,n2,min3,max3,n3g            			!InTfout!
+!!#define IgnoreTypeKindRank za                                 !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                              !InTfout!
+!!#define IgnoreTypeKindRank zb                                 !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                              !InTfout!
 	integer za(size,min1:max1,n2,n3g)
 	integer zb(size,n2,min3:max3,n1g)
 !	integer, allocatable :: za(:,:,:,:)
@@ -44,10 +48,6 @@
 	pointer (za8_,za8)
 	pointer (zb8_,zb8)
 
-!
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
 !	integer, dimension(size,n2,min3:max3,n1partiel,npe) :: ta
 !	integer*8, dimension(size/2,n2,min3:max3,n1partiel,npe) :: ta8
 	integer, allocatable :: ta(:,:,:,:,:)
@@ -125,4 +125,4 @@
 	deallocate(ta)
 !
 	return
-	end
+	end															!InTfout!

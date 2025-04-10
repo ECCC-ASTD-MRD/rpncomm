@@ -18,24 +18,25 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-	subroutine RPN_COMM_coll(garr,gmini,gmaxi,gminj,&
-               gmaxj,nig,njg,nk,ghalox,ghaloy,size,&
-               larr,mini,maxi,minj,maxj,halox,haloy,&
-               status)
-	use rpn_comm
-	implicit none
+	subroutine RPN_COMM_coll(garr,gmini,gmaxi,gminj,&                   !InTfout!
+               gmaxj,nig,njg,nk,ghalox,ghaloy,size,&                    !InTfout!
+               larr,mini,maxi,minj,maxj,halox,haloy,&                   !InTfout!
+               status)                                                  !InTfout!
+	use rpn_comm_globals
+    use rpn_comm, only: RPN_COMM_coll2, RPN_COMM_ngrank
+	implicit none                                                       !InTfout!
 !
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
-	integer ghalox,ghaloy,gmini,gmaxi,gmaxj,gminj
-	integer nig,njg,size,mini,maxi,minj,maxj,nk,status
-	integer garr(size,gmini:gmaxi,gminj:gmaxj,nk),halox,haloy
-	real reel,lreel
+	integer ghalox,ghaloy,gmini,gmaxi,gmaxj,gminj                       !InTfout!
+	integer nig,njg,size,mini,maxi,minj,maxj,nk,status                  !InTfout!
+    integer halox, haloy                                                !InTfout!
+!!#define IgnoreTypeKindRank garr                                       !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
+	integer garr(size,gmini:gmaxi,gminj:gmaxj,nk)
+!!#define IgnoreTypeKindRank larr                                       !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
 	integer larr(size,mini:maxi,minj:maxj,nk),i,j,k
 
 	integer dimtemp(2),dt1,dt2,ierr,ixmin,ixmax,iymin,iymax,isize
-	logical RPN_COMM_ngrank
 
 	if(.not.RPN_COMM_ngrank(pe_defgroup)) return
         
@@ -67,7 +68,7 @@
                larr,mini,maxi,minj,maxj,halox,haloy,&
                status,dt1,dt2)
         return
-        end
+        end                                                             !InTfout!
 
 
 !**S/R RPN_COMM_coll  Global collection of data
@@ -79,21 +80,24 @@
 !
 !****
 
-	subroutine RPN_COMM_coll2(garr,gmini,gmaxi,gminj,&
-               gmaxj,nig,njg,nk,ghalox,ghaloy,size,&
-               larr,mini,maxi,minj,maxj,halox,haloy,&
-               status,dt1,dt2)
-	use rpn_comm
-	implicit none
+	subroutine RPN_COMM_coll2(garr,gmini,gmaxi,gminj,&          !InTfout!
+               gmaxj,nig,njg,nk,ghalox,ghaloy,size,&            !InTfout!
+               larr,mini,maxi,minj,maxj,halox,haloy,&           !InTfout!
+               status,dt1,dt2)                                  !InTfout!
+	use rpn_comm_globals
+    use rpn_comm, only: RPN_COMM_limit
+	implicit none                                               !InTfout!
 !
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
-	integer ghalox,ghaloy,gmini,gmaxi,gmaxj,gminj
-	integer nig,njg,size,mini,maxi,minj,maxj,nk,status
-	integer garr(size,gmini:gmaxi,gminj:gmaxj,nk),halox,haloy
-	real reel,lreel
-	integer larr(size,mini:maxi,minj:maxj,nk),dt1,dt2
+	integer ghalox,ghaloy,gmini,gmaxi,gmaxj,gminj               !InTfout!
+	integer nig,njg,size,mini,maxi,minj,maxj,nk,status          !InTfout!
+    integer halox, haloy                                        !InTfout!
+!!#define IgnoreTypeKindRank garr                               !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                              !InTfout!
+	integer garr(size,gmini:gmaxi,gminj:gmaxj,nk)
+!!#define IgnoreTypeKindRank larr                               !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                              !InTfout!
+	integer larr(size,mini:maxi,minj:maxj,nk)
+    integer dt1, dt2                                            !InTfout!
 	logical comphx,comphy,periodx,periody
 !
 !arguments
@@ -123,8 +127,6 @@
 	integer count(pe_nx+pe_ny)
 	integer depl(pe_nx+pe_ny)
 	integer mex, nx, mey, ny
-
-	integer rpn_comm_limit
 
 !
  1	status=MPI_ERROR
@@ -216,4 +218,4 @@
 1111	status =  MPI_ERROR
 	write(rpn_u,*) 'ERREUR',MPI_ERROR,pe_medomm
 
-	end
+	end                                                         !InTfout!

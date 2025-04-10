@@ -18,21 +18,18 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-        SUBROUTINE RPN_COMM_irecv(buffer,count,datatype,source,tag,&
-                                 com,request,ierr)
+        SUBROUTINE RPN_COMM_irecv(buffer,count,datatype,source,tag,&            !InTfout!
+                                 com,request,ierr)                              !InTfout!
 !	Michel Valin 2009/10/13
-!	mpi irecv
-
-        implicit none
-        integer count,comm,ierr,tag,source
-        integer request
+        use rpn_comm, only: RPN_COMM_datyp, RPN_COMM_comm, RPN_COMM_grank
+        implicit none                                                           !InTfout!
+        integer count,comm,ierr,tag,source                                      !InTfout!
+        integer request                                                         !InTfout!
+!!#define IgnoreTypeKindRank buffer                                             !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                              !InTfout!
         integer buffer
-        integer datyp
-        character(len=*) datatype,com
-        integer RPN_COMM_datyp,RPN_COMM_comm
-        logical RPN_COMM_grank
-!*
-!        include 'mpif.h'
+        integer datyp                                                           !InTfout!
+        character(len=*) datatype,com                                           !InTfout!
 !*
         datyp=rpn_comm_datyp(datatype)
 	comm=rpn_comm_comm(com)
@@ -40,4 +37,4 @@
         call mpi_irecv(buffer,count,datyp,source,tag,comm,request,ierr)
 
 	return
-	end
+	end                                                                     !InTfout!

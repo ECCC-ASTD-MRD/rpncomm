@@ -20,16 +20,13 @@
 
 	subroutine RPN_COMM_diag(Sub,Array,Minx,Maxx,Miny,Maxy,Ni,Nj,Nk,&
      &             R_8,Nr,Tmp_8,Fast)
-	use rpn_comm
+	use rpn_comm_globals
 	implicit none
 	external sub
 	integer Minx,Maxx,Miny,Maxy,Ni,Nj,Nk,Nr
 	logical Fast
 	real array(Minx:Maxx,Miny:Maxy,Nk)
 	real *8 R_8(Nk,Nr), Tmp_8(Miny:Maxy,Nk,Nr)
-!
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
 !
 	integer nelem,ierr
 	integer status(mpi_status_size)

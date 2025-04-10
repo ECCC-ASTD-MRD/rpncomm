@@ -22,13 +22,10 @@
 
 !	Luc Corbeil, 2000-11-21
 !	mpi finalize
-      use rpn_comm
+      use rpn_comm_globals
       implicit none                      !InTf!
       integer, intent(OUT) ::  ierr      !InTf!
         
-!*
-!        include 'mpif.h'
-
 !       if(allocated(pe_domains)) deallocate(pe_domains)
       if(allocated(pe_id))      deallocate(pe_id)
       if(allocated(pe_xtab))    deallocate(pe_xtab)

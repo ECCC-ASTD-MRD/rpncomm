@@ -24,8 +24,6 @@
 !
 !	Calls RPN_COMM_xch_halo for n-length words
 !       n=1 -> real*4, n=2 -> real*8 and so on...
-!        include 'rpn_comm.h'
-!        include 'mpif.h'
 
       integer minx,maxx,miny,maxy,ni,nj,nk,halox,haloy
       integer gni,npol_row,n
@@ -40,15 +38,12 @@
         return
         end
 
-        SUBROUTINE RPN_COMM_xch_haloxn(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody,g2,minx2,maxx2,miny2,maxy2,gni,npol_row,n)
+      SUBROUTINE RPN_COMM_xch_haloxn(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody,g2,minx2,maxx2,miny2,maxy2,gni,npol_row,n)
       use rpn_comm
       implicit none
 !
 !	Calls RPN_COMM_xch_halox for n-length words
 !       n=1 -> real*4, n=2 -> real*8 and so on...
-!
-!        include 'rpn_comm.h'
-!        include 'mpif.h'
 
       integer minx,maxx,miny,maxy,ni,nj,nk,halox,haloy
       integer minx2,maxx2,miny2,maxy2
@@ -59,10 +54,10 @@
 
 
 
-        call RPN_COMM_xch_halox(g,n*(minx-1)+1,n*maxx,miny,maxy,   &
-                   n*ni,nj,nk,n*halox,haloy,periodx,periody,       &
-                   g2,n*(minx2-1)+1,n*maxx2,miny2,maxy2,n*gni,npol_row)
+      call RPN_COMM_xch_halox(g,n*(minx-1)+1,n*maxx,miny,maxy,   &
+                  n*ni,nj,nk,n*halox,haloy,periodx,periody,       &
+                  g2,n*(minx2-1)+1,n*maxx2,miny2,maxy2,n*gni,npol_row)
 
 
-        return
-        end
+      return
+      end

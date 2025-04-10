@@ -24,7 +24,7 @@ module split_by_node
   integer, dimension(MAX_CACHE) :: cold      ! original communicator
   integer, dimension(MAX_CACHE) :: cnew      ! communicator for PEs on same node
   integer, dimension(MAX_CACHE) :: commio    ! dommunicator for rank on same node peers
-  integer, save :: ncached = 0               ! number of cached entries
+  integer :: ncached = 0                     ! number of cached entries
 
 end module split_by_node
 !****P* rpn_comm/commnicators  (communicator management package)
@@ -38,6 +38,7 @@ subroutine RPN_COMM_split_by_node(origcomm, nodecomm, peercomm, noderank, peerra
 ! IGNORE
   use ISO_C_BINDING
   use split_by_node
+  use rpn_comm_globals
   implicit none
 ! ARGUMENTS
   integer, intent(IN)  :: origcomm  ! MPI communicator to split on a host basis        !InTf!
@@ -48,14 +49,12 @@ subroutine RPN_COMM_split_by_node(origcomm, nodecomm, peercomm, noderank, peerra
   integer, intent(OUT) :: isiz      ! size of new communicator                         !InTf!
   integer, intent(OUT) :: err       ! error code                                       !InTf!
 !******
-  include 'mpif.h'
   interface
     function gethostid() result(id) BIND(C,name='gethostid')
       import :: C_LONG
       integer(C_LONG) :: id
     end function gethostid
   end interface
-  include 'RPN_COMM_constants.inc'
 
 !   integer :: myhost, myhost0, myhost1, tmpcomm, i, rank
   integer :: i, rank, ierr
@@ -113,9 +112,8 @@ subroutine RPN_COMM_split_by_socket(origcomm, nodecomm, sockcomm, peercomm, node
 !  M.Valin Recherche en Prevision Numerique 2020
 ! IGNORE
   use ISO_C_BINDING
+  use rpn_comm_globals
   implicit none
-  include 'mpif.h'
-  include 'RPN_COMM_constants.inc'
 ! ARGUMENTS
   integer, intent(IN)  :: origcomm  ! MPI communicator to split on a socket basis        !InTf!
   integer, intent(OUT) :: nodecomm  ! new communicator to be used py PEs on same node    !InTf!

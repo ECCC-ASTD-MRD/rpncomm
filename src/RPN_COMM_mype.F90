@@ -24,7 +24,7 @@
 ! me_x: position along X axis in its domain
 ! me_y: position along Y axis in its domain
 !
-	use rpn_comm
+	use rpn_comm_globals
 	implicit none                                              !InTf!
 	integer, intent(OUT) ::  Me,Me_x,Me_y                      !InTf!
 !arguments
@@ -32,9 +32,6 @@
 !  O	Me_x	X coordinate of PE in computational grid
 !  O	Me_y	Y coordinate of PE in computational grid
 !!
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
-!
 	Me = pe_medomm
 	Me_x = pe_mex
 	Me_y = pe_mey

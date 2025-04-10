@@ -19,14 +19,11 @@
 ! */
 !InTf!
       integer function RPN_COMM_topo_xy(nig,njg,mini,maxi,minj,maxj,nil,njl,haloi,haloj,peri,perj) !InTf!
-      use rpn_comm
+      use rpn_comm, self => RPN_COMM_topo_xy
       implicit none                                               !InTf!
       integer, intent(IN) :: nig,njg,haloi,haloj                  !InTf!
       integer, intent(OUT) :: nil,njl,mini,maxi,minj,maxj         !InTf!
       logical, intent(IN) ::  peri,perj                           !InTf!
-!
-!	include 'rpn_comm.h'
-!	include 'mpif.h'
 !
       mini = 1-haloi
       minj = 1-haloj

@@ -1,5 +1,3 @@
-        external RPN_COMM_Wtime
-        real *8 RPN_COMM_Wtime
         integer, save :: ntimes=0
         integer, save :: ntimes_sz=0
         real times(0:*)

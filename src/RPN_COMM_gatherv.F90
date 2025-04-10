@@ -18,21 +18,19 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-      SUBROUTINE RPN_COMM_gatherv(sendbuf,sendcount,sendtype,&
-     &     recbuf,reccountv,disp,rectype,root,com,ierr)
+      SUBROUTINE RPN_COMM_gatherv(sendbuf,sendcount,sendtype,&          !InTfout!
+     &     recbuf,reccountv,disp,rectype,root,com,ierr)                 !InTfout!
 !     Luc Corbeil, 2001-09-19
-!     mpi gather
-      
-      implicit none
-      integer sendbuf,recbuf,sendcount,reccountv,comm,ierr
-      integer datyp,datyp2,oper,root, disp
-      character(len=*) rectype,sendtype,com
-      integer RPN_COMM_datyp,RPN_COMM_oper,RPN_COMM_comm
-      logical RPN_COMM_grank
-      
-!     
-!
-!      include 'mpif.h'
+      use rpn_comm, only: RPN_COMM_datyp, RPN_COMM_oper, RPN_COMM_comm, RPN_COMM_grank
+      implicit none                                                     !InTfout!
+!!#define IgnoreTypeKindRank sendbuf                                    !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
+!!#define IgnoreTypeKindRank recbuf                                     !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
+      integer sendbuf, recbuf
+      integer sendcount,reccountv,comm,ierr                             !InTfout!
+      integer datyp,datyp2,oper,root, disp                              !InTfout!
+      character(len=*) rectype,sendtype,com                             !InTfout!
       
       datyp=rpn_comm_datyp(sendtype)
       datyp2=rpn_comm_datyp(rectype)
@@ -43,5 +41,5 @@
      &     ,reccountv,disp,datyp2,root,comm,ierr)
       
       return
-      end
+      end                                                               !InTfout!
       

@@ -25,7 +25,7 @@ endif()
 
 include(ec_compiler_presets)
 
-find_package(MPI)
+find_package(MPI REQUIRED)
 
 # Find out MPI version (to use in rpncomm version)
 if (NOT RPN_SERIAL)

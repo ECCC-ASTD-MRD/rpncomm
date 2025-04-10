@@ -135,7 +135,6 @@ module RPN_COMM_io_pe_tables   ! this module may also be used by data distributi
 #define RPN_COMM_OK 0
 #define RPN_COMM_ERROR -1
 #endif
-#include "RPN_COMM_interfaces_int.inc"
   type :: RPN_COMM_io_set
     integer, dimension(:), pointer :: x    ! x coordinate in grid of IO PEs in this set
     integer, dimension(:), pointer :: y    ! y coordinate in grid of IO PEs in this set
@@ -186,8 +185,8 @@ contains
   end function is_io_pe
 !
   function io_pe_comm(setno) result(communicator)  ! is this pe part of IO PE set setno. if yes return set communicator, else return MPI_COMM_NULL
+    use rpn_comm_globals
     implicit none
-    include 'mpif.h'
     integer, intent(IN) :: setno             ! set number as returned by create_ioset
     integer :: communicator
     integer :: i
@@ -267,8 +266,8 @@ contains
   end function io_pe_groups
 !
   function free_ioset(setno) result(freed)   ! free table space associated with IO PE set setno
+    use rpn_comm_globals
     implicit none
-    include 'mpif.h'
     integer, intent(IN) :: setno             ! set number as returned by create_ioset
     integer :: freed
     integer :: ierr
@@ -291,6 +290,7 @@ contains
   end function free_ioset
 !
   function create_ioset(npes,method) result(setno)  ! pe_indomm AKA "GRID" is assumed as a communicator
+    use rpn_comm_globals
     implicit none
     integer, intent(IN) :: npes
     integer, intent(IN) :: method
@@ -298,7 +298,6 @@ contains
     integer :: ierr, my_color, i, j, newset, ordinal_in_set
 
 #if defined(STAND_ALONE)
-    include 'mpif.h'
     integer :: pe_mex, pe_mey, pe_indomm, pe_me, pe_nx, pe_ny
     integer, external :: RPN_COMM_comm, RPN_COMM_mype
     pe_indomm = RPN_COMM_comm('GRID')          ! grid communicator
@@ -387,7 +386,6 @@ end module RPN_COMM_io_pe_tables
   subroutine RPN_COMM_io_pe_test()
   use rpn_comm
   implicit none
-#include <RPN_COMM_interfaces.inc>
 #endif
 !****f* rpn_comm/example example code
 ! EXAMPLE
@@ -471,7 +469,7 @@ function RPN_COMM_create_io_set(npes,method) result(setno)  !InTf!  ! create a s
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_create_io_set
   implicit none                                             !InTf!
 ! ARGUMENTS
   integer, intent(IN)  :: npes      !InTf!  ! number of IO PEs desired in set ( set size will be min(npes,pe_nx,pe_ny) )
@@ -489,7 +487,7 @@ function RPN_COMM_free_io_set(setno) result(freed)  !InTf!  ! delete a set of IO
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_free_io_set
   implicit none                       !InTf!
 ! ARGUMENTS
   integer, intent(IN) :: setno        !InTf!  ! set number as returned by RPN_COMM_create_io_set
@@ -505,7 +503,7 @@ function RPN_COMM_is_valid_io_setno(setno) result(valid)   !InTf!  ! is this IO 
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_is_valid_io_setno
   implicit none                      !InTf!
 ! ARGUMENTS
   integer, intent(IN) :: setno       !InTf!  ! set number as returned by RPN_COMM_create_io_set
@@ -520,7 +518,7 @@ function RPN_COMM_is_io_pe(setno) result(ordinal)   !InTf!  ! is this PE part of
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_is_io_pe
   implicit none                      !InTf!
 ! ARGUMENTS
   integer, intent(IN) :: setno       !InTf!  ! set number as returned by RPN_COMM_create_io_set
@@ -535,7 +533,7 @@ function RPN_COMM_io_pe_gridid(setno,n) result(ordinal)   !InTf!  ! ordinal in "
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_io_pe_gridid
   implicit none                      !InTf!
 ! ARGUMENTS
   integer, intent(IN) :: setno       !InTf!  ! set number as returned by RPN_COMM_create_io_set
@@ -557,7 +555,7 @@ function RPN_COMM_io_pe_comm(setno) result(communicator)  !InTf!   ! get communi
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_io_pe_comm
   implicit none                       !InTf!
 ! ARGUMENTS
   integer, intent(IN) :: setno        !InTf!  ! set number as returned by RPN_COMM_create_io_set
@@ -572,7 +570,7 @@ function RPN_COMM_io_pe_size(setno) result(population)   !InTf!  ! get size of I
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_io_pe_size
   implicit none                       !InTf!
 ! ARGUMENTS
   integer, intent(IN) :: setno        !InTf!  ! set number as returned by RPN_COMM_create_io_set
@@ -587,7 +585,7 @@ function RPN_COMM_io_pe_groups(setno) result(ngroups)   !InTf!  ! get number of 
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_io_pe_groups
   implicit none                       !InTf!
 ! ARGUMENTS
   integer, intent(IN) :: setno        !InTf!  ! set number as returned by RPN_COMM_create_io_set
@@ -604,7 +602,7 @@ function RPN_COMM_io_pe_idlist(setno) result(idlist)   !InTf!  ! get list of PE 
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_io_pe_idlist
   implicit none                               !InTf!
 ! ARGUMENTS
   integer, intent(IN) :: setno                !InTf!  ! set number as returned by RPN_COMM_create_io_set
@@ -636,7 +634,7 @@ function RPN_COMM_io_pe_coord(setno) result(list)   !InTf!  ! get x and y coordi
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_io_pe_coord
   implicit none                               !InTf!
 ! ARGUMENTS
   integer, intent(IN) :: setno                !InTf!  ! set number as returned by RPN_COMM_create_io_set
@@ -667,7 +665,7 @@ function RPN_COMM_io_pe_callback(setno,callback,argv) result(status) !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_io_pe_callback
 !!  import :: C_PTR      !InTf!
   implicit none                       !InTf!
 ! ARGUMENTS
@@ -717,7 +715,7 @@ function RPN_COMM_io_pe_valid_set(x,y,npes,penx,peny,diag,method) result(status)
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_io_pe_tables
+  use RPN_COMM_io_pe_tables, self => RPN_COMM_io_pe_valid_set
   implicit none
 ! ARGUMENTS
     integer, intent(IN) :: npes                !InTf!   ! number of PEs in set
@@ -746,8 +744,8 @@ end function RPN_COMM_io_pe_valid_set !InTf!
 !
 #if defined SELF_TEST
 program self_test
+  use rpn_comm_globals
   implicit none
-  include 'mpif.h'
   integer ierr,pe_me,pe_mex,pe_mey,npes,pe_nx,pe_ny,pe_indomm
   integer, external :: RPN_COMM_mype, RPN_COMM_comm
 
@@ -768,16 +766,16 @@ program self_test
   end
 !
 integer function RPN_COMM_comm(what)
+  use mpi
   implicit none
-  include 'mpif.h'
   character (len=*) :: what
   RPN_COMM_comm = MPI_COMM_WORLD
   return
 end
 !
 integer function RPN_COMM_datyp(what)
+  use mpi
   implicit none
-  include 'mpif.h'
   character (len=*) :: what
   RPN_COMM_datyp = MPI_UNDEFINED
   if(trim(what) .ne. 'MPI_INTEGER') return
@@ -785,8 +783,8 @@ integer function RPN_COMM_datyp(what)
 end function RPN_COMM_datyp
 !
 integer function RPN_COMM_mype(pe_me,pe_mex,pe_mey)
+  use mpi
   implicit none
-  include 'mpif.h'
   integer, intent(OUT) :: pe_me,pe_mex,pe_mey
   integer :: i
   integer :: ierr,npes

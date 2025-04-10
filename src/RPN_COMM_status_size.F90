@@ -20,12 +20,10 @@
 !InTf!
         subroutine RPN_COMM_status_size(status_size) !InTf!
 !	Michel Valin 2009/10/13
-!	mpi recv
 
+        use mpi
         implicit none                                 !InTf!
         integer, intent(OUT) :: status_size           !InTf!
-!*
-        include 'mpif.h'
 !*
         status_size = MPI_STATUS_SIZE
 
