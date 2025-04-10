@@ -21,7 +21,7 @@
         subroutine RPN_COMM_unit(unit) !InTf!
 !	Luc Corbeil, 2003-02-19
 !
-        use rpn_comm, self => RPN_COMM_unit
+        use rpn_comm_globals
         implicit none                  !InTf!
         integer, intent(IN) ::  unit   !InTf!
       

@@ -103,7 +103,8 @@
         return
         end function RPN_COMM_oper                  !InTf!
 subroutine RPN_COMM_i_oper(op,r_oper)             !InTf!
-  use rpn_comm, self => RPN_COMM_i_oper
+  use rpn_comm_globals
+  use rpn_comm, only: RPN_COMM_oper
   implicit none
 !! import :: rpncomm_operator                     !InTf!
   character(len=*), intent(IN) :: op              !InTf!
@@ -116,7 +117,7 @@ subroutine RPN_COMM_i_oper(op,r_oper)             !InTf!
   return
 end subroutine RPN_COMM_i_oper                    !InTf!
 function RPN_COMM_i_valid_oper(r_oper) result (is_valid)  !InTf!
-  use rpn_comm, self => RPN_COMM_i_valid_oper
+  use rpn_comm_globals
 !! import :: rpncomm_operator                     !InTf!
   implicit none
   type(rpncomm_operator), intent(IN) :: r_oper    !InTf!

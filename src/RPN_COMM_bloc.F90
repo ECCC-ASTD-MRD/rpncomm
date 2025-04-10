@@ -35,9 +35,10 @@
       end module RPN_COMM_bloc_mgt
 !InTf!
       integer function RPN_COMM_bloc(nblocx,nblocy) ! switch to nblocx by nblocy block distribution !InTf!
+      use rpn_comm_globals
+      use rpn_comm, only:  RPN_COMM_bloc_create, RPN_COMM_bloc_find
       implicit none                                                               !InTf!
       integer, intent(IN) :: nblocx, nblocy                                       !InTf!
-      integer, external :: RPN_COMM_bloc_create, RPN_COMM_bloc_find
       integer :: index
 !     old code
 !      RPN_COMM_bloc = RPN_COMM_bloc_create(nblocx,nblocy)
@@ -54,7 +55,7 @@
 !InTf!
       integer function RPN_COMM_bloc_find(nblocx,nblocy,set) ! find and optionally use an already defined block distribution !InTf!
       use RPN_COMM_bloc_mgt
-      use rpncomm_com, self => RPN_COMM_bloc_find
+      use rpncomm_com
       implicit none                                                                !InTf!
       integer, intent(IN) :: nblocx, nblocy                                        !InTf!
       logical, intent(IN) :: set   ! if block distribution found, apply it         !InTf!
@@ -110,7 +111,7 @@
 !InTf!
       integer function RPN_COMM_bloc_create(nblocx,nblocy)                          !InTf!
       use RPN_COMM_bloc_mgt
-      use rpncomm_com, self => RPN_COMM_bloc_create
+      use rpncomm_com
       implicit none                                                                 !InTf!
       integer, intent(IN) :: nblocx, nblocy                                         !InTf!
 !arguments

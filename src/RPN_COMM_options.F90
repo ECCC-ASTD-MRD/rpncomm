@@ -19,7 +19,7 @@
 ! !/
 !InTf!
 	integer function RPN_COMM_option_L(name_S,value_L)     !InTf!
-	use rpn_comm, self => RPN_COMM_option_L
+	use rpn_comm_globals
 	implicit none                                          !InTf!
 	character(len=*), intent(IN) :: name_S                 !InTf!
 	logical, intent(IN) :: value_L                         !InTf!
@@ -47,7 +47,7 @@
 
 !InTf!
 	integer function RPN_COMM_option(name_S,value)     !InTf!
-	use rpn_comm, self => RPN_COMM_option
+	use rpn_comm_globals
 	implicit none                                      !InTf!
 	character(len=*), intent(IN) :: name_S             !InTf!
 	integer, intent(IN) :: value                       !InTf!

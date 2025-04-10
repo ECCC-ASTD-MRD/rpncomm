@@ -1,6 +1,7 @@
 !InTf!
       SUBROUTINE RPN_COMM_exchange_halo(pattern,array,periodx,periody,periodp,npol_row)  !InTf!
-      use rpn_comm, self => RPN_COMM_exchange_halo
+      use rpn_comm_globals
+      use rpn_comm, only: RPN_COMM_xch_halo
 !!    import ::  rpncomm_pattern, c_ptr                                                  !InTf!
       implicit none                                                                      !InTf!
       type(rpncomm_pattern), intent(IN) :: pattern                                       !InTf!

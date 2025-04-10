@@ -25,7 +25,8 @@
 !   RPN_COMM_tmg_wrt, RPN_COMM_move
 !
 SUBROUTINE RPN_COMM_defo(com)             !InTf!
-  use rpncomm_com, self => RPN_COMM_defo
+  use rpncomm_com
+  use rpn_comm, only: rpn_comm_comm
   implicit none                           !InTf!
   character(len=*), intent(IN) ::  com    !InTf!
   integer comm

@@ -19,7 +19,7 @@
 ! */
 !InTf!
       integer function RPN_COMM_topo_xy(nig,njg,mini,maxi,minj,maxj,nil,njl,haloi,haloj,peri,perj) !InTf!
-      use rpn_comm, self => RPN_COMM_topo_xy
+      use rpn_comm_globals
       implicit none                                               !InTf!
       integer, intent(IN) :: nig,njg,haloi,haloj                  !InTf!
       integer, intent(OUT) :: nil,njl,mini,maxi,minj,maxj         !InTf!

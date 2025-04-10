@@ -22,14 +22,13 @@
 !	Luc Corbeil, 2002-11-21
 !	mpi reduce
 
+      use rpn_comm, only:  RPN_COMM_datyp,RPN_COMM_oper,RPN_COMM_comm,  RPN_COMM_grank
       implicit none                                 !InTf!
       integer, intent(OUT) :: ierr,size             !InTf!
       character(len=*), intent(IN) ::  com          !InTf!
-      integer :: comm
-      integer, external :: RPN_COMM_datyp,RPN_COMM_oper,RPN_COMM_comm
-      logical, external :: RPN_COMM_grank
-!*
 
+      integer :: comm
+!*
       comm=rpn_comm_comm(com)
       if(.not.RPN_COMM_grank(com)) return
       call mpi_comm_size(comm, size, ierr)

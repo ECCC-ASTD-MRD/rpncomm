@@ -26,13 +26,12 @@
 !	Luc Corbeil, 2002-11-21
 
       use rpn_comm_globals
+      use rpn_comm, only:  RPN_COMM_datyp,RPN_COMM_oper,RPN_COMM_comm, RPN_COMM_grank
       implicit none                                                 !InTf!
       character(len=*),intent(in) :: com                            !InTf!
       integer, intent(out) :: rank                                  !InTf!
       integer, intent(out) :: ierr                                  !InTf!
       integer comm
-      integer, external :: RPN_COMM_datyp,RPN_COMM_oper,RPN_COMM_comm
-      logical, external :: RPN_COMM_grank
 !*
       comm=rpn_comm_comm(com)
       if(.not.RPN_COMM_grank(com)) return

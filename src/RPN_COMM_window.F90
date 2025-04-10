@@ -85,8 +85,7 @@ module RPN_COMM_windows
 ! one sided communication window management code 
 ! (used internally by user callable routines)
 !===============================================================================
-  use ISO_C_BINDING
-  use rpn_comm
+  use rpn_comm_globals
   implicit none
 !******
   integer, parameter :: RPN_COMM_MAX_WINDOWS = 64
@@ -1158,7 +1157,7 @@ subroutine RPN_COMM_i_win_group(window,pes_to,pes_from,ierr)  !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows, self => RPN_COMM_i_win_group
+  use RPN_COMM_windows
   implicit none
 !!  import :: rpncomm_window                                       !InTf!
 ! ARGUMENTS
@@ -1222,7 +1221,8 @@ subroutine RPN_COMM_i_win_oper(window,oper,ierr)  !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows, self => RPN_COMM_i_win_oper
+  use RPN_COMM_windows
+  use rpn_comm, only: RPN_COMM_i_valid_oper
   implicit none
 !!  import :: rpncomm_window                                       !InTf!
 !!  import :: rpncomm_operator                                     !InTf!
@@ -1272,7 +1272,7 @@ subroutine RPN_COMM_i_win_create(window,dtype,siz,com,array,ierr)  !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows, self => RPN_COMM_i_win_create
+  use RPN_COMM_windows
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window, rpncomm_datatype, rpncomm_communicator  !InTf!
@@ -1316,7 +1316,7 @@ subroutine RPN_COMM_i_win_free(window,ierr)                           !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows, self => RPN_COMM_i_win_free
+  use RPN_COMM_windows
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1375,7 +1375,8 @@ subroutine RPN_COMM_i_win_open(window,active,ierr)                           !In
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows, self => RPN_COMM_i_win_open
+  use RPN_COMM_windows
+  use RPN_COMM, only: RPN_COMM_i_win_check
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1435,7 +1436,8 @@ subroutine RPN_COMM_i_win_close(window,ierr)                          !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows, self => RPN_COMM_i_win_close
+  use RPN_COMM_windows
+  use rpn_comm, only: RPN_COMM_i_win_check
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1571,7 +1573,7 @@ function RPN_COMM_i_win_get_ptr(window,ierr) result(ptr)                 !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows, self => RPN_COMM_i_win_get_ptr
+  use RPN_COMM_windows
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1611,7 +1613,7 @@ function RPN_COMM_i_win_get_size(window,ierr) result(siz)                 !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows, self => RPN_COMM_i_win_get_size
+  use RPN_COMM_windows
   implicit none
 !!  import :: rpncomm_window                                          !InTf!
 ! ARGUMENTS
@@ -1653,7 +1655,8 @@ subroutine RPN_COMM_i_win_put_r(window,larray,targetpe,offset,nelem,ierr) !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows, self => RPN_COMM_i_win_put_r
+  use RPN_COMM_windows
+  use rpn_comm, only: RPN_COMM_i_win_check
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1733,7 +1736,8 @@ subroutine RPN_COMM_i_win_acc_r(window,larray,targetpe,offset,nelem,oper,ierr) !
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows, self => RPN_COMM_i_win_acc_r
+  use RPN_COMM_windows
+  use rpn_comm, only: RPN_COMM_i_win_check
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1817,8 +1821,8 @@ subroutine RPN_COMM_i_win_put_l(window,larray,offset,nelem,ierr)      !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use rpn_comm_globals
-  use RPN_COMM_windows, only: RPN_COMM_i_win_check
+  use RPN_COMM_windows
+  use rpn_comm, only: RPN_COMM_i_win_check
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1872,7 +1876,8 @@ subroutine RPN_COMM_i_win_get_r(window,larray,target,offset,nelem,ierr) !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use RPN_COMM_windows, self => RPN_COMM_i_win_get_r
+  use RPN_COMM_windows
+  use rpn_comm, only: RPN_COMM_i_win_check
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!
@@ -1937,8 +1942,8 @@ subroutine RPN_COMM_i_win_get_l(window,larray,offset,nelem,ierr)      !InTf!
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2015
 ! IGNORE
-  use rpn_comm_globals
-  use RPN_COMM_windows, only: RPN_COMM_i_win_check
+  use RPN_COMM_windows
+  use rpn_comm, only: RPN_COMM_i_win_check
   implicit none
 !!  import :: C_PTR                                                   !InTf!
 !!  import :: rpncomm_window                                          !InTf!

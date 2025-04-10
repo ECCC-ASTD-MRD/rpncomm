@@ -22,8 +22,8 @@
 ! if rcom is present, com is ignored
 !InTf!
       subroutine RPN_COMM_i_group(com,rgroup,rcom)  !InTf!
-      use rpn_comm, self => RPN_COMM_i_group
-      use ISO_C_BINDING
+      use rpn_comm_globals
+      use rpn_comm, only: RPN_COMM_group
 !!  import :: rpncomm_group                        !InTf!
 !!  import :: rpncomm_communicator                 !InTf!
       implicit none                                !InTf!

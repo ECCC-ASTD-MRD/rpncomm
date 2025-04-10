@@ -19,7 +19,7 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 module rpncomm_com
-  use rpn_comm
+  use rpn_comm_globals
   implicit none
   integer, parameter :: MAX_COMM_TAB=128
   type(symtab), dimension(:), pointer, save :: com_tab => NULL()  ! communicator translation table
@@ -106,7 +106,7 @@ end module rpncomm_com
 !	GRID, EW et NS et leur numero assigne par
 !	MPI.
 !
-      use rpncomm_com, self => RPN_COMM_comm
+      use rpncomm_com
       implicit none                                 !InTf!
       character(len=*), intent(IN) :: com           !InTf!
       character(len=32) comm
@@ -191,7 +191,7 @@ end module rpncomm_com
       end function RPN_COMM_comm                                  !InTf!
 !InTf!
       integer function RPN_COMM_custom_comm(mpicom,name,mode)     !InTf!
-      use rpncomm_com, self => RPN_COMM_custom_comm
+      use rpncomm_com
       implicit none                                               !InTf!
 !     lookup, create, or delete a custom communicator with a rpn_comm style name
       character(len=*), intent(IN) :: name                        !InTf!
@@ -265,7 +265,8 @@ end module rpncomm_com
 !       ctyp   : new item of type rpncomm_communicator
 !InTf!
         subroutine RPN_COMM_i_comm(ctyp_c,ctyp,mcom)         !InTf!
-        use rpn_comm, self => RPN_COMM_i_comm
+        use rpn_comm_globals
+        use rpn_comm, only: rpn_comm_comm
 !!      import :: rpncomm_communicator                       !InTf!
         implicit none
         type(rpncomm_communicator), intent(OUT) :: ctyp      !InTf!

@@ -289,7 +289,7 @@
 !          'SUPERGRID' : coordinates of PE x,y in current SUPERGRID (sgrd must be -1)
 !          'ALLGRIDS'  : coordinates of PE x,y in current domain (set of SUPERGRIDs)
 !
-      use rpn_comm, self => RPN_COMM_get_pe
+      use rpn_comm_globals
       implicit none                                                !InTf!
       integer, intent(IN) :: x,y,grd,sgrd                          !InTf!
       character (len=*), intent(IN) :: communicator                   !InTf!

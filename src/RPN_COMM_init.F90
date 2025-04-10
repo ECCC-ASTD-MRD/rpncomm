@@ -81,7 +81,7 @@
 !===================================================================
 !InTf!
       subroutine RPN_COMM_world_set(world_comm)                    !InTf!
-      use rpn_comm, self => RPN_COMM_world_set
+      use rpn_comm_globals
       implicit none                                                !InTf!
       integer, intent(IN) ::  world_comm                           !InTf!
 !        world_comm=WORLD_COMM_MPI ! should rather be the other way around

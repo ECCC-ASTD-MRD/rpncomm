@@ -126,7 +126,8 @@
 !       dtyp   : new item of type rpncomm_datatype
 !InTf!
         subroutine RPN_COMM_i_datyp(dtyp_c,dtyp)           !InTf!
-        use rpn_comm, self => RPN_COMM_i_datyp
+        use rpn_comm_globals
+        use rpn_comm, only: RPN_COMM_datyp_indx
 !!      import :: rpncomm_datatype                           !InTf!
         implicit none
         type(rpncomm_datatype), intent(OUT) :: dtyp          !InTf!
@@ -146,7 +147,7 @@
 !       dtyp   : new item of type rpncomm_datatype
 !InTf!
         subroutine RPN_COMM_i_user_datyp(dtyp_m,dtyp)       !InTf!
-        use rpn_comm, self => RPN_COMM_i_user_datyp
+        use rpn_comm_globals
 !!      import :: rpncomm_datatype                     !InTf!
         implicit none
         type(rpncomm_datatype), intent(OUT) :: dtyp    !InTf!
@@ -170,7 +171,7 @@
 !
 !InTf!
         function RPN_COMM_i_valid_datyp(dtyp) result(valid)    !InTf!
-        use rpn_comm, self => RPN_COMM_i_valid_datyp
+        use rpn_comm_globals
 !!      import :: rpncomm_datatype                           !InTf!
         implicit none
         type(rpncomm_datatype), intent(IN) :: dtyp           !InTf!
@@ -201,7 +202,7 @@
 ! get extent of data type dtyp ( rpn comm datatype)
 !InTf!
         function RPN_COMM_i_datyp_extent(dtyp) result(extent)    !InTf!
-        use rpn_comm, self => RPN_COMM_i_datyp_extent
+        use rpn_comm_globals
 !!      import :: rpncomm_datatype                               !InTf!
         implicit none
         type(rpncomm_datatype), intent(IN) :: dtyp               !InTf!
