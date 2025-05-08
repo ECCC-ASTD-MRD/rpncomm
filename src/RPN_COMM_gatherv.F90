@@ -29,7 +29,7 @@
 !!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
       integer sendbuf, recbuf
       integer sendcount,reccountv(*),comm,ierr                          !InTfout!
-      integer datyp,datyp2,oper,root, disp                              !InTfout!
+      integer datyp,datyp2,oper,root, disp(*)                           !InTfout!
       character(len=*) rectype,sendtype,com                             !InTfout!
       
       datyp=rpn_comm_datyp(sendtype)
