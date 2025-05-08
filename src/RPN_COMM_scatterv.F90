@@ -30,7 +30,7 @@
 !!#define IgnoreTypeKindRank recbuf                                     !InTfout!
 !!#include "IgnoreTypeKindRank.hf"                                      !InTfout!
       integer sendbuf, recbuf
-      integer sendcounts(:),reccountv,comm,ierr                         !InTfout!
+      integer sendcounts(*),reccountv(*),comm,ierr                      !InTfout!
       integer datyp,datyp2,oper,root, disp(:)                           !InTfout!
       character(len=*) rectype,sendtype,com                             !InTfout!
 
