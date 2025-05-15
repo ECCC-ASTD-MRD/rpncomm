@@ -281,6 +281,7 @@ subroutine RPN_COMM_shuf_dist(setno,  &
                                   start_x,count_x,start_y,count_y,  &
                                   periodx,periody,status)
     use rpn_comm
+    use rpn_comm_mpi
     use RPN_COMM_io_pe_tables
     implicit none
     integer, intent(IN) :: setno
@@ -511,6 +512,7 @@ if(pe_me==0) print *,"DEBUG: kcol,listofk", kcol,listofk
                                   start_x,count_x,start_y,count_y,  &
                                   status)
     use rpn_comm
+    use rpn_comm_mpi
     use RPN_COMM_io_pe_tables
     implicit none
     integer, intent(IN) :: setno                       ! IO set number
@@ -829,6 +831,7 @@ subroutine RPN_COMM_shuf_coll(setno,  &
                                   status)
 !
     use rpn_comm
+    use rpn_comm_mpi
     use RPN_COMM_io_pe_tables
     implicit none
     integer, intent(IN) :: setno,gni,gnj,mini,maxi,minj,maxj,nk,k1,kn

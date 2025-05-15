@@ -21,12 +21,34 @@
 module rpn_comm_globals
   use iso_c_binding
   use iso_fortran_env
-  use rpn_comm_mpi
+  use rpn_comm_mpi, only: MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_NULL, MPI_GROUP_NULL, &
+                          MPI_COMM_WORLD, MPI_SUCCESS, &
+                          MPI_BYTE, MPI_CHARACTER, MPI_LOGICAL, MPI_DATATYPE_NULL, &
+                          MPI_COMPLEX, MPI_COMPLEX8, MPI_COMPLEX16, MPI_COMPLEX32, MPI_DOUBLE_COMPLEX, &
+                          MPI_REAL, MPI_REAL4, MPI_REAL8, MPI_REAL16, MPI_DOUBLE_PRECISION, &
+                          MPI_INTEGER, MPI_INTEGER1, MPI_INTEGER2, MPI_INTEGER4, MPI_INTEGER8, &
+                          MPI_2REAL, MPI_2DOUBLE_PRECISION, MPI_2INTEGER, &
+                          MPI_PACKED, MPI_LB, MPI_UB, &
+                          MPI_MIN, MPI_MAX, MPI_SUM, MPI_PROD, MPI_LAND, MPI_BAND, MPI_LOR, MPI_BOR, MPI_LXOR, MPI_BXOR, &
+                          MPI_MAXLOC, MPI_MINLOC, MPI_OP_NULL, MPI_REPLACE
   implicit none
   save
+  
   include 'RPN_COMM_constants.inc'
   include 'RPN_COMM_types.inc'
   include 'RPN_COMM_types_int.inc'
+
+  private ::  &
+                          MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_NULL, MPI_GROUP_NULL, &
+                          MPI_COMM_WORLD, MPI_SUCCESS, &
+                          MPI_BYTE, MPI_CHARACTER, MPI_LOGICAL, MPI_DATATYPE_NULL, &
+                          MPI_COMPLEX, MPI_COMPLEX8, MPI_COMPLEX16, MPI_COMPLEX32, MPI_DOUBLE_COMPLEX, &
+                          MPI_REAL, MPI_REAL4, MPI_REAL8, MPI_REAL16, MPI_DOUBLE_PRECISION, &
+                          MPI_INTEGER, MPI_INTEGER1, MPI_INTEGER2, MPI_INTEGER4, MPI_INTEGER8, &
+                          MPI_2REAL, MPI_2DOUBLE_PRECISION, MPI_2INTEGER, &
+                          MPI_PACKED, MPI_LB, MPI_UB, &
+                          MPI_MIN, MPI_MAX, MPI_SUM, MPI_PROD, MPI_LAND, MPI_BAND, MPI_LOR, MPI_BOR, MPI_LXOR, MPI_BXOR, &
+                          MPI_MAXLOC, MPI_MINLOC, MPI_OP_NULL, MPI_REPLACE
 !
 !	domain boundary flags, LOGICAL
 !	.true. if a PE(TILE) is on a domain edge

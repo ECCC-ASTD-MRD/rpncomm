@@ -45,6 +45,7 @@
 !   Luc Corbeil, 2000-11-20
 !   lien entre datatype et MPI_datatype
         use rpn_comm_globals
+        use rpn_comm_mpi
         use rpn_comm, only : RPN_COMM_datyp_indx
         implicit none                                             !InTf!
         character(len=*), intent(IN) :: data_int                  !InTf!
@@ -127,6 +128,7 @@
 !InTf!
         subroutine RPN_COMM_i_datyp(dtyp_c,dtyp)           !InTf!
         use rpn_comm_globals
+        use rpn_comm_mpi
         use rpn_comm, only: RPN_COMM_datyp_indx
 !!      import :: rpncomm_datatype                           !InTf!
         implicit none
@@ -148,6 +150,7 @@
 !InTf!
         subroutine RPN_COMM_i_user_datyp(dtyp_m,dtyp)       !InTf!
         use rpn_comm_globals
+        use rpn_comm_mpi
 !!      import :: rpncomm_datatype                     !InTf!
         implicit none
         type(rpncomm_datatype), intent(OUT) :: dtyp    !InTf!
@@ -172,6 +175,7 @@
 !InTf!
         function RPN_COMM_i_valid_datyp(dtyp) result(valid)    !InTf!
         use rpn_comm_globals
+        use rpn_comm_mpi
 !!      import :: rpncomm_datatype                           !InTf!
         implicit none
         type(rpncomm_datatype), intent(IN) :: dtyp           !InTf!
@@ -203,6 +207,7 @@
 !InTf!
         function RPN_COMM_i_datyp_extent(dtyp) result(extent)    !InTf!
         use rpn_comm_globals
+        use rpn_comm_mpi
 !!      import :: rpncomm_datatype                               !InTf!
         implicit none
         type(rpncomm_datatype), intent(IN) :: dtyp               !InTf!

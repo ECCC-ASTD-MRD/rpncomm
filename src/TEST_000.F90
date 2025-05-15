@@ -1,5 +1,6 @@
 	subroutine rpncomm_test_000
 	use rpn_comm
+	use rpn_comm_mpi
 	implicit none
 	integer ierr, myrank,totpes
 	call mpi_init(ierr)

@@ -20,6 +20,7 @@
 
       subroutine RPN_COMM_globalsum(array,minx,maxx,miny,maxy,&
      &       nptsz,nil,njl,njlmax,gnj,sum)
+      use rpn_comm_mpi
       use rpn_comm
       implicit none
 

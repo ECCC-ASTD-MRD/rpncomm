@@ -42,6 +42,7 @@
 !  O    status  status code upon exit (RPN_COMM_OK or RPN_COMM_ERROR)
 !
         use rpn_comm_globals
+		use rpn_comm_mpi
         use rpn_comm, only: RPN_COMM_limit
         implicit none                                                    !InTfout!
 #define IN_RPN_COMM_dist
@@ -221,6 +222,7 @@
      &          larr,mini,maxi,minj,maxj,halox,haloy,&					!InTfout!
      &          periodx,periody,status,dt1,dt2)    						!InTfout!
 	use rpn_comm_globals
+	use rpn_comm_mpi
 	use rpn_comm, only: RPN_COMM_limit
 	implicit none                                     					!InTfout!
 !

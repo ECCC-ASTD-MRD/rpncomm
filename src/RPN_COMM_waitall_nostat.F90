@@ -20,6 +20,7 @@
 
       subroutine RPN_COMM_waitall_nostat(nreq,req,ierr)
         use rpn_comm_globals
+        use rpn_comm_mpi
         integer nreq,req(nreq),status(mpi_status_size,nreq),ierr
         call mpi_waitall(nreq,req,status,ierr)
       return

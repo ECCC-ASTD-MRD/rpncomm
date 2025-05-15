@@ -22,6 +22,7 @@
       n1partiel,za,min1,max1,n1g,n2,min3,max3,n3g,zb,size)		!InTfout!
 !
 	use rpn_comm_globals
+	use rpn_comm_mpi
 !	forward transpose, za to zb
 !	gather first dimension into processor,
 !	distribute last dimension

@@ -560,6 +560,7 @@ subroutine RPN_COMM_fast_dist_test(nparams,params)   ! fast distribute with halo
       integer function RPN_COMM_xch_halo_test(nparams,params)
 !=======================================================================
       use rpn_comm
+      use rpn_comm_mpi
       implicit none
       integer, intent(IN) :: nparams
       integer, intent(IN), dimension(nparams) :: params

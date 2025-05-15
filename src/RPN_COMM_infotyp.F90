@@ -14,6 +14,7 @@
 ! !/
 integer function RPN_COMM_infotyp(info)                 !InTf!
   use rpn_comm_globals
+  use rpn_comm_mpi
   implicit none
   character(len=*), intent(IN) :: info                  !InTf!
 

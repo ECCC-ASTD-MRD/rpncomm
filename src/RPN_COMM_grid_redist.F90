@@ -18,6 +18,7 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
       integer function RPN_COMM_grid_redist_test(nparams,params)
+      use rpn_comm_mpi
       use rpn_comm
       implicit none
       integer :: nparams
@@ -269,6 +270,7 @@
      &           zout,ix0,ixn,jy0,jyn,nz,zlist,&
      &           gni,gnj,outpe_x,noutpe_x,outpe_y,noutpe_y,ltok)
       use rpn_comm
+      use rpn_comm_mpi
       implicit none
       integer, intent(IN) :: mini,maxi,i0,in,minj,maxj,j0,jn,nk,ltok
       integer, intent(IN) :: ix0,ixn,jy0,jyn,nz

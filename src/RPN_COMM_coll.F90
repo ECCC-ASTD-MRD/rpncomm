@@ -23,6 +23,7 @@
                larr,mini,maxi,minj,maxj,halox,haloy,&                   !InTfout!
                status)                                                  !InTfout!
 	use rpn_comm_globals
+	use rpn_comm_mpi
     use rpn_comm, only: RPN_COMM_coll2, RPN_COMM_ngrank
 	implicit none                                                       !InTfout!
 !
@@ -85,6 +86,7 @@
                larr,mini,maxi,minj,maxj,halox,haloy,&           !InTfout!
                status,dt1,dt2)                                  !InTfout!
 	use rpn_comm_globals
+	use rpn_comm_mpi
     use rpn_comm, only: RPN_COMM_limit
 	implicit none                                               !InTfout!
 !

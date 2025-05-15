@@ -20,6 +20,7 @@
 !InTf!
       subroutine RPN_COMM_mydomain (call_back, mydomain)             !InTf!
       use rpn_comm_globals
+      use rpn_comm_mpi
       implicit none                                                  !InTf!
 !
       external :: call_back                                          !InTf!
@@ -68,6 +69,7 @@
 !InTf!
       subroutine RPN_COMM_world_get(world_comm) BIND(C,name='RPN_COMM_World_Get')   !InTf!
       use rpn_comm_globals
+      use rpn_comm_mpi
       implicit none                                                !InTf!
       integer, intent(OUT) ::  world_comm                          !InTf!
 
@@ -124,6 +126,7 @@
       INTEGER FUNCTION RPN_COMM_init_multi_level&
      &      (Userinit,Pelocal,Petotal,Pex,Pey,MultiGrids,Grids)
       use rpn_comm_globals
+      use rpn_comm_mpi
       use rpn_comm, only: RPN_COMM_set_timeout_alarm, RPN_COMM_get_a_free_unit, RPN_COMM_version, &
                           RPN_COMM_chdir, RPN_COMM_petopo
       implicit none                                                  !InTf!

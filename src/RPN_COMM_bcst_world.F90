@@ -37,6 +37,7 @@
 !
 !
         use rpn_comm
+		use rpn_comm_mpi
         implicit none
         integer start(2), end(2), mode
 	integer buff(2),ierr

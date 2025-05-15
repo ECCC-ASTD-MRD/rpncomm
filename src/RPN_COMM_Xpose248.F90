@@ -22,6 +22,7 @@
         za,min1,max1,n1g,min2,max2,n2l,min3,max3,n3g, &
         zb_8,a_8,b_8)
 	use rpn_comm
+	use rpn_comm_mpi
 !
 !	backward transpose, zb to za
 !	(last dimension of arrays is always in-processor)

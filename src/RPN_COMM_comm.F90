@@ -20,6 +20,7 @@
 ! !/
 module rpncomm_com
   use rpn_comm_globals
+  use rpn_comm_mpi
   implicit none
   integer, parameter :: MAX_COMM_TAB=128
   type(symtab), dimension(:), pointer, save :: com_tab => NULL()  ! communicator translation table
@@ -266,6 +267,7 @@ end module rpncomm_com
 !InTf!
         subroutine RPN_COMM_i_comm(ctyp_c,ctyp,mcom)         !InTf!
         use rpn_comm_globals
+        use rpn_comm_mpi
         use rpn_comm, only: rpn_comm_comm
 !!      import :: rpncomm_communicator                       !InTf!
         implicit none

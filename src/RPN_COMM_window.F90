@@ -86,6 +86,7 @@ module RPN_COMM_windows
 ! (used internally by user callable routines)
 !===============================================================================
   use rpn_comm_globals
+  use rpn_comm_mpi
   implicit none
 !******
   integer, parameter :: RPN_COMM_MAX_WINDOWS = 64

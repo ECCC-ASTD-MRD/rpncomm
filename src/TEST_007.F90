@@ -1,5 +1,7 @@
 subroutine rpncomm_test_007
   use rpn_comm_globals
+  use rpn_comm, only: RPN_COMM_spread_context, RPN_COMM_spread
+  use rpn_comm_mpi
   implicit none
   integer, PARAMETER :: npts = 170000
   integer :: npes, myrank, nprint
@@ -67,7 +69,7 @@ subroutine rpncomm_test_007
   write(0,*)'--------------------------------------------'
 !  status = RPN_COMM_spread(context,source,npts,size(source2,2),dest2)
   write(0,*)'============================================='
-9 call mpi_finalize()
+9 call mpi_finalize(ierr)
   return
 
   contains

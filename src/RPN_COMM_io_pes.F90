@@ -186,6 +186,7 @@ contains
 !
   function io_pe_comm(setno) result(communicator)  ! is this pe part of IO PE set setno. if yes return set communicator, else return MPI_COMM_NULL
     use rpn_comm_globals
+    use rpn_comm_mpi
     implicit none
     integer, intent(IN) :: setno             ! set number as returned by create_ioset
     integer :: communicator
@@ -267,6 +268,7 @@ contains
 !
   function free_ioset(setno) result(freed)   ! free table space associated with IO PE set setno
     use rpn_comm_globals
+    use rpn_comm_mpi
     implicit none
     integer, intent(IN) :: setno             ! set number as returned by create_ioset
     integer :: freed
@@ -291,6 +293,7 @@ contains
 !
   function create_ioset(npes,method) result(setno)  ! pe_indomm AKA "GRID" is assumed as a communicator
     use rpn_comm_globals
+    use rpn_comm_mpi
     use rpn_comm, only: RPN_COMM_check_ioset
     implicit none
     integer, intent(IN) :: npes

@@ -22,6 +22,7 @@
      &     recvbuf, recvcount,periodicity, ierr)                     !InTfout!
 
         use rpn_comm_globals
+        use rpn_comm_mpi
         use rpn_comm, only: RPN_COMM_datyp
         implicit none                                                !InTfout!
 

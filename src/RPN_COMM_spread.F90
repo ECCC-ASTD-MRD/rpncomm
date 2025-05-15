@@ -21,6 +21,7 @@
 function RPN_COMM_spread(contxt,source,npts,ndata,dest)  result(status)   !InTf!
   use ISO_C_BINDING                                                       !InTf!
   use rpn_comm_globals
+  use rpn_comm_mpi
 !!  import :: rpncomm_context    !InTf!
   implicit none                                                           !InTf!
   include 'RPN_COMM_spread.inc'
@@ -116,6 +117,7 @@ end function RPN_COMM_spread                                                    
 !InTf!
 function RPN_COMM_spread_context(contxt,com,rootpe,pe,npts) result(status)                          !InTf!
   use rpn_comm_globals
+  use rpn_comm_mpi
   use rpn_comm, only: RPN_COMM_comm
 !!  import :: rpncomm_context                                                                       !InTf!
   implicit none                                                                                     !InTf!

@@ -42,6 +42,7 @@
      &          nwin,nwrn,wdin,nwis,nwrs,wdis,periody,&
      &          status)
 	use rpn_comm_globals
+	use rpn_comm_mpi
 	implicit none
 
 	integer nwen,wden(nwen),nwes,wdes(nwes)

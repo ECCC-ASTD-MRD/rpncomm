@@ -26,6 +26,7 @@
 
         subroutine rpn_comm_test_002b
         use rpn_comm
+        use rpn_comm_mpi
         implicit none
 !
 !       dummy test program implemented as a subroutne

@@ -7,7 +7,8 @@ stop
 end
 #endif
 subroutine rpncomm_test_012
-  use rpn_comm_globals
+  use rpn_comm
+  use rpn_comm_mpi
   implicit none
 
   type(rpncomm_datatype) :: my_type

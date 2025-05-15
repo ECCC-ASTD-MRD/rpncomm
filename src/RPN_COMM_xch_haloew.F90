@@ -21,6 +21,7 @@
 
       SUBROUTINE RPN_COMM_xch_haloew(g,minx,maxx,miny,maxy,ni,jmin,jmax,nk,halox,haloy,periodx,periody)
       use rpn_comm
+      use rpn_comm_mpi
       implicit none
 !
 !	exchange a halo with neighbours

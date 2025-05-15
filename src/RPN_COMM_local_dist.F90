@@ -17,6 +17,7 @@
 ! * Boston, MA 02111-1307, USA.
 ! */
       module rpn_comm_localdist
+            use rpn_comm_mpi
       implicit none
       SAVE
 !

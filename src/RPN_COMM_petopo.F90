@@ -157,6 +157,7 @@
 !InTf!
       integer function RPN_COMM_petopo(pex,pey)          !InTf!
       use rpn_comm_globals
+      use rpn_comm_mpi
       implicit none                                      !InTf!
       integer, intent(IN) :: pex,pey                     !InTf!
 

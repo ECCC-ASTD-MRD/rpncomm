@@ -25,6 +25,7 @@
 ! me_y: position along Y axis in its domain
 !
 	use rpn_comm_globals
+	use rpn_comm_mpi
 	implicit none                                              !InTf!
 	integer, intent(OUT) ::  Me,Me_x,Me_y                      !InTf!
 !arguments

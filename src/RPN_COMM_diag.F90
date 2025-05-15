@@ -21,6 +21,7 @@
 	subroutine RPN_COMM_diag(Sub,Array,Minx,Maxx,Miny,Maxy,Ni,Nj,Nk,&
      &             R_8,Nr,Tmp_8,Fast)
 	use rpn_comm_globals
+	use rpn_comm_mpi
 	implicit none
 	external sub
 	integer Minx,Maxx,Miny,Maxy,Ni,Nj,Nk,Nr

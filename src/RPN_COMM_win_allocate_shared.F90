@@ -22,8 +22,8 @@
 !InTf!
 !! interface RPN_COMM_win_allocate_shared   !InTf!
 subroutine RPN_COMM_win_allocate_shared2(comm, msize, win, baseptr, err)  !InTf! 
-  use ISO_C_BINDING
   use rpn_comm_globals
+  use rpn_comm_mpi
   implicit none
 !!  import :: C_PTR, C_INTPTR_T              !InTf!   
   integer, intent(IN)  :: comm               !InTf!   communicator
@@ -56,8 +56,8 @@ subroutine RPN_COMM_win_allocate_shared2(comm, msize, win, baseptr, err)  !InTf!
 end subroutine RPN_COMM_win_allocate_shared2  !InTf! 
 !InTf!
 subroutine RPN_COMM_win_allocate_shared1(comm, msize, win, baseptr, err)  !InTf! 
-  use ISO_C_BINDING
   use rpn_comm_globals
+  use rpn_comm_mpi
   implicit none
 !!  import :: C_PTR                          !InTf!   
   integer, intent(IN)  :: comm               !InTf!   communicator

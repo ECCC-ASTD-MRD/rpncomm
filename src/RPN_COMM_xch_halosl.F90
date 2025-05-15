@@ -21,6 +21,7 @@
       SUBROUTINE RPN_COMM_xch_halosl(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody,gni,npol_row,nimax)
 !     nj, haloy, periody, npol_row : NOT USED
       use rpn_comm
+      use rpn_comm_mpi
       implicit none
 !     
 !     exchange a halo with neighbours, semi-lagrangian fashion for E-W part of exchange

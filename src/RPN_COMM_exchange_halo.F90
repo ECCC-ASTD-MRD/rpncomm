@@ -37,6 +37,7 @@
 
       SUBROUTINE RPN_COMM_exchange_ew(g,minx,maxx,miny,maxy,ni,nj,nk,halox,periodx,ew3d)
       use rpn_comm
+      use rpn_comm_mpi
       implicit none
       integer, intent(IN) :: minx,maxx,miny,maxy,ni,nj,nk,halox,ew3d
       logical, intent(IN) :: periodx

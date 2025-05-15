@@ -22,6 +22,7 @@
                   ni,nj,nk,halox,haloy,periodx,periody, &       !InTfout!
                   gni,npol_row)                                 !InTfout!
     use rpn_comm_globals
+	use rpn_comm_mpi
 	implicit none                                               !InTfout!
 !
 !	exchange a halo with neighbours

@@ -21,6 +21,7 @@
 !InTf!
         real(kind=kind(1.d0)) function RPN_COMM_wtime()            !InTf!
         use rpn_comm_globals
+        use rpn_comm_mpi
         implicit none                               !InTf!
 !
         integer :: myrank, ierr

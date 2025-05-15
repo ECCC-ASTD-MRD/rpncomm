@@ -25,6 +25,7 @@
 !	'GRID', 'EW' et 'NS' et leur numero assigne par
 !	MPI.
         use rpn_comm_globals
+        use rpn_comm_mpi
         use rpn_comm, only: rpn_comm_group
         implicit none                             !InTf!
         character(len=*), intent(IN) :: com       !InTf!
@@ -49,6 +50,7 @@
 !       MPI.
 !
         use rpn_comm_globals
+        use rpn_comm_mpi
         implicit none                              !InTf!
         integer, intent(IN) :: group               !InTf!
 

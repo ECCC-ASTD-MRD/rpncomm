@@ -19,6 +19,7 @@
 ! */
         module RPN_COMM_barrier_priv
           use rpn_comm_globals
+          use rpn_comm_mpi
           use rpn_comm, only: RPN_COMM_comm, RPN_COMM_grank
           implicit none
           integer, save :: detail = 0   ! 0, 1, 2

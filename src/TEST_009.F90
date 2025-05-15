@@ -1,5 +1,6 @@
 subroutine RPN_COMM_haloflip_test(halox, haloy, ni, nj, nk)   ! test routine for RPN_COMM_haloflip
   use rpn_comm
+  use rpn_comm_mpi
   implicit none
   integer, intent(IN) :: halox, haloy, ni, nj, nk
   integer :: ierr, errors, errorn, terrs, terrn

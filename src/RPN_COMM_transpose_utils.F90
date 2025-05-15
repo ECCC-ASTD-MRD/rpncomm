@@ -19,6 +19,7 @@
 ! */
 module RPN_COMM_transpose_utils
   use rpn_comm
+  use rpn_comm_mpi
   implicit none
 
   private :: forward, backward

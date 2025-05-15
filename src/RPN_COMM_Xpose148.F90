@@ -23,6 +23,7 @@
         n3g,zb_8,a_8,b_8)
 !
 	use rpn_comm
+	use rpn_comm_mpi
 !	forward transpose, za to zb
 !	gather first dimension into processor,
 !	distribute last dimension

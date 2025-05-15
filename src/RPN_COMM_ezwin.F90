@@ -1,6 +1,7 @@
 #define IN_RPN_COMM_ezwin
 module RPN_COMM_ezwin_mod
   use rpn_comm_globals
+  use rpn_comm_mpi
   implicit none
   type :: rpn_comm_ezwin
     type(C_PTR) :: p

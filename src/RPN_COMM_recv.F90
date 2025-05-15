@@ -22,6 +22,7 @@
      &                           com,status,ierr)                       !InTfout!
 !	Luc Corbeil, 2000-11-21
         use rpn_comm_globals
+        use rpn_comm_mpi
         use rpn_comm, only: RPN_COMM_datyp, RPN_COMM_comm, RPN_COMM_grank
         implicit none                                                   !InTfout!
         integer count,comm,ierr,tag,source                              !InTfout!

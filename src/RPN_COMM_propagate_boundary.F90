@@ -238,6 +238,7 @@ end program
 #endif
 
 subroutine RPN_COMM_propagate_boundary(f,minx,maxx,miny,maxy,lni,lnj,nk,hx,hy)
+  use rpn_comm_mpi
   use rpn_comm
   implicit none
   integer, intent(IN) :: minx,maxx,miny,maxy,lni,lnj,nk,hx,hy
@@ -456,6 +457,7 @@ end subroutine
 #define FED f(lni+1-hx  :lni        ,1          :lnj      ,:)
 
 subroutine RPN_COMM_propagate_pilot_circular(f,minx,maxx,miny,maxy,lni,lnj,nk,pilx,pily,hx,hy)
+  use rpn_comm_mpi
   use rpn_comm
   implicit none
   integer, intent(IN) :: minx,maxx,miny,maxy,nk   ! dimensions of array f
@@ -616,6 +618,7 @@ subroutine RPN_COMM_propagate_pilot_circular(f,minx,maxx,miny,maxy,lni,lnj,nk,pi
 end subroutine RPN_COMM_propagate_pilot_circular
 
 subroutine RPN_COMM_propagate_boundary_circular(f,minx,maxx,miny,maxy,lni,lnj,nk,hx,hy)
+  use rpn_comm_mpi
   use rpn_comm
   implicit none
   integer, intent(IN) :: minx,maxx,miny,maxy,nk   ! dimensions of array f

@@ -21,6 +21,7 @@
 !**S/R RPN_COMM_haloflip handle across the pole halo exchange for global grids
 subroutine RPN_COMM_haloflip(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,ggni)  !InTfout!
   use rpn_comm_globals
+  use rpn_comm_mpi
   use rpn_comm, only: RPN_COMM_limit
   implicit none                                                                !InTfout!
 !ARGUMENTS

@@ -19,6 +19,7 @@
 ! */
         SUBROUTINE RPN_COMM_transpose_44(za,min1,max1,n1g,n2,min3,max3,n3g,zb,direction)
         use rpn_comm_globals
+        use rpn_comm_mpi
         implicit none
         integer, intent(IN) :: min1,max1,n1g,n2,min3,max3,n3g
         integer, intent(IN) :: direction

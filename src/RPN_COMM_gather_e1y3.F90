@@ -21,6 +21,7 @@
 	SUBROUTINE RPN_COMM_gather_e1y3(srca,srcc,srcr,&
      &        min1,max1,min2,max2, n1,n2,n3,dest,size)
 	use rpn_comm
+	use rpn_comm_mpi
 	implicit none
 	integer min1,max1,min2,max2,n1,n2,n3,size
 	real dest(size,6*(2*(max(max(n2*n3,n1*n3),n1*n2)/2)+1)*size)

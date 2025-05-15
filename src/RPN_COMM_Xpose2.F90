@@ -21,6 +21,7 @@
 	SUBROUTINE RPN_COMM_Xpose2(n3partiel,npe,pecomm, &			!InTfout!
         n1partiel,za,min1,max1,n1g,n2,min3,max3,n3g,zb,size)	!InTfout!
 	use rpn_comm_globals
+	use rpn_comm_mpi
 !
 !	backward transpose, zb to za
 !	(last dimension of arrays is always in-processor)

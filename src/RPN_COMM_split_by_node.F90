@@ -19,6 +19,8 @@
 !
 
 module split_by_node
+  use rpn_comm_mpi
+  implicit none
   save
   integer, parameter :: MAX_CACHE=16
   integer, dimension(MAX_CACHE) :: cold      ! original communicator
@@ -111,8 +113,8 @@ subroutine RPN_COMM_split_by_socket(origcomm, nodecomm, sockcomm, peercomm, node
 ! AUTHOR
 !  M.Valin Recherche en Prevision Numerique 2020
 ! IGNORE
-  use ISO_C_BINDING
   use rpn_comm_globals
+  use rpn_comm_mpi
   implicit none
 ! ARGUMENTS
   integer, intent(IN)  :: origcomm  ! MPI communicator to split on a socket basis        !InTf!

@@ -23,6 +23,7 @@
 !InTf!
       subroutine RPN_COMM_i_group(com,rgroup,rcom)  !InTf!
       use rpn_comm_globals
+      use rpn_comm_mpi
       use rpn_comm, only: RPN_COMM_group
 !!  import :: rpncomm_group                        !InTf!
 !!  import :: rpncomm_communicator                 !InTf!
@@ -60,6 +61,7 @@
 !      MPI.
 !
       use rpn_comm_globals
+      use rpn_comm_mpi
       implicit none                                 !InTf!
       character(len=*), intent(IN) :: com           !InTf!
       character(len=32) comm
