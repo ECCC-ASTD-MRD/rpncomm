@@ -18,9 +18,15 @@
 ! ! Boston, MA 02111-1307, USA.
 ! !/
 
-    SUBROUTINE RPN_COMM_adj_halo4(g,minx,maxx,miny,maxy, &
-                  ni,nj,nk,halox,haloy,periodx,periody, &
-                  gni,npol_row)
+    SUBROUTINE RPN_COMM_adj_halo4(g,minx,maxx,miny,maxy, &      !InTfout!
+                  ni,nj,nk,halox,haloy,periodx,periody, &       !InTfout!
+                  gni,npol_row)                                 !InTfout!
+!!    implicit none                                             !InTfout!
+!!    integer minx,maxx,miny,maxy,ni,nj,nk,halox,haloy          !InTfout!
+!!    integer gni,npol_row                                      !InTfout!
+!!    logical periodx,periody                                   !InTfout! 
+!!#define IgnoreTypeKindRank g                                  !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                              !InTfout!
 #include <RPN_COMM_adj_halo.hf>
 
     entry adj_halo4(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody)
@@ -29,11 +35,17 @@
     polarrows=0
     goto 1
 
-    end
+    end !InTfout!
 
-    SUBROUTINE RPN_COMM_adj_halo8(g,minx,maxx,miny,maxy, &
-                  ni,nj,nk,halox,haloy,periodx,periody, &
-                  gni,npol_row)
+    SUBROUTINE RPN_COMM_adj_halo8(g,minx,maxx,miny,maxy, &      !InTfout!
+                  ni,nj,nk,halox,haloy,periodx,periody, &       !InTfout!
+                  gni,npol_row)                                 !InTfout!
+!!    implicit none                                             !InTfout!
+!!    integer minx,maxx,miny,maxy,ni,nj,nk,halox,haloy          !InTfout!
+!!    integer gni,npol_row                                      !InTfout!
+!!    logical periodx,periody                                   !InTfout! 
+!!#define IgnoreTypeKindRank g                                  !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                              !InTfout!
 #define DOUBLE8
 #include <RPN_COMM_adj_halo.hf>
 
@@ -43,4 +55,4 @@
     polarrows=0
     goto 1
 
-    end
+    end !InTfout!

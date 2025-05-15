@@ -1,13 +1,14 @@
-      subroutine RPN_COMM_xch_halo_8(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody,gni,npol_row)
+      subroutine RPN_COMM_xch_halo_8(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody,gni,npol_row) !InTfout!
       implicit none
 !
 !     exchange a halo with N/S/E/W neighbours for 64 bit items
 !     use RPN_COMM_xch_halo (32 bit items) with fudged dimensions along x
 !
-      integer minx,maxx,miny,maxy,ni,nj,nk,halox,haloy
-      integer gni,npol_row
-      logical periodx,periody
-!
+      integer minx,maxx,miny,maxy,ni,nj,nk,halox,haloy                !InTfout!
+      integer gni,npol_row                                            !InTfout!
+      logical periodx,periody                                         !InTfout!
+!!#define IgnoreTypeKindRank g                                        !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                    !InTfout!
       integer g(2*minx-1:2*maxx,miny:maxy,nk)
 !     integer*8  g(minx:maxx,miny:maxy,nk)
 !
@@ -21,4 +22,4 @@
                    2*ni,nj,nk,2*halox,haloy,periodx,periody,  &
                    2*gni,0)
       return
-      end subroutine RPN_COMM_xch_halo_8
+      end subroutine RPN_COMM_xch_halo_8                              !InTfout!
