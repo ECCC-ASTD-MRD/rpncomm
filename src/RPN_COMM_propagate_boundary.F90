@@ -458,7 +458,7 @@ end subroutine
 
 subroutine RPN_COMM_propagate_pilot_circular(f,minx,maxx,miny,maxy,lni,lnj,nk,pilx,pily,hx,hy)  !InTfout!
   use rpn_comm_mpi
-  use rpn_comm
+  use rpn_comm_globals
   implicit none                                                                                 !InTfout!
   integer, intent(IN) :: minx,maxx,miny,maxy,nk   ! dimensions of array f                       !InTfout!
 !!#define IgnoreTypeKindRank f                                                                  !InTfout!

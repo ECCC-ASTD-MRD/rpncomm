@@ -20,7 +20,7 @@
 
       SUBROUTINE RPN_COMM_xch_halox(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody,g2, & !InTfout!
                                     minx2,maxx2,miny2,maxy2,gni,npol_row)       !InTfout!
-      use rpn_comm
+      use rpn_comm_globals
       implicit none                                                             !InTfout!
 !
 !	exchange a halo with neighbours
