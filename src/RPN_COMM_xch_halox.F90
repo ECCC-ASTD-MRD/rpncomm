@@ -18,19 +18,23 @@
 ! * Boston, MA 02111-1307, USA.
 ! */
 
-      SUBROUTINE RPN_COMM_xch_halox(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody,g2,minx2,maxx2,miny2,maxy2,gni,npol_row)
+      SUBROUTINE RPN_COMM_xch_halox(g,minx,maxx,miny,maxy,ni,nj,nk,halox,haloy,periodx,periody,g2, & !InTfout!
+                                    minx2,maxx2,miny2,maxy2,gni,npol_row)       !InTfout!
       use rpn_comm
-      implicit none
+      implicit none                                                             !InTfout!
 !
 !	exchange a halo with neighbours
 !
-      integer minx,maxx,miny,maxy,ni,nj,nk,halox,haloy
-      integer minx2,maxx2,miny2,maxy2
-      integer gni,npol_row
-      logical periodx,periody
+      integer minx,maxx,miny,maxy,ni,nj,nk,halox,haloy                          !InTfout!
+      integer minx2,maxx2,miny2,maxy2                                           !InTfout!
+      integer gni,npol_row                                                      !InTfout!
+      logical periodx,periody                                                   !InTfout!
+!!#define IgnoreTypeKindRank g, g2                                              !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                              !InTfout!
       integer g(minx:maxx,miny:maxy,nk)
-      real g_adj(minx:maxx,miny:maxy,nk)
       integer g2(minx2:maxx2,miny2:maxy2,nk)
+
+      real g_adj(minx:maxx,miny:maxy,nk)
       real g2_adj(minx2:maxx2,miny2:maxy2,nk)
       pointer (g_adj_,g_adj)
       pointer (g2_adj_,g2_adj)
@@ -89,4 +93,4 @@
       	           g2,minx2,maxx2,miny2,maxy2,gni,npol_row)
       adjoint=.true.
       goto 1
-      end
+      end                                                                       !InTfout!

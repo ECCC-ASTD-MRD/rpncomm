@@ -18,10 +18,12 @@
 ! * Boston, MA 02111-1307, USA.
 ! */
 
-      subroutine RPN_COMM_waitall_nostat(nreq,req,ierr)
+      subroutine RPN_COMM_waitall_nostat(nreq,req,ierr)           !InTf!
         use rpn_comm_globals
         use rpn_comm_mpi
-        integer nreq,req(nreq),status(mpi_status_size,nreq),ierr
+        !! import :: MPI_STATUS_SIZE                              !InTf!
+        implicit none                                             !InTf!
+        integer nreq,req(nreq),status(mpi_status_size,nreq),ierr  !InTf!
         call mpi_waitall(nreq,req,status,ierr)
       return
-      end
+      end                                                         !InTf!

@@ -341,6 +341,8 @@ end module rpn_comm_globals
 
 module rpn_comm
   use rpn_comm_globals
+  use RPN_COMM_mpi, only: MPI_STATUS_SIZE
   implicit none
 # include <RPN_COMM_interfaces.hf>
+  private :: MPI_STATUS_SIZE
 end module rpn_comm

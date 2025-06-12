@@ -456,15 +456,17 @@ end subroutine
 #define FHA f(1         :hx         ,1          :lnj      ,:)
 #define FED f(lni+1-hx  :lni        ,1          :lnj      ,:)
 
-subroutine RPN_COMM_propagate_pilot_circular(f,minx,maxx,miny,maxy,lni,lnj,nk,pilx,pily,hx,hy)
+subroutine RPN_COMM_propagate_pilot_circular(f,minx,maxx,miny,maxy,lni,lnj,nk,pilx,pily,hx,hy)  !InTfout!
   use rpn_comm_mpi
   use rpn_comm
-  implicit none
-  integer, intent(IN) :: minx,maxx,miny,maxy,nk   ! dimensions of array f
+  implicit none                                                                                 !InTfout!
+  integer, intent(IN) :: minx,maxx,miny,maxy,nk   ! dimensions of array f                       !InTfout!
+!!#define IgnoreTypeKindRank f                                                                  !InTfout!
+!!#include "IgnoreTypeKindRank.hf"                                                              !InTfout!
   integer, dimension(minx:maxx,miny:maxy,nk), intent(INOUT) :: f
-  integer, intent(IN) :: lni, lnj                 ! number of private points in array f
-  integer, intent(IN) :: hx, hy                   ! useful horizontal halo around f
-  integer, intent(IN) :: pilx, pily               ! pilot zone thickness
+  integer, intent(IN) :: lni, lnj                 ! number of private points in array f         !InTfout!
+  integer, intent(IN) :: hx, hy                   ! useful horizontal halo around f             !InTfout!
+  integer, intent(IN) :: pilx, pily               ! pilot zone thickness                        !InTfout!
 
   integer :: northpe, southpe, eastpe, westpe, upstream, downstream
   integer :: ierror
@@ -615,7 +617,7 @@ subroutine RPN_COMM_propagate_pilot_circular(f,minx,maxx,miny,maxy,lni,lnj,nk,pi
   endif
 
   return
-end subroutine RPN_COMM_propagate_pilot_circular
+end subroutine RPN_COMM_propagate_pilot_circular                                          !InTfout!
 
 subroutine RPN_COMM_propagate_boundary_circular(f,minx,maxx,miny,maxy,lni,lnj,nk,hx,hy)
   use rpn_comm_mpi
