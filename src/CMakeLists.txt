@@ -47,6 +47,11 @@ endif()
 
 # Targets for generating header files
 add_executable(c_binding_extras c_binding_extras.c)
+# Need to build generic for cross platform buidls
+if(CMAKE_C_COMPILER MATCHES icx)
+   target_compile_options(c_binding_extras PUBLIC -xHost)
+endif()
+
 target_link_libraries(c_binding_extras PUBLIC MPI::MPI_C)
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf
