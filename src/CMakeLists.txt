@@ -45,19 +45,12 @@ if (NOT (${HAS_EXTRA_MPI_ITF}))
    target_compile_definitions(${PROJECT_NAME} PRIVATE NEED_EXTRA_MPI_ITF)
 endif()
 
-# Targets for generating header files
-add_executable(c_binding_extras c_binding_extras.c)
-# Need to build generic for cross platform buidls
-if(CMAKE_C_COMPILER MATCHES icx)
-   target_compile_options(c_binding_extras PUBLIC -xHost)
-endif()
-
-target_link_libraries(c_binding_extras PUBLIC MPI::MPI_C)
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf
+  COMMAND ${CMAKE_C_COMPILER} ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.c -o ${CMAKE_CURRENT_BINARY_DIR}/c_binding_extras
   COMMAND ${CMAKE_CURRENT_BINARY_DIR}/c_binding_extras > ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf 
   COMMENT "Generating c_binding_extras.hf"
-  DEPENDS c_binding_extras
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.c
   BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf
   USES_TERMINAL
 )
