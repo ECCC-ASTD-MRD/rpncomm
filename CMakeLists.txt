@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 message(STATUS "(EC) Generating rpncomm Makefile")
 
 #----- Append EC specific module path
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_rpn/modules $ENV{EC_CMAKE_MODULE_PATH})
+list(APPEND CMAKE_MODULE_PATH $ENV{EC_CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake_rpn/modules)
 
 include(ec_init)
 ec_git_version()           # Get version from git state
