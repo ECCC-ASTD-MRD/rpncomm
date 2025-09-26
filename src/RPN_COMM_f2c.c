@@ -1,4 +1,7 @@
+#include <stddef.h>
+
 #include <mpi.h>
+
 typedef union {
   void *ftn;
   MPI_Datatype type;
