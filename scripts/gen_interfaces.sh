@@ -21,6 +21,10 @@ function extract_lines() {
 TMP_FILE=rpn_comm_itf.tmp
 rm -f ${TMP_FILE}
 
+echo "!"
+echo "! This file is generated at compile time. Do not modify it"
+echo "!"
+
 echo
 echo "#if 0"
 for target in ${@}; do
