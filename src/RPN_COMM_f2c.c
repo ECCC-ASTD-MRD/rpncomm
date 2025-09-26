@@ -161,6 +161,9 @@ void *RPN_COMM_f2c( MPI_Fint in, int what) {
     case 7:
       temp.all.comm = MPI_Comm_f2c(in);
       break;
+    default:
+      temp.all.ftn = NULL;
+      break;
   }
   return temp.all.ftn;
 }
