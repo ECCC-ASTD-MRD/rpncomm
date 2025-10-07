@@ -2,7 +2,6 @@
 Build*
 build*
 lib/
-src/c_binding_extras.hf
 
 CMakeLists.txt.user
 
@@ -10,7 +9,6 @@ dependencies.mk
 objects.lst
 SORTED.lst
 
-rpncomm/RPN_COMM_interfaces*.inc
 src/RPN_COMM_version.F90
 
 

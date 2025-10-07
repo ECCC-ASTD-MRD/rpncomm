@@ -47,16 +47,17 @@ if (NOT (${HAS_EXTRA_MPI_ITF}))
    target_compile_definitions(${PROJECT_NAME} PRIVATE NEED_EXTRA_MPI_ITF)
 endif()
 
+set(C_BINDINGS_FILE ${CMAKE_CURRENT_BINARY_DIR}/c_binding_extras.hf)
 add_custom_command(
-  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf
+  OUTPUT  ${C_BINDINGS_FILE}
   COMMAND ${CMAKE_C_COMPILER} ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.c -o ${CMAKE_CURRENT_BINARY_DIR}/c_binding_extras
-  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/c_binding_extras > ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf 
+  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/c_binding_extras > ${C_BINDINGS_FILE}
   COMMENT "Generating c_binding_extras.hf"
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.c
-  BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf
+  BYPRODUCTS ${C_BINDINGS_FILE}
   USES_TERMINAL
 )
-add_custom_target(c_binding_extras_include DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/c_binding_extras.hf)
+add_custom_target(c_binding_extras_include DEPENDS ${C_BINDINGS_FILE})
 add_dependencies(${PROJECT_NAME} c_binding_extras_include)
 
 set(GEN_INTERFACES_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/gen_interfaces.sh)
