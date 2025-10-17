@@ -221,7 +221,7 @@ static int bind_to_port(int *port, int *ipaddress)
 /* ------------------- END OF CODE BORROWED AND/OR ADAPTED FROM gossip_sock  ----------------- */
 
 int f_omp_get_max_threads();
-int f_omp_set_num_threads();
+int f_omp_set_num_threads(const int* num_threads);
 static int omp_max_threads=1;
 
 #pragma weak save_openmp_state__=save_openmp_state

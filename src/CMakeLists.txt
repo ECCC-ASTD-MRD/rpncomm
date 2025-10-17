@@ -182,6 +182,7 @@ if (RPN_BUILD_TESTS)
       TEST_015.F90
       TEST_016.F90
       TEST_017.F90
+      TEST_018.F90
    )
 
    function(get_test_name SOURCE_FILE TEST_NAME)

@@ -120,21 +120,12 @@
 !     the requested IO PE set is possible given pex and pey.
 !******
 #define IN_RPN_COMM_io_pes
-#if defined(SELF_TEST)
-#define STAND_ALONE
-#endif
-!
-! STAND_ALONE mode is really used for debugging
-! in normal mode, these routines rely on internal module rpn_comm
-!
+
 module RPN_COMM_io_pe_tables   ! this module may also be used by data distribution routines
   use ISO_C_BINDING
-#if ! defined(STAND_ALONE)
   use rpn_comm_globals
-#else
-#define RPN_COMM_OK 0
-#define RPN_COMM_ERROR -1
-#endif
+  implicit none
+
   type :: RPN_COMM_io_set
     integer, dimension(:), pointer :: x    ! x coordinate in grid of IO PEs in this set
     integer, dimension(:), pointer :: y    ! y coordinate in grid of IO PEs in this set
@@ -166,11 +157,6 @@ contains
     integer, intent(IN) :: setno             ! set number as returned by create_ioset
     integer :: ordinal
     integer :: i
-#if defined(STAND_ALONE)
-    integer :: pe_mex, pe_mey, pe_me, ierr
-    integer, external :: RPN_COMM_mype
-    ierr = RPN_COMM_mype(pe_me,pe_mex,pe_mey)  ! who am I, where am I ?
-#endif
 !
     ordinal = -1                                ! preset for failure
     if( .not. is_valid_io_setno(setno) ) return   ! not a valid IO set
@@ -191,11 +177,6 @@ contains
     integer, intent(IN) :: setno             ! set number as returned by create_ioset
     integer :: communicator
     integer :: i
-#if defined(STAND_ALONE)
-    integer :: pe_mex, pe_mey, pe_me, ierr
-    integer, external :: RPN_COMM_mype
-    ierr = RPN_COMM_mype(pe_me,pe_mex,pe_mey)  ! who am I, where am I ?
-#endif
 
     communicator = MPI_COMM_NULL
     if( .not. is_valid_io_setno(setno) ) return   ! invalid IO set
@@ -301,17 +282,6 @@ contains
     integer :: setno
     integer :: ierr, my_color, i, j, newset, ordinal_in_set
 
-#if defined(STAND_ALONE)
-    integer :: pe_mex, pe_mey, pe_indomm, pe_me, pe_nx, pe_ny
-    integer, external :: RPN_COMM_comm, RPN_COMM_mype
-    pe_indomm = RPN_COMM_comm('GRID')          ! grid communicator
-    ierr = RPN_COMM_mype(pe_me,pe_mex,pe_mey)  ! who am I, where am I ?
-    call mpi_allreduce(pe_mex,pe_nx,1,MPI_INTEGER,MPI_MAX,pe_indomm,ierr)  ! roundabout way to get pe_nx
-    pe_nx = pe_nx + 1
-    call mpi_allreduce(pe_mey,pe_ny,1,MPI_INTEGER,MPI_MAX,pe_indomm,ierr)  ! roundabout way to get pe_ny
-    pe_ny = pe_ny + 1
-#endif
-!
     setno = -1                       ! precondition for failure
     if(iosets >= MAXIOSETS) return   ! OOPS, table is full
     newset = iosets + 1
@@ -319,7 +289,7 @@ contains
       if(io_set(i)%ioset == -1) newset = i   ! recycle freed set
     enddo
     iosets = max(iosets,newset)
-!
+    
     allocate(io_set(newset)%x(npes))
     allocate(io_set(newset)%y(npes))
     io_set(newset)%ioset = -1
@@ -368,76 +338,6 @@ contains
   end function create_ioset
 !
 end module RPN_COMM_io_pe_tables
-!
-!=========================   embedded self test   ===============================
-!
-#if defined(STAND_ALONE)
-  subroutine RPN_COMM_io_pe_test(pe_nx,pe_ny,pe_me,pe_mex,pe_mey)
-  use ISO_C_BINDING
-  implicit none
-  include 'RPN_COMM.inc'
-!  integer, external :: RPN_COMM_create_io_set, RPN_COMM_free_io_set, RPN_COMM_io_pe_callback
-!  integer, external :: RPN_COMM_is_io_pe, RPN_COMM_io_pe_size
-!  interface
-!    function RPN_COMM_io_pe_coord(setno) result(list)
-!      implicit none
-!      integer, intent(IN) :: setno
-!      integer, dimension(:,:), pointer :: list
-!    end function RPN_COMM_io_pe_coord
-!  end interface
-  integer, intent(IN) :: pe_nx,pe_ny,pe_me,pe_mex,pe_mey
-#else
-  subroutine RPN_COMM_io_pe_test()
-  use rpn_comm
-  implicit none
-#endif
-!****f* rpn_comm/example example code
-! EXAMPLE
-  integer, external :: RPN_COMM_io_pe_test_callback   ! the callback function returns an integer value
-  integer setno,nio,me_io,setno2,setno3,status
-  integer, dimension(1), target :: argv               ! the argument list for the callback function
-  integer, dimension(:,:), pointer :: iopelist        ! will receive a coordinate list
-  integer, dimension(1) :: tbcst                      ! this will be broadcast in the test
-!
-! IGNORE
-  if(pe_me == 0)  print *,'DEBUG: pe_nx,pe_ny',pe_nx,pe_ny
-  nio = min(pe_nx,pe_ny)
-  print 100,'RPN_COMM_io_pe test program, pe_nx,pe_ny,pe_me,pe_mex,pe_mey,nio=',pe_nx,pe_ny,pe_me,pe_mex,pe_mey,nio
-! EXAMPLE
-  setno = RPN_COMM_create_io_set(nio+2,0)                   ! create a set of IO PEs containing nio+2 members
-  me_io = RPN_COMM_is_io_pe(setno)                          ! is this PE a member of this IO PE set ?
-  if(me_io .ne. -1) then
-    print *,"I am a proud IO pe !"                          ! YES it is
-  else
-    print *,"I am a lazy  NON-IO pe !"                      ! NO it is not
-  endif
-  print *,"set number, size of set='",setno,RPN_COMM_io_pe_size(setno)         ! get size of this IO PE set
-  setno2 = RPN_COMM_create_io_set(nio,0)                                       ! crete another set containing nio PEs
-  print *,"set number, size of set='",setno2,RPN_COMM_io_pe_size(setno2)       ! get size of this other IO PE set (should be nio+2)
-  setno = RPN_COMM_free_io_set(setno)                                          ! delete IO set
-  print *,'DEBUG: freed IO set ',setno
-  print *,"set number, size of set='",setno,RPN_COMM_io_pe_size(setno)         ! this should return -1
-  setno = RPN_COMM_create_io_set(nio,0)                                        ! re create IO PE set, this time with nio PEs
-  print *,"set number, size of set='",setno,RPN_COMM_io_pe_size(setno)         ! this should return nio now
-  setno3 = RPN_COMM_create_io_set(nio-1,0)                                     ! crete another set containing nio-1 PEs
-  print *,"set number, size of set='",setno3,RPN_COMM_io_pe_size(setno3)       ! this should return nio-1
-  argv(1) = pe_me                                                              ! argument array for callback function
-  status = RPN_COMM_io_pe_callback(setno3,RPN_COMM_io_pe_test_callback,C_LOC(argv(1)))    ! call to callback function(see example below)
-  print *,"after callback, status,argv=",status,argv(1)                        ! status 0 from non members of IO set, return of callback function on members
-  iopelist => RPN_COMM_io_pe_coord(setno3)                                     ! get grid coordinates of PEs in IO set setno3
-  print *,"PE list x=",iopelist(:,1)                                           ! row 1, X coordinates in "GRID"
-  print *,"PE list y=",iopelist(:,2)                                           ! row 2, Y coordinates in "GRID"
-  tbcst = pe_me
-  if(RPN_COMM_is_io_pe(setno3) .ne. -1)then  ! part of the set only, bcst pe_me of highest rank in set
-    call RPN_COMM_io_pe_bcast(tbcst,1,'MPI_INTEGER',RPN_COMM_io_pe_size(setno3)-1,setno3,status) 
-!   root for broadcast is RPN_COMM_io_pe_size(setno3)-1, get "GRID" ordinal of PE with highest rank (last PE) in IO set
-!   root for broadcast 0 would have returned the "GRID" ordinal of first (lowest rank) PE in set
-    print *,'tbcst after broadcast',tbcst                                      ! and the answer is ...
-  endif
-!******
-100 format(A,10I5)
-  return
-end subroutine
 !===============================================================================
 ! beginning of USER CALLABLE routines/functions
 !===============================================================================
