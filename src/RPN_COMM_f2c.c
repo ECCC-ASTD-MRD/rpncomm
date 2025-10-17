@@ -135,6 +135,8 @@ MPI_Fint RPN_COMM_c2f( F_C_univ *in, int what) {
       return MPI_Comm_c2f(in->all.comm);
       break;
   }
+
+  return MPI_Comm_c2f(MPI_COMM_NULL);
 }
 
 void *RPN_COMM_f2c( MPI_Fint in, int what) {
