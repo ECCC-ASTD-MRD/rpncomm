@@ -25,6 +25,7 @@ endif()
 
 include(ec_compiler_presets)
 
+set(CMAKE_Fortran_PREPROCESS ON)
 find_package(MPI REQUIRED)
 
 # Find out MPI version (to use in rpncomm version)

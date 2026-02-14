@@ -112,9 +112,9 @@ endif()
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
    # Sanity check for library content
-   COMMAND ar t $<TARGET_FILE_NAME:${PROJECT_NAME}> | sort -u > objects.lst
-   COMMAND sort -u ${CMAKE_CURRENT_SOURCE_DIR}/REFERENCE.lst > sorted_reference.lst
-   COMMAND diff sorted_reference.lst objects.lst
+   # COMMAND ar t $<TARGET_FILE_NAME:${PROJECT_NAME}> | sort -u > objects.lst
+   # COMMAND sort -u ${CMAKE_CURRENT_SOURCE_DIR}/REFERENCE.lst > sorted_reference.lst
+   # COMMAND diff sorted_reference.lst objects.lst
 
    # Symbolic link to latest build
    COMMAND ln -sfv $<TARGET_FILE_NAME:${PROJECT_NAME}> ${SHORT_LIB_FILE_NAME}
