@@ -46,6 +46,15 @@ if (NOT (${HAS_EXTRA_MPI_ITF}))
    target_compile_definitions(${PROJECT_NAME} PRIVATE NEED_EXTRA_MPI_ITF)
 endif()
 
+# BSD sed doesn't recognize the '--version' argument if this command
+# fails it's a good indication that we don't have GNU Sed.
+# This check is valuable because with BSD sed, the source code ends up
+# modified leading to many compilation errors.
+execute_process(COMMAND sed --version RESULT_VARIABLE sed_result)
+if(${sed_result} STREQUAL 1)
+    message(FATAL_ERROR "The target RPN_COMM_interfaces runs a script that requires GNU Sed (BSD Sed (found on BSD and MacOS) doesn't work)")
+endif()
+
 set(C_BINDINGS_FILE ${CMAKE_CURRENT_BINARY_DIR}/c_binding_extras.hf)
 add_custom_command(
   OUTPUT  ${C_BINDINGS_FILE}
