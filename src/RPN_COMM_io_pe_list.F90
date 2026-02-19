@@ -10,12 +10,12 @@
     integer, intent(IN) :: pe_nx, pe_ny         !InTf!   ! number of PEs along x and y in PE grid
     integer, intent(IN) :: method               !InTf!   ! fill method
     integer :: i
-    integer :: deltax, deltay, pe_nxy
+    integer :: deltax, deltay, pe_nxy, facty
+    real    :: multx,multy
     integer, save :: scramblex = 0
     integer, save :: scrambley = 0
     integer, save :: pe_nx_old = 0
     integer, save :: pe_ny_old = 0
-    logical :: modulo_x_y
     integer, dimension(16), save :: primes = [ &
          5,      7,      11,     13,   &
         17,     19,      23,     29,   &
@@ -44,6 +44,7 @@
     endif
     x = -1
     y = -1
+
     if(method .ne. 0) then
       print *,"ERROR: method MUST be zero for the time being"
       return      ! method 0 is the only one supported for the time being
@@ -55,36 +56,27 @@
       deltax = scramblex
       deltay = scrambley
     endif
-!     if( npes > pe_nxy * pe_nxy ) then
-!       print *,"ERROR: too many PEs requested in set (",npes," ),max permitted:",pe_nxy * pe_nxy
-!       return
-!     endif
-!     modulo_x_y = mod(pe_ny,pe_nx) == 0 .or. mod(pe_nx,pe_ny) == 0 ! one is a multiple of the other
-    modulo_x_y = .true.   ! forced true for the time being
+
+! To distribute evenly on each axis, does not matter along X or Y
+    multx = 1.0
+    multy = 1.0
     do i = 0 , npes-1
-!       if(npes > pe_nxy) then
-!         if(pe_nx > pe_ny) then
-!           x(i+1) = mod( i * deltax , pe_nx )
-!           y(i+1) = mod( mod( i , pe_ny) + i / pe_nx , pe_ny)
-!         else
-!           x(i+1) = mod( mod( i , pe_nx ) + i / pe_ny , pe_nx)
-!           y(i+1) = mod( i * deltay , pe_ny)
-!         endif
-!       else
-        if(modulo_x_y) then
-          if(pe_nx < pe_ny) then
-            x(i+1) = mod( i , pe_nx)
-            y(i+1) = mod(x(i+1)+(i/pe_nx)*scrambley,pe_ny)
-          else
-            y(i+1) = mod( i , pe_ny)
-            x(i+1) = mod(y(i+1)+(i/pe_ny)*scramblex,pe_nx)
-          endif
-!           y(i+1) = mod(y(i+1)+i/pe_ny,pe_ny)
-        else
-          x(i+1) = mod( i * deltax , pe_nx )
-          y(i+1) = mod( i * deltay , pe_ny )
-        endif
-!       endif
+    if (npes .lt. pe_nx .and. npes .lt. pe_ny) then
+        multy= real(pe_ny)/real(npes)
+        multx= real(pe_nx)/real(npes)
+        x(i+1) = floor(real(i+1)*multx) -1
+        y(i+1) = floor(real(i+1)*multy) -1
+    else if (pe_nx < pe_ny ) then
+        multy= real(pe_ny)/real(pe_nx)
+        x(i+1) = mod( i, pe_nx)
+        y(i+1) = mod(floor(real(x(i+1))*multy)+(i/pe_nx)*scrambley,pe_ny)
+
+    else !pe_nx >= pe_ny
+        multx = real(pe_nx)/real(pe_ny)
+        y(i+1) = mod( i, pe_ny)
+        x(i+1) = mod(floor(real(y(i+1))*multx)+(i/pe_ny)*scramblex,pe_nx)
+    endif
+         
     enddo
   end subroutine RPN_COMM_make_io_pe_list  !InTf!
 !
