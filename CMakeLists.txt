@@ -47,6 +47,7 @@ if (EC_INIT_DONE LESS 2)
 endif()
 
 add_subdirectory(src)
+add_subdirectory(tests)
 
 #----- Generate the config file for the project to be usable via cmake's find_package command
 set(INCLUDE_INSTALL_DIR include)
