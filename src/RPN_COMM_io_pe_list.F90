@@ -142,7 +142,7 @@
     endif
 100   format(1X,I4,1x,128I1)
 101   format(A,I3,A,I3,A)
-102   format(A10,20I4(/10X,20I4))
+102   format(A10, 20I4, 100(/, 10X, 20I4))
     status = 0
     return
   end function RPN_COMM_check_ioset  !InTf!
