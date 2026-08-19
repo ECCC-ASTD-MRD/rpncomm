@@ -1,6 +1,6 @@
 NAME       : rpncomm
 VERSION    : 
-BUILD      : Release
+BUILD      : 
 STATE      :
 DESCRIPTION: MPI based communication routines for models
 SUMMARY    :
