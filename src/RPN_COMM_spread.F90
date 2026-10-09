@@ -219,6 +219,7 @@ function RPN_COMM_spread_context(contxt,com,rootpe,pe,npts) result(status)      
   return
 
 3 continue                     ! upon error, deallocate everything, set error status
+  if(myrank == rootpe) write(0,*)'ERROR: (RPN_COMM_spread_context) Will not be able to fit all data points'
   deallocate(order)
   deallocate(offset)
   deallocate(nlocal)
